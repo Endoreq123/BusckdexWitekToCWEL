@@ -4,9 +4,12 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="theme-color" content="#c0191a">
   <title>BuseDex Kielce</title>
-  <link rel="stylesheet" href="style.css">
+  <link rel="manifest" href="manifest.json">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
 </head>
 <body>
 <div id="app">
@@ -16,13 +19,13 @@
     <div class="topbar">
       <div class="topbar-left">
         <img class="topbar-herb" src="grafika/herb-kielce.png" alt="Herb Kielc"
-             onerror="this.outerHTML='<div class=topbar-herb-missing>herb<br>Kielc</div>'">
+             onerror="this.outerHTML='&lt;div class=topbar-herb-missing&gt;herb&lt;br&gt;Kielc&lt;/div&gt;'">
         <div>
           <div class="app-title">&#x1F68C; BuseDex</div>
           <div class="app-sub">Kielce &middot; KM</div>
         </div>
-        <img class="topbar-herb" src="grafika/herb-swietokrzyskiego.png" alt="Herb Woj."
-             onerror="this.outerHTML='<div class=topbar-herb-missing>herb<br>woj.</div>'">
+        <img class="topbar-herb" src="grafika/herb-swietokrzyskie.png" alt="Herb Woj."
+             onerror="this.outerHTML='&lt;div class=topbar-herb-missing&gt;herb&lt;br&gt;woj.&lt;/div&gt;'">
       </div>
       <div>
         <div class="score-big" id="pct-big">0%</div>
@@ -33,14 +36,18 @@
     <div class="stats-row" id="stats-row"></div>
     <div id="inst-wrap"></div>
     <div class="sw">
-      <input class="si" id="si" type="search"
-             placeholder="&#x1F50D; numer lub model..."
+      <input class="si" id="si" type="search" placeholder="&#x1F50D; numer lub model..."
              autocorrect="off" autocomplete="off">
     </div>
     <div class="frow" id="bf"></div>
     <div class="frow" id="tf"></div>
+    <div class="filter-uncaught" id="filter-uncaught" onclick="toggleUncaught()">
+      <span class="fu-icon">&#x2753;</span>
+      <span class="fu-label">Tylko niezłapane</span>
+      <div class="fu-toggle"><div class="fu-knob"></div></div>
+    </div>
     <div id="bus-list"></div>
-    <div style="height:28px"></div>
+    <div style="height:8px"></div>
   </div>
 
   <!-- EKRAN: SZCZEGOLY -->
@@ -67,7 +74,7 @@
         <div class="pbox" id="pbox">
           <div class="pph" id="pph">
             <div style="font-size:44px">&#x1F68C;</div>
-            <div>Dotkni&#x105;j aby doda&#x107; zdj&#x119;cie</div>
+            <div>Dotknij aby doda&#x107; zdj&#x119;cie</div>
             <div style="font-size:11px;margin-top:6px;opacity:.5">aparat lub galeria</div>
           </div>
           <img id="pprev" class="pprev" src="" alt="podgl&#x105;d">
@@ -83,25 +90,86 @@
         <div class="plbl" style="margin-bottom:6px">&#x1F4DD; Notatka</div>
         <textarea id="note" placeholder="np. linia 1, ul. Sienkiewicza&#x2026;"></textarea>
       </div>
+      <div style="font-size:10px;color:#444;text-align:center;letter-spacing:1px">
+        &#x1F4CD; Lokalizacja GPS zostanie zapisana automatycznie
+      </div>
       <button class="btnp" id="btn-save">&#x2705; Zapisz z&#x142;apanie!</button>
     </div>
   </div>
 
+  <!-- EKRAN: MAPA -->
+  <div id="screen-map" class="screen">
+    <div class="hdr">
+      <span></span>
+      <span class="htit">&#x1F4CD; Mapa z&#x142;apa&#x144;</span>
+      <span></span>
+    </div>
+    <div class="map-stats" id="map-stats">Wczytywanie mapy&hellip;</div>
+    <div id="map-container"></div>
+  </div>
+
+  <!-- EKRAN: ODZNAKI -->
+  <div id="screen-badges" class="screen">
+    <div class="hdr">
+      <span></span>
+      <span class="htit">&#x1F3C6; Odznaki i poziom</span>
+      <span></span>
+    </div>
+    <div class="badges-body" id="badges-body"></div>
+  </div>
+
+  <!-- EKRAN: HISTORIA -->
+  <div id="screen-history" class="screen">
+    <div class="hdr">
+      <span></span>
+      <span class="htit">&#x1F4C5; Historia</span>
+      <span></span>
+    </div>
+    <div class="history-body" id="history-body"></div>
+  </div>
+
+  <!-- EKRAN: STATYSTYKI -->
+  <div id="screen-stats" class="screen">
+    <div class="hdr">
+      <span></span>
+      <span class="htit">&#x1F4CA; Statystyki</span>
+      <span></span>
+    </div>
+    <div class="stats-body" id="stats-body"></div>
+  </div>
+
 </div>
+
+<!-- DOLNA NAWIGACJA -->
+<nav class="bottom-nav">
+  <button class="nav-btn active" id="nav-list"    onclick="showList()">
+    <span class="ni">&#x1F68C;</span>Lista
+  </button>
+  <button class="nav-btn" id="nav-map"     onclick="showMap()">
+    <span class="ni">&#x1F4CD;</span>Mapa
+  </button>
+  <button class="nav-btn" id="nav-badges"  onclick="showBadges()">
+    <span class="ni">&#x1F3C6;</span>Odznaki
+  </button>
+  <button class="nav-btn" id="nav-history" onclick="showHistory()">
+    <span class="ni">&#x1F4C5;</span>Historia
+  </button>
+  <button class="nav-btn" id="nav-stats"   onclick="showStatsScreen()">
+    <span class="ni">&#x1F4CA;</span>Wyniki
+  </button>
+</nav>
 
 <input type="file" id="in-cam" accept="image/*" capture="environment"
        style="position:fixed;left:-9999px;opacity:0">
 <input type="file" id="in-gal" accept="image/*"
        style="position:fixed;left:-9999px;opacity:0">
 
-<div id="ov">
-  <div id="sheet">
-    <h3>DODAJ ZDJ&#x118;CIE</h3>
-    <button class="mbtn" id="m-cam">&#x1F4F7; Zr&#xF3;b zdj&#x119;cie aparatem</button>
-    <button class="mbtn" id="m-gal">&#x1F5BC; Wybierz z galerii</button>
-    <button class="mbtn mcancel" id="m-cancel">Anuluj</button>
-  </div>
-</div>
+<div id="ov"><div id="sheet">
+  <h3>DODAJ ZDJ&#x118;CIE</h3>
+  <button class="mbtn" id="m-cam">&#x1F4F7; Zr&#xF3;b zdj&#x119;cie aparatem</button>
+  <button class="mbtn" id="m-gal">&#x1F5BC; Wybierz z galerii</button>
+  <button class="mbtn mcancel" id="m-cancel">Anuluj</button>
+</div></div>
 
 <div id="toast"></div>
 <canvas id="cvs"></canvas>
@@ -114,10 +182,8 @@
     <div class="ca-brand">BUSEDEX &bull; KM KIELCE</div>
     <div class="ca-screen">
       <canvas id="ca-grain"></canvas>
-      <div id="ca-tint"></div>
-      <div id="ca-il"></div>
-      <div class="ca-scanlines"></div>
-      <div class="ca-vignette"></div>
+      <div id="ca-tint"></div><div id="ca-il"></div>
+      <div class="ca-scanlines"></div><div class="ca-vignette"></div>
       <img id="ca-photo" src="" alt="">
       <div id="ca-noghost" class="ca-noghost" style="display:none">&#x1F68C;</div>
     </div>
@@ -129,14 +195,18 @@
   <div class="ca-bottom">
     <div class="ca-badge" id="ca-badge"></div>
     <div class="ca-sub"   id="ca-sub"></div>
-    <div class="ca-tap">&#x25BA; dotkni&#x105;j aby kontynuowa&#x107;</div>
+    <div class="ca-tap">&#x25BA; dotknij aby kontynuowa&#x107;</div>
   </div>
 </div>
 
 <!-- kolejnosc skryptow jest wazna -->
-<script src="catalog.js"></script>
-<script src="render.js"></script>
-<script src="app.js"></script>
-
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script src="js/catalog.js"></script>
+<script src="js/render.js"></script>
+<script src="js/badges.js"></script>
+<script src="js/map.js"></script>
+<script src="js/history.js"></script>
+<script src="js/stats.js"></script>
+<script src="js/app.js"></script>
 </body>
 </html>

@@ -4,10 +4,11 @@
    ============================================================ */
 
 /* ── STAN APLIKACJI ─────────────────────────────────────────── */
-var caught   = {};          // { id: { date, note, hp } }
-var brandF   = "Wszystkie";
-var typeF    = "Wszystkie";
-var curBus   = null;
+var caught       = {};          // { id: { date, note, hp, lat, lng } }
+var brandF       = "Wszystkie";
+var typeF        = "Wszystkie";
+var onlyUncaught = false;       // filtr: pokaż tylko niezłapane
+var curBus       = null;
 var capPh    = null;
 
 /* ── STORAGE ────────────────────────────────────────────────── */
@@ -80,7 +81,34 @@ function showScreen(id) {
 
 function showList() {
   showScreen("screen-list");
+  setNav("nav-list");
   renderList();
+}
+function showMap() {
+  showScreen("screen-map");
+  setNav("nav-map");
+  renderMap();
+}
+function showBadges() {
+  showScreen("screen-badges");
+  setNav("nav-badges");
+  renderBadges();
+}
+function showHistory() {
+  showScreen("screen-history");
+  setNav("nav-history");
+  renderHistory();
+}
+function showStatsScreen() {
+  showScreen("screen-stats");
+  setNav("nav-stats");
+  renderStats2();
+}
+function setNav(activeId) {
+  var btns = document.querySelectorAll(".nav-btn");
+  for (var i = 0; i < btns.length; i++) btns[i].classList.remove("active");
+  var el = document.getElementById(activeId);
+  if (el) el.classList.add("active");
 }
 
 function showDetail(bus) {
@@ -247,7 +275,16 @@ function saveCatch() {
   saveData();
 
   var savedBus = curBus, savedPh = capPh;
-  showCatchAnim(savedBus, savedPh, function() { showDetail(savedBus); });
+
+  /* spróbuj zapisać lokalizację GPS */
+  getGpsAndSave(id, function(pos) {
+    if (pos) {
+      caught[id].lat = pos.lat;
+      caught[id].lng = pos.lng;
+      saveData();
+    }
+    showCatchAnim(savedBus, savedPh, function() { showDetail(savedBus); });
+  });
 }
 
 function delCatch(id) {
@@ -265,6 +302,14 @@ function openViewer(id, num, model, brand) {
           "&model=" + encodeURIComponent(model) +
           "&brand=" + encodeURIComponent(brand);
   window.location.href = "viewer.html" + p;
+}
+
+/* ── FILTR TYLKO NIEZŁAPANE ─────────────────────────────────── */
+function toggleUncaught() {
+  onlyUncaught = !onlyUncaught;
+  var el = document.getElementById("filter-uncaught");
+  if (el) el.className = "filter-uncaught" + (onlyUncaught ? " on" : "");
+  renderList();
 }
 
 /* ── BANNER INSTALACJI PWA ───────────────────────────────────── */
@@ -307,4 +352,9 @@ window.addEventListener("DOMContentLoaded", function() {
   loadData();
   renderList();
   renderInstall();
+
+  /* Service Worker — PWA offline */
+  if ("serviceWorker" in navigator) {
+    navigator.serviceWorker.register("/sw.js").catch(function() {});
+  }
 });

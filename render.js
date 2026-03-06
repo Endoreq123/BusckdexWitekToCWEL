@@ -133,6 +133,7 @@ function renderList() {
     var b = CATALOG[i];
     if (brandF !== "Wszystkie" && b.brand !== brandF) continue;
     if (typeF  !== "Wszystkie" && b.type  !== typeF)  continue;
+    if (onlyUncaught && caught[b.id]) continue;
     if (q && b.num.indexOf(q) === -1 && b.model.toLowerCase().indexOf(q) === -1) continue;
     filtered.push(b);
   }

@@ -409,3 +409,166 @@ textarea:focus { outline: none; border-color: var(--yel); }
 .ca-noghost { font-size: 60px; opacity: .15; margin: 12px 0; text-align: center; }
 
 canvas { display: none; }
+
+/* ══════════════════════════════════════════════════════════════
+   NOWE EKRANY — dodane style
+   ══════════════════════════════════════════════════════════════ */
+
+/* ── DOLNA NAWIGACJA ──────────────────────────────────────────  */
+.bottom-nav {
+  position: fixed; bottom: 0; left: 50%; transform: translateX(-50%);
+  width: 100%; max-width: 480px;
+  background: #0e0e0e;
+  border-top: 2px solid #c0191a;
+  display: flex; z-index: 50;
+  padding-bottom: env(safe-area-inset-bottom, 0);
+}
+.nav-btn {
+  flex: 1; display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  padding: 8px 4px 6px;
+  background: transparent; border: none; color: #444;
+  font-family: monospace; font-size: 9px; letter-spacing: .5px;
+  cursor: pointer; gap: 2px;
+  -webkit-tap-highlight-color: transparent;
+  transition: color .15s;
+}
+.nav-btn .ni { font-size: 20px; line-height: 1; }
+.nav-btn.active { color: var(--yel); }
+.nav-btn:active { opacity: .7; }
+
+/* dodaj padding na dole ekranów aby nav nie zasłaniał */
+.screen { padding-bottom: 58px; }
+
+/* ── FILTR TYLKO NIEZŁAPANE ───────────────────────────────────  */
+.filter-uncaught {
+  margin: 0 14px 6px;
+  display: flex; align-items: center; gap: 8px;
+  padding: 8px 12px;
+  border-radius: 8px; border: 1px solid #2a2a2a;
+  background: #111; cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+.filter-uncaught.on { border-color: var(--red); background: #1a0000; }
+.filter-uncaught .fu-icon { font-size: 16px; }
+.filter-uncaught .fu-label { font-size: 12px; color: #777; flex: 1; }
+.filter-uncaught.on .fu-label { color: var(--yel); }
+.fu-toggle {
+  width: 34px; height: 18px; border-radius: 9px;
+  background: #222; position: relative; transition: background .2s;
+}
+.filter-uncaught.on .fu-toggle { background: var(--red); }
+.fu-knob {
+  position: absolute; top: 2px; left: 2px;
+  width: 14px; height: 14px; border-radius: 50%;
+  background: #555; transition: left .2s, background .2s;
+}
+.filter-uncaught.on .fu-knob { left: 18px; background: #fff; }
+
+/* ── MAPA ─────────────────────────────────────────────────────  */
+#map-container {
+  width: 100%; height: calc(100vh - 100px);
+  z-index: 1;
+}
+.map-stats {
+  padding: 8px 14px; font-size: 11px; color: #555;
+  letter-spacing: 1px; text-align: center;
+  background: #0e0e0e; border-bottom: 1px solid #1a1a1a;
+}
+/* nadpisz styl Leaflet aby pasował do dark theme */
+.leaflet-popup-content-wrapper { background: #1a1a1a !important; color: #fff !important; border: 1px solid #333 !important; border-radius: 10px !important; box-shadow: 0 4px 20px rgba(0,0,0,.6) !important; }
+.leaflet-popup-tip { background: #1a1a1a !important; }
+.leaflet-popup-close-button { color: #888 !important; }
+
+/* ── ODZNAKI ──────────────────────────────────────────────────  */
+.badges-body { padding: 14px; display: flex; flex-direction: column; gap: 14px; }
+
+.level-card {
+  display: flex; align-items: center; gap: 14px;
+  padding: 14px; border-radius: 12px;
+  background: #0e0e0e; border: 2px solid;
+}
+.level-icon { font-size: 40px; line-height: 1; flex-shrink: 0; }
+.level-info { flex: 1; min-width: 0; }
+.level-name { font-size: 20px; font-weight: 900; letter-spacing: 1px; }
+.level-sub  { font-size: 11px; color: #666; margin-top: 3px; }
+.level-bar  { height: 4px; background: #222; border-radius: 2px; margin-top: 8px; }
+.level-fill { height: 100%; border-radius: 2px; transition: width .5s; }
+
+.badges-title { font-size: 13px; font-weight: 700; color: #555; letter-spacing: 2px; text-transform: uppercase; padding: 0 2px; }
+.badges-grid  { display: grid; grid-template-columns: repeat(2,1fr); gap: 8px; }
+
+.badge-card {
+  position: relative;
+  padding: 12px 10px; border-radius: 10px;
+  background: #0e0e0e; border: 1px solid #1a1a1a;
+  opacity: .4; filter: grayscale(.8);
+  text-align: center;
+}
+.badge-card.earned { opacity: 1; filter: none; border-color: #333; background: #111; }
+.badge-icon { font-size: 28px; margin-bottom: 5px; }
+.badge-name { font-size: 12px; font-weight: 700; color: #ccc; }
+.badge-desc { font-size: 10px; color: #555; margin-top: 3px; line-height: 1.4; }
+.badge-check { position: absolute; top: 6px; right: 8px; font-size: 12px; }
+
+/* ── HISTORIA ─────────────────────────────────────────────────  */
+.history-body { padding: 14px; display: flex; flex-direction: column; gap: 14px; }
+
+.cal-nav { display: flex; align-items: center; justify-content: space-between; padding: 0 4px; }
+.cal-btn  { background: transparent; border: 1px solid #2a2a2a; border-radius: 8px; color: var(--yel); font-size: 16px; padding: 6px 14px; cursor: pointer; font-family: monospace; }
+.cal-btn:active { opacity: .7; }
+.cal-title { font-size: 15px; font-weight: 700; color: #ccc; letter-spacing: 1px; }
+
+.cal-grid { display: grid; grid-template-columns: repeat(7,1fr); gap: 4px; }
+.cal-dow  { text-align: center; font-size: 9px; color: #444; letter-spacing: 1px; padding: 4px 0; }
+.cal-cell {
+  aspect-ratio: 1; border-radius: 6px; background: #111;
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  font-size: 11px; color: #444; position: relative; cursor: default;
+}
+.cal-cell.empty { background: transparent; }
+.cal-cell.today { border: 1px solid #333; color: #888; }
+.cal-cell.has-catch { background: #1a0a00; border: 1px solid var(--red); color: var(--yel); cursor: pointer; }
+.cal-cell.has-catch:active { opacity: .7; }
+.cal-day-num { font-size: 11px; line-height: 1; }
+.cal-dot { font-size: 9px; font-weight: 900; color: var(--red); line-height: 1; }
+
+.hist-title     { font-size: 13px; font-weight: 700; color: #555; letter-spacing: 2px; text-transform: uppercase; padding: 0 2px; }
+.hist-list      { display: flex; flex-direction: column; gap: 2px; }
+.hist-date-sep  { font-size: 10px; color: #444; letter-spacing: 1px; padding: 8px 4px 4px; border-top: 1px solid #1a1a1a; margin-top: 4px; }
+.hist-date-sep:first-child { border-top: none; margin-top: 0; }
+.hist-row {
+  display: flex; align-items: center; gap: 10px;
+  padding: 8px 10px; border-radius: 8px; background: #111;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+.hist-row:active { opacity: .7; }
+.hist-empty { text-align: center; color: #444; font-size: 13px; padding: 20px; }
+
+/* ── STATYSTYKI / RANKING ──────────────────────────────────── */
+.stats-body { padding: 14px; display: flex; flex-direction: column; gap: 14px; }
+
+.stat-hero       { text-align: center; padding: 20px 0 10px; }
+.stat-hero-num   { font-size: 64px; font-weight: 900; line-height: 1; }
+.stat-hero-sub   { font-size: 13px; color: #555; margin-top: 4px; letter-spacing: 1px; }
+.stat-hero-sub2  { font-size: 14px; color: #888; margin-top: 6px; }
+
+.rank-title { font-size: 13px; font-weight: 700; color: #555; letter-spacing: 2px; text-transform: uppercase; padding: 0 2px; }
+.rank-list  { display: flex; flex-direction: column; gap: 6px; }
+.rank-row   { display: flex; align-items: center; gap: 8px; padding: 10px 12px; background: #111; border-radius: 8px; }
+.rank-pos   { width: 28px; text-align: center; font-size: 14px; font-weight: 700; color: #555; flex-shrink: 0; }
+.rank-info  { flex: 1; min-width: 0; }
+.rank-name  { font-size: 12px; font-weight: 700; color: #ccc; margin-bottom: 4px; }
+.rank-bar-wrap { height: 4px; background: #222; border-radius: 2px; }
+.rank-bar   { height: 100%; border-radius: 2px; transition: width .5s; }
+.rank-pct   { font-size: 14px; font-weight: 900; width: 38px; text-align: right; flex-shrink: 0; }
+.rank-frac  { font-size: 10px; color: #444; width: 36px; text-align: right; flex-shrink: 0; }
+
+.export-btn {
+  width: 100%; padding: 13px; border-radius: 10px;
+  border: 1px solid #333; background: #111; color: #ccc;
+  font-family: monospace; font-size: 14px; cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+.export-btn:active { opacity: .7; }
