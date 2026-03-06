@@ -681,15 +681,15 @@ function buildCard(bus, retro) {
   var c   = caught[bus.id];
   var tm  = TM[bus.type];
   var bm  = BM[bus.brand];
-  var ph  = c && c.hp ? loadPh(bus.id) : null;
+  // Ikarus: zawsze pokazuje ikarus.jpg z serwera
+  var ph  = retro ? "ikarus.jpg" : (c && c.hp ? loadPh(bus.id) : null);
   var lbl = bus.num ? "#" + bus.num : bus.model;
   var el  = document.createElement("div");
 
   if (retro) {
     el.className = "icard" + (c ? " caught" : "");
     el.innerHTML =
-      (ph ? '<img class="cthumb" src="' + ph + '" alt="' + lbl + '" style="filter:sepia(.3)">'
-          : '<div class="cicon" style="font-size:24px">&#x1F68C;</div>') +
+      '<img class="cthumb" src="ikarus.jpg" alt="' + lbl + '" style="filter:sepia(.4)" onerror="this.style.display=\'none\'">' +
       '<div class="cnum" style="font-size:' + (bus.num ? "12px" : "9px") + '">' + lbl + '</div>' +
       (bus.num ? '<div class="iera">' + bus.model + '</div>' : '') +
       '<div class="ctype">&#x26FD;</div>' +
@@ -858,9 +858,10 @@ function renderDetail() {
   var c   = caught[bus.id];
   var tm  = TM[bus.type];
   var bm  = BM[bus.brand];
-  var ph  = c && c.hp ? loadPh(bus.id) : null;
-  var lbl = bus.num ? "#" + bus.num : bus.model;
   var isRetro = !!bm.retro;
+  // Ikarus: zawsze pokazuje ikarus.jpg z serwera zamiast zdjecia uzytkownika
+  var ph  = isRetro ? "ikarus.jpg" : (c && c.hp ? loadPh(bus.id) : null);
+  var lbl = bus.num ? "#" + bus.num : bus.model;
   var isRare  = !!bus.rare;
   var isUniq  = !!bus.unique;
   var titleStr = bus.brand + (bus.num ? " #" + bus.num : " \u00B7 " + bus.model);
@@ -906,14 +907,17 @@ function renderDetail() {
         : "background:#12052a;border:1px solid #7c3aed;color:#c084fc;";
       html += '<div class="oneof-pill" style="' + pillStyle + '">&thinsp;&#x2736; 1 OF 1 &#x2736;&thinsp;</div>';
     }
-    if (ph) html += '<img class="bphoto" src="' + ph + '" style="border-color:' + (isRetro ? "#c9a84c" : (isRare ? "#a855f7" : tm.color)) + '" alt="zdjecie">';
+    if (ph) html += '<img class="bphoto" src="' + ph + '" style="border-color:' + (isRetro ? "#c9a84c" : (isRare ? "#a855f7" : tm.color)) + ';cursor:pointer" onclick="openViewer(\'' + bus.id + '\',\'' + (bus.num||'') + '\',\'' + bus.model.replace(/\'/g,'') + '\',\'' + bus.brand + '\')" alt="zdjecie"' + (isRetro ? ' onerror="this.parentNode.removeChild(this)"' : '') + '>';
+    // Ikarus: zawsze pokazuj zdjecie z serwera nawet przed zlaPANiem
+    if (!c && isRetro) html += '<img class="bphoto" src="ikarus.jpg" style="border-color:#c9a84c44;cursor:pointer" onclick="openViewer(\'' + bus.id + '\',\'\',\'260.04\',\'Ikarus\')" alt="Ikarus" onerror="this.parentNode.removeChild(this)">';
     var mboxStyle = isRetro ? "background:#0e0c05;border:1px solid #2a2000;" : "";
     html += '<div class="mbox" style="' + mboxStyle + '">';
     if (c.date) html += '<span>&#x1F4C5; Z&#x142;apany: ' + c.date + '</span>';
     if (c.note) html += '<span style="margin-top:4px">&#x1F4DD; ' + c.note.replace(/</g,"&lt;") + '</span>';
     if (!c.date && !c.note) html += '<span style="color:#444">Brak notatki</span>';
     html += '</div>';
-    html += '<button class="btns" onclick="showCapture(curBus,true)">&#x270F;&#xFE0F; Edytuj wpis</button>';
+    if (!isRetro) html += '<button class="btns" onclick="showCapture(curBus,true)">&#x270F;&#xFE0F; Edytuj wpis</button>';
+    if (isRetro)  html += '<button class="btns" onclick="showCapture(curBus,true)">&#x270F;&#xFE0F; Edytuj notatk&#x119;</button>';
     html += '<button class="btns btnd" onclick="delCatch(\'' + bus.id + '\')">&#x1F5D1; Usu&#x144; z&#x142;apanie</button>';
   } else {
     // not caught
@@ -958,6 +962,17 @@ function renderInstall() {
     ? "&#x1F4F1; Dodaj do ekranu g&#x142;&oacute;wnego: naci&#x15B;nij <b>Udost&#x119;pnij</b> &rarr; <b>Dodaj do ekranu</b>"
     : "&#x1F4F1; Dodaj do ekranu g&#x142;&oacute;wnego: menu <b>&#x22EE;</b> &rarr; <b>Dodaj do ekranu g&#x142;&oacute;wnego</b>";
   w.innerHTML = '<div class="ibanner"><span style="flex:1;line-height:1.5">' + tip + '</span><button class="iclose" onclick="localStorage.setItem(\'bd-inst\',\'1\');document.getElementById(\'inst-wrap\').innerHTML=\'\'">&#xD7;</button></div>';
+}
+
+// ============================================================
+// VIEWER OPENER
+// ============================================================
+function openViewer(id, num, model, brand) {
+  var params = "?id=" + encodeURIComponent(id)
+    + "&num=" + encodeURIComponent(num)
+    + "&model=" + encodeURIComponent(model)
+    + "&brand=" + encodeURIComponent(brand);
+  window.location.href = "viewer.html" + params;
 }
 
 // ============================================================
