@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="theme-color" content="#000">
+<title>BuseDex Viewer</title>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html,body{width:100%;min-height:100%;background:#0a0a0a;font-family:'Courier New',monospace;color:#fff;-webkit-text-size-adjust:100%}
+#wrap{max-width:480px;margin:0 auto;min-height:100vh;display:flex;flex-direction:column;padding:0 0 24px}
+.topbar{display:flex;align-items:center;justify-content:space-between;padding:13px 16px;background:#0e0e0e;border-bottom:1px solid #1a1a1a}
+.back-btn{background:transparent;border:none;color:#f5a623;font-family:monospace;font-size:13px;cursor:pointer;padding:6px 0;-webkit-tap-highlight-color:transparent}
+.top-title{font-size:11px;color:#444;letter-spacing:2px;text-transform:uppercase}
+.bus-meta{padding:14px 16px 0;display:flex;align-items:center;gap:10px}
+.bus-num-big{font-size:34px;font-weight:900;line-height:1}
+.bus-model-sm{font-size:12px;color:#666;margin-top:3px}
+/* BEZEL */
+.crt-outer{margin:14px 16px;position:relative}
+.bezel{background:linear-gradient(160deg,#2e2e2e 0%,#181818 40%,#222 100%);border-radius:20px;padding:16px 16px 12px;box-shadow:0 0 0 2px #3a3a3a,0 0 0 4px #111,0 6px 40px rgba(0,0,0,.9),inset 0 2px 5px rgba(255,255,255,.06),inset 0 -2px 5px rgba(0,0,0,.7);position:relative}
+.screw{position:absolute;width:10px;height:10px;border-radius:50%;background:radial-gradient(circle at 35% 35%,#666,#1a1a1a);box-shadow:0 0 0 1px #111,0 1px 2px rgba(0,0,0,.8)}
+.s-tl{top:9px;left:9px}.s-tr{top:9px;right:9px}.s-bl{bottom:9px;left:9px}.s-br{bottom:9px;right:9px}
+.bezel-brand{text-align:center;font-size:9px;letter-spacing:3px;color:#2a2a2a;text-transform:uppercase;margin-bottom:10px;user-select:none}
+.screen{border-radius:12px;overflow:hidden;position:relative;background:#000;box-shadow:inset 0 0 0 2px #000,inset 0 0 30px rgba(0,0,0,.9)}
+.screen::after{content:'';position:absolute;inset:-1px;border-radius:13px;pointer-events:none;z-index:18;animation:screenGlow 3s ease-in-out infinite alternate}
+@keyframes screenGlow{0%{box-shadow:0 0 10px rgba(60,200,80,.15),0 0 25px rgba(40,150,60,.08)}100%{box-shadow:0 0 22px rgba(80,230,100,.3),0 0 55px rgba(60,200,80,.16)}}
+.scanlines{position:absolute;inset:0;background:repeating-linear-gradient(to bottom,transparent 0px,transparent 3px,rgba(0,0,0,.22) 3px,rgba(0,0,0,.22) 4px);z-index:14;pointer-events:none;border-radius:12px}
+.vignette{position:absolute;inset:0;background:radial-gradient(ellipse at 50% 45%,transparent 50%,rgba(0,0,0,.7) 100%);z-index:15;pointer-events:none;border-radius:12px}
+.fringe{position:absolute;inset:0;background:radial-gradient(ellipse at 0% 50%,rgba(255,0,0,.03) 0%,transparent 60%),radial-gradient(ellipse at 100% 50%,rgba(0,0,255,.03) 0%,transparent 60%);z-index:16;pointer-events:none;border-radius:12px}
+#grain{position:absolute;inset:0;opacity:.045;z-index:13;pointer-events:none;border-radius:12px}
+#tint{position:absolute;inset:0;background:rgba(0,255,60,.18);z-index:17;pointer-events:none;opacity:0;border-radius:12px;transition:opacity 1s}
+#il{position:absolute;inset:0;z-index:19;pointer-events:none;opacity:0;border-radius:12px;background:repeating-linear-gradient(to bottom,rgba(0,0,0,.95) 0px,rgba(0,0,0,.95) 2px,transparent 2px,transparent 4px);transition:opacity .3s}
+#il.show{opacity:1}
+#photo{display:block;width:100%;aspect-ratio:4/3;object-fit:cover;position:relative;z-index:12;opacity:0;transform:scaleY(0.004);transition:transform .45s cubic-bezier(.35,0,.9,1);background:#000}
+#photo.on{transform:scaleY(1);opacity:1}
+.bezel-strip{display:flex;align-items:center;gap:10px;padding:10px 6px 0}
+.led{width:7px;height:7px;border-radius:50%;background:#0a3a0a;box-shadow:0 0 0 1px #000;flex-shrink:0;transition:background .3s,box-shadow .3s}
+.led.on{background:#1a8a1a;box-shadow:0 0 8px #1a8a1a,0 0 0 1px #0a2a0a;animation:ledBlink 2.5s ease-in-out infinite}
+@keyframes ledBlink{0%,92%{opacity:1}96%{opacity:.25}100%{opacity:1}}
+.status-txt{font-size:9px;color:#2a2a2a;letter-spacing:2px;text-transform:uppercase;flex:1;text-align:center;transition:color .4s}
+.status-txt.on{color:#1a4a1a}
+.model-plate{font-size:8px;color:#222;letter-spacing:1px;text-align:right;white-space:nowrap;max-width:100px;overflow:hidden;text-overflow:ellipsis}
+/* TERMINAL */
+#terminal{margin:0 16px;background:#000;border-radius:8px;border:1px solid #111;padding:10px 12px 12px;min-height:100px;font-size:11px;color:#1a7a1a;line-height:1.75;overflow:hidden;position:relative;transition:opacity .35s,max-height .4s,padding .4s,min-height .4s,margin .4s}
+#terminal.hide{opacity:0;max-height:0!important;padding:0 12px;min-height:0;margin:0}
+#terminal::before{content:'';position:absolute;inset:0;background:repeating-linear-gradient(to bottom,transparent 0,transparent 21px,rgba(0,255,0,.025) 21px,rgba(0,255,0,.025) 22px);pointer-events:none}
+.tline{white-space:pre;display:block;overflow:hidden;max-height:0;transition:max-height .07s linear}
+.tline.show{max-height:22px}
+#cur{display:inline-block;width:7px;height:13px;background:#1a7a1a;margin-left:2px;vertical-align:middle;animation:blink .7s step-end infinite}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:0}}
+.pb{height:4px;background:#050505;border:1px solid #0d0d0d;border-radius:2px;overflow:hidden;margin-top:8px}
+.pbf{height:100%;width:0%;background:linear-gradient(90deg,#0a3a0a,#1a8a1a);transition:width .09s}
+/* NO PHOTO */
+#no-photo{display:none;margin:20px 16px;padding:28px;background:#0e0e0e;border:1px solid #1a1a1a;border-radius:10px;text-align:center}
+.np-icon{font-size:48px;opacity:.18;margin-bottom:12px}
+.np-msg{font-size:12px;color:#444;letter-spacing:1px;line-height:1.8}
+</style>
+</head>
+<body>
+<div id="wrap">
+  <div class="topbar">
+    <button class="back-btn" onclick="goBack()">&#x2190; Wr&oacute;&cacute;</button>
+    <span class="top-title">PHOTO VIEWER</span>
+    <span style="width:60px"></span>
+  </div>
+  <div class="bus-meta" id="bus-meta" style="display:none">
+    <div>
+      <div class="bus-num-big" id="meta-num">---</div>
+      <div class="bus-model-sm" id="meta-model"></div>
+    </div>
+  </div>
+  <div class="crt-outer" id="crt-outer" style="display:none">
+    <div class="bezel">
+      <div class="screw s-tl"></div><div class="screw s-tr"></div>
+      <div class="screw s-bl"></div><div class="screw s-br"></div>
+      <div class="bezel-brand">BUSEDEX &bull; MONITOR</div>
+      <div class="screen">
+        <canvas id="grain"></canvas>
+        <div id="tint"></div>
+        <div id="il"></div>
+        <div class="scanlines"></div>
+        <div class="vignette"></div>
+        <div class="fringe"></div>
+        <img id="photo" src="" alt="zdjecie">
+      </div>
+      <div class="bezel-strip">
+        <div class="led" id="led"></div>
+        <div class="status-txt" id="status">STANDBY</div>
+        <div class="model-plate" id="plate"></div>
+      </div>
+    </div>
+  </div>
+  <div id="terminal">
+    <div id="tlines"></div>
+    <span id="cur"></span>
+    <div class="pb"><div class="pbf" id="pbf"></div></div>
+  </div>
+  <div id="no-photo">
+    <div class="np-icon">&#x1F4F7;</div>
+    <div class="np-msg">Brak zdj&#x119;cia<br>dla tego autobusu</div>
+  </div>
+</div>
+<script>
+var grainTimer;
+function drawGrain(){var c=document.getElementById("grain"),w=c.offsetWidth,h=c.offsetHeight;if(!w||!h)return;c.width=w;c.height=h;var ctx=c.getContext("2d"),img=ctx.createImageData(w,h);for(var i=0;i<img.data.length;i+=4){var v=(Math.random()*255)|0;img.data[i]=img.data[i+1]=img.data[i+2]=v;img.data[i+3]=255;}ctx.putImageData(img,0,0);}
+function getP(){var p={};(window.location.search||"").replace(/^\?/,"").split("&").forEach(function(s){var a=s.split("=");if(a[0])p[a[0]]=decodeURIComponent(a[1]||"");});return p;}
+var LINES=["> BUSEDEX PHOTO ENGINE 2.0","> INICJALIZACJA WYSWIETLACZA...","> LADOWANIE STEROWNIKA CRT.....OK","> KALIBRACJA FOSFORU............OK","> MONTOWANIE PAMIECI ZDJEC.....OK","> DEKOMPRESJA OBRAZU.............","> FILTR SKANOWANIA.............OK","> GOTOWE"];
+function runBoot(cb){var cont=document.getElementById("tlines"),pbf=document.getElementById("pbf"),delay=0;LINES.forEach(function(txt,i){var wait=i===0?80:i<3?75:i<6?100:150;delay+=wait;setTimeout(function(){var div=document.createElement("div");div.className="tline";div.textContent=txt;cont.appendChild(div);requestAnimationFrame(function(){div.classList.add("show");});pbf.style.width=Math.round((i+1)/LINES.length*100)+"%";},delay);});setTimeout(cb,delay+180);}
+function powerOn(src){var outer=document.getElementById("crt-outer"),photo=document.getElementById("photo"),tint=document.getElementById("tint"),il=document.getElementById("il"),led=document.getElementById("led"),status=document.getElementById("status");outer.style.display="block";photo.src=src;il.classList.add("show");status.textContent="POWER ON";setTimeout(function(){photo.classList.add("on");tint.style.opacity="1";led.classList.add("on");status.textContent="LOADING";status.classList.add("on");setTimeout(function(){il.classList.remove("show");tint.style.transition="opacity 1.4s";tint.style.opacity="0";status.textContent="DISPLAY OK";grainTimer=setInterval(drawGrain,80);},350);},100);}
+function goBack(){clearInterval(grainTimer);if(window.history.length>1)window.history.back();else window.location.href="index.html";}
+window.addEventListener("DOMContentLoaded",function(){
+  var p=getP(),busId=p.id||"",busNum=p.num||"",busModel=p.model||"",busBrand=p.brand||"";
+  var src=null;if(busBrand==="Ikarus"){src="ikarus.jpg";}else{try{if(busId)src=localStorage.getItem("bdp-"+busId);}catch(e){}}
+  if(!src){document.getElementById("terminal").style.display="none";document.getElementById("no-photo").style.display="block";return;}
+  var meta=document.getElementById("bus-meta");meta.style.display="flex";
+  var numEl=document.getElementById("meta-num");numEl.textContent=busNum?"#"+busNum:busModel;
+  var bc={MAZ:"#039be5",Temsa:"#8e24aa",Solaris:"#fb8c00",MAN:"#e53935",Mercedes:"#78909c",Autosan:"#c0392b",Ikarus:"#c9a84c"};
+  numEl.style.color=bc[busBrand]||"#f5a623";
+  document.getElementById("meta-model").textContent=busModel;
+  document.getElementById("plate").textContent=busBrand||"BUSEDEX";
+  runBoot(function(){var term=document.getElementById("terminal");term.classList.add("hide");setTimeout(function(){powerOn(src);},450);});
+});
+</script>
+</body>
+</html>
