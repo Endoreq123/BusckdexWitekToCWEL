@@ -4,8 +4,6 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="apple-mobile-web-app-title" content="BuseDex">
 <meta name="theme-color" content="#0a0a0a">
 <title>BuseDex Kielce</title>
 <style>
@@ -15,26 +13,18 @@ html,body{height:100%;background:var(--bg);color:#fff;font-family:'Courier New',
 #app{max-width:480px;margin:0 auto;min-height:100vh}
 .screen{display:none;flex-direction:column;min-height:100vh}
 .screen.active{display:flex}
-
-/* topbar */
 .topbar{display:flex;justify-content:space-between;align-items:center;padding:14px 16px 12px;background:linear-gradient(135deg,#141414,#0e0e0e);border-bottom:2px solid var(--or);position:sticky;top:0;z-index:10}
 .app-title{font-size:22px;font-weight:900;color:var(--or);letter-spacing:1px}
 .app-sub{font-size:10px;color:var(--mu);letter-spacing:2px;margin-top:3px}
 .score-big{font-size:28px;font-weight:900;color:var(--or);line-height:1;text-align:center}
 .score-sub{font-size:10px;color:var(--mu);margin-top:2px;text-align:center}
-
-/* progress */
 .prog-wrap{height:4px;background:#111}
 .prog-bar{height:100%;background:linear-gradient(90deg,var(--or),var(--gr));transition:width .5s}
-
-/* stats */
 .stats-row{display:flex;gap:8px;padding:10px 14px;overflow-x:auto;scrollbar-width:none}
 .stats-row::-webkit-scrollbar{display:none}
 .stat-chip{display:flex;flex-direction:column;align-items:center;gap:3px;padding:8px 12px;border-radius:8px;background:var(--bg2);border:1px solid;min-width:84px;flex-shrink:0}
 .smbar{width:100%;height:3px;background:#222;border-radius:2px;margin-top:2px}
 .smfill{height:100%;border-radius:2px}
-
-/* search & filters */
 .sw{padding:8px 14px 4px}
 .si{width:100%;padding:9px 12px;border-radius:8px;border:1px solid var(--bd);background:var(--bg2);color:#fff;font-family:monospace;font-size:13px;-webkit-appearance:none}
 .si:focus{outline:none;border-color:var(--or)}
@@ -42,19 +32,13 @@ html,body{height:100%;background:var(--bg);color:#fff;font-family:'Courier New',
 .frow::-webkit-scrollbar{display:none}
 .chip{padding:5px 12px;border-radius:20px;border:1px solid #2a2a2a;background:transparent;color:#666;cursor:pointer;font-family:monospace;font-size:11px;white-space:nowrap;flex-shrink:0;-webkit-tap-highlight-color:transparent}
 .chip.on{color:#000;font-weight:800}
-
-/* section */
 .shdr{display:flex;align-items:center;gap:8px;padding:10px 14px 6px;border-left:3px solid;background:#0e0e0e;margin-top:6px}
 .stit{font-size:15px;font-weight:900;letter-spacing:1px;flex:1}
 .scnt{font-size:12px;color:#444}
 .sminibar{width:60px;height:4px;background:#1a1a1a;border-radius:2px}
 .sminifill{height:100%;border-radius:2px}
-
-/* sub-section */
 .subhdr{display:flex;align-items:center;gap:8px;padding:7px 14px 5px 20px;background:#0a0a0a;border-left:3px solid #33333388;margin-top:2px}
 .subtit{font-size:13px;font-weight:900;letter-spacing:1px;flex:1}
-
-/* grid */
 .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;padding:8px 14px}
 .card{border-radius:10px;border:2px solid;overflow:hidden;cursor:pointer;position:relative;aspect-ratio:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;padding:4px;background:var(--bg2);-webkit-tap-highlight-color:transparent}
 .card:active{opacity:.8}
@@ -66,13 +50,9 @@ html,body{height:100%;background:var(--bg);color:#fff;font-family:'Courier New',
 .ctype{position:absolute;top:3px;left:5px;font-size:10px}
 .cchk{position:absolute;top:2px;right:4px;font-size:11px}
 .oneof{position:absolute;bottom:3px;left:50%;transform:translateX(-50%);color:#fff;font-size:7px;font-weight:900;letter-spacing:1px;padding:1px 5px;border-radius:4px;white-space:nowrap;text-transform:uppercase;pointer-events:none}
-
-/* rare cards */
 .card.rare{border-color:#a855f7!important;background:linear-gradient(145deg,#1a0a2a,#120818)!important;box-shadow:0 0 10px rgba(168,85,247,.25)}
 .card.rare .cnum{color:#c084fc!important}
 .card.rare .oneof{background:linear-gradient(90deg,#7c3aed,#a855f7)}
-
-/* ikarus grid */
 .igrid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;padding:8px 14px;background:#0c0b08}
 .icard{border-radius:8px;border:1px solid #3a2e10;overflow:hidden;cursor:pointer;position:relative;aspect-ratio:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;padding:4px;background:linear-gradient(145deg,#131006,#0e0c05);-webkit-tap-highlight-color:transparent}
 .icard:active{opacity:.8}
@@ -84,24 +64,16 @@ html,body{height:100%;background:var(--bg);color:#fff;font-family:'Courier New',
 .iera{font-size:8px;color:#4a3a08;text-align:center}
 .icard.caught .iera{color:#7a6020}
 .icard .oneof{background:linear-gradient(90deg,#a07820,#f0c040);color:#000}
-
-/* ikarus section header */
 .ihdr{display:flex;align-items:center;gap:8px;padding:12px 14px 8px;margin-top:6px;background:linear-gradient(135deg,#1a1200,#12100a);border-left:3px solid #c9a84c;border-top:1px solid #c9a84c44;position:relative;overflow:hidden}
 .ihdr::before{content:'';position:absolute;inset:0;background:repeating-linear-gradient(90deg,transparent,transparent 3px,rgba(201,168,76,.04) 3px,rgba(201,168,76,.04) 4px);pointer-events:none}
 .itit{font-size:16px;font-weight:900;letter-spacing:3px;flex:1;background:linear-gradient(90deg,#f0c040,#c9a84c,#a07820,#c9a84c,#f0c040);background-size:200% auto;-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;text-transform:uppercase;animation:shine 4s linear infinite}
 .isub{font-size:9px;letter-spacing:2px;color:#7a6020;text-transform:uppercase;margin-top:2px}
 @keyframes shine{0%{background-position:0%}100%{background-position:200%}}
-
-/* rare sub-header */
 .rshdr{display:flex;align-items:center;gap:8px;padding:7px 14px 5px 20px;background:linear-gradient(90deg,#12081a,#0a0a0a);border-left:3px solid #a855f788;margin-top:2px}
 .rstit{font-size:13px;font-weight:900;letter-spacing:1px;flex:1;background:linear-gradient(90deg,#c084fc,#a855f7,#7c3aed,#c084fc);background-size:200% auto;-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;animation:shine 5s linear infinite}
-
-/* header */
 .hdr{display:flex;align-items:center;justify-content:space-between;padding:13px 16px;background:#0e0e0e;border-bottom:1px solid var(--bd);position:sticky;top:0;z-index:10}
 .htit{font-size:14px;font-weight:700;color:var(--or)}
 .bk{background:transparent;border:none;color:var(--or);font-size:14px;cursor:pointer;font-family:monospace;padding:8px 0;-webkit-tap-highlight-color:transparent}
-
-/* detail */
 .dbody{padding:20px;display:flex;flex-direction:column;gap:14px;flex:1}
 .irow{display:flex;align-items:center;gap:12px;padding:12px 14px;background:var(--bg2);border-radius:10px;border:2px solid}
 .bnum{font-size:38px;font-weight:900;letter-spacing:1px;line-height:1}
@@ -109,17 +81,13 @@ html,body{height:100%;background:var(--bg);color:#fff;font-family:'Courier New',
 .tbadge{align-self:flex-start;padding:5px 14px;border-radius:20px;font-size:13px;font-weight:700;border:1px solid}
 .cbadge{align-self:flex-start;padding:5px 14px;border-radius:20px;font-weight:700;font-size:13px}
 .ubadge{align-self:flex-start;background:#141414;border:1px solid #333;color:#555;padding:5px 14px;border-radius:20px;font-weight:700;font-size:13px}
-.bphoto{width:100%;border-radius:10px;max-height:280px;object-fit:cover;border:2px solid;display:block}
+.bphoto{width:100%;border-radius:10px;max-height:280px;object-fit:cover;border:2px solid;display:block;cursor:pointer}
 .mbox{display:flex;flex-direction:column;gap:5px;padding:10px 14px;background:var(--bg2);border-radius:8px;font-size:13px;color:#777}
 .ghost{font-size:90px;opacity:.12;text-align:center;margin:16px 0}
 .oneof-pill{display:inline-flex;align-items:center;gap:5px;align-self:flex-start;padding:4px 12px;border-radius:20px;font-size:11px;font-weight:900;letter-spacing:2px;text-transform:uppercase}
-
-/* buttons */
 .btnp{width:100%;padding:15px;border-radius:10px;border:none;color:#fff;font-weight:900;font-size:15px;cursor:pointer;font-family:monospace;letter-spacing:.5px;-webkit-tap-highlight-color:transparent}
 .btns{width:100%;padding:12px;border-radius:10px;border:1px solid #2a2a2a;background:var(--bg2);color:#bbb;font-size:13px;cursor:pointer;font-family:monospace;-webkit-tap-highlight-color:transparent}
 .btnd{border-color:#c0392b!important;color:#e74c3c!important}
-
-/* capture */
 .abody{padding:16px;display:flex;flex-direction:column;gap:12px;flex:1}
 .ainfo{display:flex;align-items:center;gap:12px;padding:12px 14px;background:var(--bg2);border-radius:10px;border:2px solid}
 .plbl{font-size:11px;color:#666;letter-spacing:1px;text-transform:uppercase;padding:0 2px}
@@ -132,8 +100,6 @@ html,body{height:100%;background:var(--bg);color:#fff;font-family:'Courier New',
 .pbtn:active{opacity:.7}
 textarea{width:100%;padding:10px 12px;border-radius:8px;border:1px solid #1e1e1e;background:var(--bg2);color:#fff;font-family:monospace;font-size:13px;resize:none;height:72px;-webkit-appearance:none}
 textarea:focus{outline:none;border-color:var(--or)}
-
-/* modal */
 #ov{display:none;position:fixed;inset:0;background:rgba(0,0,0,.75);z-index:200;align-items:flex-end;justify-content:center}
 #ov.open{display:flex}
 #sheet{background:#161616;border-radius:16px 16px 0 0;padding:20px 16px 36px;width:100%;max-width:480px;border-top:2px solid #2a2a2a}
@@ -141,866 +107,450 @@ textarea:focus{outline:none;border-color:var(--or)}
 .mbtn{display:block;width:100%;padding:16px;border-radius:10px;border:none;background:#1e1e1e;color:#fff;font-family:monospace;font-size:15px;cursor:pointer;margin-bottom:10px;text-align:center;-webkit-tap-highlight-color:transparent}
 .mbtn:active{opacity:.7}
 .mcancel{background:transparent!important;border:1px solid #333;color:#666;margin-top:4px}
-
-/* toast */
 #toast{position:fixed;bottom:30px;left:50%;transform:translateX(-50%);background:#1e1e1e;color:#fff;padding:10px 22px;border-radius:20px;font-family:monospace;font-size:13px;opacity:0;transition:opacity .3s;pointer-events:none;z-index:999;white-space:nowrap;border:1px solid #333;max-width:90vw;text-align:center}
 #toast.show{opacity:1}
-
-/* install banner */
 .ibanner{margin:10px 14px;padding:10px 12px;border-radius:10px;background:#111;border:1px solid var(--or);display:flex;align-items:center;gap:10px;font-size:11px;color:#aaa;line-height:1.5}
 .iclose{margin-left:auto;background:transparent;border:none;color:#555;font-size:20px;cursor:pointer;flex-shrink:0;padding:0 4px}
 canvas{display:none}
+
+/* ── CATCH ANIMATION OVERLAY ─────────────────────────── */
+#ca{position:fixed;inset:0;z-index:500;background:#000;display:none;flex-direction:column;align-items:center;justify-content:center;padding:20px}
+#ca.show{display:flex}
+.ca-bezel{width:min(320px,86vw);background:linear-gradient(160deg,#2e2e2e,#181818,#222);border-radius:18px;padding:14px 14px 10px;box-shadow:0 0 0 2px #3a3a3a,0 0 0 4px #111,0 8px 50px rgba(0,0,0,.95),inset 0 2px 4px rgba(255,255,255,.06);position:relative}
+.ca-sc{position:absolute;width:9px;height:9px;border-radius:50%;background:radial-gradient(circle at 35% 35%,#666,#1a1a1a);box-shadow:0 0 0 1px #111}
+.ca-s1{top:8px;left:8px}.ca-s2{top:8px;right:8px}.ca-s3{bottom:8px;left:8px}.ca-s4{bottom:8px;right:8px}
+.ca-brand{text-align:center;font-size:9px;letter-spacing:3px;color:#2a2a2a;text-transform:uppercase;margin-bottom:8px}
+.ca-screen{border-radius:10px;overflow:hidden;position:relative;background:#000;box-shadow:inset 0 0 20px rgba(0,0,0,.9)}
+.ca-screen::after{content:'';position:absolute;inset:-1px;border-radius:11px;pointer-events:none;z-index:8;animation:caGlow 2s ease-in-out infinite alternate}
+@keyframes caGlow{0%{box-shadow:0 0 10px rgba(60,200,80,.15)}100%{box-shadow:0 0 25px rgba(80,230,100,.32)}}
+.ca-scanlines{position:absolute;inset:0;background:repeating-linear-gradient(to bottom,transparent 0px,transparent 3px,rgba(0,0,0,.22) 3px,rgba(0,0,0,.22) 4px);z-index:5;pointer-events:none;border-radius:10px}
+.ca-vignette{position:absolute;inset:0;background:radial-gradient(ellipse at 50% 45%,transparent 50%,rgba(0,0,0,.65) 100%);z-index:6;pointer-events:none;border-radius:10px}
+#ca-tint{position:absolute;inset:0;background:rgba(0,255,60,.2);z-index:7;pointer-events:none;opacity:0;border-radius:10px;transition:opacity 1.2s}
+#ca-grain{position:absolute;inset:0;opacity:.05;z-index:4;pointer-events:none;border-radius:10px;display:block!important}
+#ca-photo{display:block!important;width:100%;aspect-ratio:4/3;object-fit:cover;position:relative;z-index:3;background:#000;transform:scaleY(0.005);opacity:0;transition:transform .42s cubic-bezier(.35,0,.9,1)}
+#ca-photo.on{transform:scaleY(1);opacity:1}
+#ca-il{position:absolute;inset:0;z-index:9;pointer-events:none;opacity:0;border-radius:10px;background:repeating-linear-gradient(to bottom,rgba(0,0,0,.95) 0px,rgba(0,0,0,.95) 2px,transparent 2px,transparent 4px);transition:opacity .28s}
+#ca-il.show{opacity:1}
+.ca-strip{display:flex;align-items:center;gap:8px;padding:8px 4px 2px}
+.ca-led{width:6px;height:6px;border-radius:50%;background:#0a3a0a;box-shadow:0 0 0 1px #000;flex-shrink:0;transition:background .3s,box-shadow .3s}
+.ca-led.on{background:#1a8a1a;box-shadow:0 0 7px #1a8a1a;animation:ledBlink 2s infinite}
+@keyframes ledBlink{0%,92%{opacity:1}96%{opacity:.25}100%{opacity:1}}
+.ca-status{font-size:9px;color:#1a4a1a;letter-spacing:2px;text-transform:uppercase;flex:1;text-align:center}
+.ca-bottom{margin-top:18px;text-align:center}
+.ca-badge{font-size:24px;font-weight:900;letter-spacing:2px;line-height:1.2}
+.ca-sub{font-size:11px;color:#555;letter-spacing:1px;margin-top:5px}
+.ca-tap{font-size:11px;color:#333;margin-top:20px;letter-spacing:2px;animation:tapPulse 1.5s ease-in-out infinite}
+@keyframes tapPulse{0%,100%{opacity:.35}50%{opacity:1}}
+.ca-noghost{font-size:60px;opacity:.15;margin:12px 0;text-align:center}
 </style>
 </head>
 <body>
 <div id="app">
-
-  <!-- LIST -->
   <div id="screen-list" class="screen active">
     <div class="topbar">
-      <div>
-        <div class="app-title">&#x1F68C; BuseDex</div>
-        <div class="app-sub">Kielce &middot; Komunikacja Miejska</div>
-      </div>
-      <div>
-        <div class="score-big" id="pct-big">0%</div>
-        <div class="score-sub" id="pct-sub">0 / 0</div>
-      </div>
+      <div><div class="app-title">&#x1F68C; BuseDex</div><div class="app-sub">Kielce &middot; KM</div></div>
+      <div><div class="score-big" id="pct-big">0%</div><div class="score-sub" id="pct-sub">0 / 0</div></div>
     </div>
     <div class="prog-wrap"><div class="prog-bar" id="prog-bar" style="width:0%"></div></div>
     <div class="stats-row" id="stats-row"></div>
     <div id="inst-wrap"></div>
-    <div class="sw"><input class="si" id="si" type="search" placeholder="&#x1F50D; numer boczny lub model&hellip;" autocorrect="off" autocomplete="off"></div>
+    <div class="sw"><input class="si" id="si" type="search" placeholder="&#x1F50D; numer lub model..." autocorrect="off" autocomplete="off"></div>
     <div class="frow" id="bf"></div>
     <div class="frow" id="tf"></div>
     <div id="bus-list"></div>
     <div style="height:28px"></div>
   </div>
-
-  <!-- DETAIL -->
   <div id="screen-detail" class="screen">
     <div class="hdr">
-      <button class="bk" id="det-back">&#x2190; Wr&oacute;&cacute;</button>
+      <button class="bk" id="det-back">&#x2190; Wróc</button>
       <span class="htit" id="det-title"></span>
       <span style="width:60px"></span>
     </div>
     <div class="dbody" id="det-body"></div>
   </div>
-
-  <!-- CAPTURE -->
   <div id="screen-capture" class="screen">
     <div class="hdr">
-      <button class="bk" id="cap-back">&#x2190; Wr&oacute;&cacute;</button>
-      <span class="htit" id="cap-title">Z&#x142;ap autobus</span>
+      <button class="bk" id="cap-back">&#x2190; Wróc</button>
+      <span class="htit" id="cap-title">Zlap autobus</span>
       <span style="width:60px"></span>
     </div>
     <div class="abody">
       <div class="ainfo" id="cap-info" style="border-color:#333"></div>
       <div>
-        <div class="plbl" style="margin-bottom:6px">&#x1F4F8; Zdj&#x119;cie</div>
+        <div class="plbl" style="margin-bottom:6px">&#x1F4F8; Zdjecie</div>
         <div class="pbox" id="pbox">
-          <div class="pph" id="pph">
-            <div style="font-size:44px">&#x1F68C;</div>
-            <div>Dotknij, by doda&#x107; zdj&#x119;cie</div>
-            <div style="font-size:11px;margin-top:6px;opacity:.5">aparat lub galeria</div>
-          </div>
+          <div class="pph" id="pph"><div style="font-size:44px">&#x1F68C;</div><div>Dotknij aby dodac zdjecie</div><div style="font-size:11px;margin-top:6px;opacity:.5">aparat lub galeria</div></div>
           <img id="pprev" class="pprev" src="" alt="podglad">
         </div>
         <div class="pbtns" style="margin-top:8px">
           <button class="pbtn" id="btn-cam">&#x1F4F7; Aparat</button>
           <button class="pbtn" id="btn-gal">&#x1F5BC; Galeria</button>
-          <button class="pbtn" id="btn-del-ph" style="display:none;color:#e74c3c;border-color:#c0392b">&#x1F5D1; Usu&#x144;</button>
+          <button class="pbtn" id="btn-del-ph" style="display:none;color:#e74c3c;border-color:#c0392b">&#x1F5D1; Usun</button>
         </div>
       </div>
       <div>
         <div class="plbl" style="margin-bottom:6px">&#x1F4DD; Notatka</div>
-        <textarea id="note" placeholder="np. linia 1, ul. Sienkiewicza, &#x15B;roda rano&hellip;"></textarea>
+        <textarea id="note" placeholder="np. linia 1, ul. Sienkiewicza..."></textarea>
       </div>
-      <button class="btnp" id="btn-save">&#x2705; Zapisz z&#x142;apanie!</button>
+      <button class="btnp" id="btn-save">&#x2705; Zapisz zlapanie!</button>
     </div>
   </div>
-
 </div>
-
-<!-- hidden file inputs -->
-<input type="file" id="in-cam"  accept="image/*" capture="environment" style="position:fixed;left:-9999px;opacity:0">
-<input type="file" id="in-gal"  accept="image/*" style="position:fixed;left:-9999px;opacity:0">
-
-<!-- modal -->
-<div id="ov">
-  <div id="sheet">
-    <h3>DODAJ ZDJ&#x118;CIE</h3>
-    <button class="mbtn" id="m-cam">&#x1F4F7; Zr&oacute;b zdj&#x119;cie aparatem</button>
-    <button class="mbtn" id="m-gal">&#x1F5BC; Wybierz z galerii</button>
-    <button class="mbtn mcancel" id="m-cancel">Anuluj</button>
-  </div>
-</div>
-
+<input type="file" id="in-cam" accept="image/*" capture="environment" style="position:fixed;left:-9999px;opacity:0">
+<input type="file" id="in-gal" accept="image/*" style="position:fixed;left:-9999px;opacity:0">
+<div id="ov"><div id="sheet"><h3>DODAJ ZDJECIE</h3><button class="mbtn" id="m-cam">&#x1F4F7; Zrób zdjecie aparatem</button><button class="mbtn" id="m-gal">&#x1F5BC; Wybierz z galerii</button><button class="mbtn mcancel" id="m-cancel">Anuluj</button></div></div>
 <div id="toast"></div>
 <canvas id="cvs"></canvas>
 
+<!-- CATCH ANIMATION -->
+<div id="ca">
+  <div class="ca-bezel">
+    <div class="ca-sc ca-s1"></div><div class="ca-sc ca-s2"></div><div class="ca-sc ca-s3"></div><div class="ca-sc ca-s4"></div>
+    <div class="ca-brand">BUSEDEX &bull; CAPTURED</div>
+    <div class="ca-screen">
+      <canvas id="ca-grain"></canvas>
+      <div id="ca-tint"></div>
+      <div id="ca-il"></div>
+      <div class="ca-scanlines"></div>
+      <div class="ca-vignette"></div>
+      <img id="ca-photo" src="" alt="">
+      <div id="ca-noghost" class="ca-noghost" style="display:none">&#x1F68C;</div>
+    </div>
+    <div class="ca-strip"><div class="ca-led" id="ca-led"></div><div class="ca-status" id="ca-status">CAPTURED</div></div>
+  </div>
+  <div class="ca-bottom">
+    <div class="ca-badge" id="ca-badge"></div>
+    <div class="ca-sub" id="ca-sub"></div>
+    <div class="ca-tap">&#x25BA; dotknij aby kontynuowac</div>
+  </div>
+</div>
+
 <script>
-// ============================================================
-// KATALOG — edytuj tutaj aby dodawac/usuwac autobusy
-// brand: MAZ | Temsa | Solaris | MAN | Mercedes | Autosan | Ikarus
-// type:  spalinowy | hybrydowy | elektryczny
-// sub:   podgrupa (opcjonalnie, tylko Solaris)
-// rare:  true — rzadki (fioletowy styl)
-// unique:true — badge 1 OF 1
-// ============================================================
 var CATALOG = [
-  // MAZ
-  {id:"m1",  num:"006", brand:"MAZ", model:"MAZ-206085", type:"spalinowy"},
-  {id:"m2",  num:"950", brand:"MAZ", model:"MAZ-206085", type:"spalinowy"},
-  {id:"m3",  num:"951", brand:"MAZ", model:"MAZ-206085", type:"spalinowy"},
-  {id:"m4",  num:"007", brand:"MAZ", model:"MAZ-203069", type:"spalinowy"},
-  {id:"m5",  num:"009", brand:"MAZ", model:"MAZ-203069", type:"spalinowy"},
-  {id:"m6",  num:"010", brand:"MAZ", model:"MAZ-203069", type:"spalinowy"},
-  {id:"m7",  num:"011", brand:"MAZ", model:"MAZ-203069", type:"spalinowy"},
-  {id:"m8",  num:"013", brand:"MAZ", model:"MAZ-203069", type:"spalinowy"},
-  {id:"m9",  num:"014", brand:"MAZ", model:"MAZ-203069", type:"spalinowy"},
-  {id:"m10", num:"015", brand:"MAZ", model:"MAZ-203069", type:"spalinowy"},
-  {id:"m11", num:"016", brand:"MAZ", model:"MAZ-203069", type:"spalinowy"},
-  {id:"m12", num:"919", brand:"MAZ", model:"MAZ-203069", type:"spalinowy"},
-  // Temsa
-  {id:"t1",  num:"030", brand:"Temsa", model:"LF 12", type:"spalinowy"},
-  {id:"t2",  num:"031", brand:"Temsa", model:"LF 12", type:"spalinowy"},
-  {id:"t3",  num:"032", brand:"Temsa", model:"LF 12", type:"spalinowy"},
-  {id:"t4",  num:"600", brand:"Temsa", model:"LF 12", type:"spalinowy"},
-  {id:"t5",  num:"601", brand:"Temsa", model:"LF 12", type:"spalinowy"},
-  {id:"t6",  num:"602", brand:"Temsa", model:"LF 12", type:"spalinowy"},
-  {id:"t7",  num:"603", brand:"Temsa", model:"LF 12", type:"spalinowy"},
-  {id:"t8",  num:"604", brand:"Temsa", model:"LF 12", type:"spalinowy"},
-  {id:"t9",  num:"605", brand:"Temsa", model:"LF 12", type:"spalinowy"},
-  {id:"t10", num:"606", brand:"Temsa", model:"LF 12", type:"spalinowy"},
-  {id:"t11", num:"607", brand:"Temsa", model:"LF 12", type:"spalinowy"},
-  // Solaris U12 I
-  {id:"s1",  num:"328", brand:"Solaris", sub:"U12 I",  model:"Urbino 12 I",  type:"spalinowy", rare:true, unique:true},
-  // Solaris U12 III
-  {id:"s2",  num:"363", brand:"Solaris", sub:"U12 III", model:"Urbino 12 III", type:"spalinowy"},
-  {id:"s3",  num:"365", brand:"Solaris", sub:"U12 III", model:"Urbino 12 III", type:"spalinowy"},
-  {id:"s4",  num:"366", brand:"Solaris", sub:"U12 III", model:"Urbino 12 III", type:"spalinowy"},
-  {id:"s5",  num:"368", brand:"Solaris", sub:"U12 III", model:"Urbino 12 III", type:"spalinowy"},
-  {id:"s6",  num:"369", brand:"Solaris", sub:"U12 III", model:"Urbino 12 III", type:"spalinowy"},
-  {id:"s7",  num:"372", brand:"Solaris", sub:"U12 III", model:"Urbino 12 III", type:"spalinowy"},
-  {id:"s8",  num:"374", brand:"Solaris", sub:"U12 III", model:"Urbino 12 III", type:"spalinowy"},
-  {id:"s9",  num:"375", brand:"Solaris", sub:"U12 III", model:"Urbino 12 III", type:"spalinowy"},
-  {id:"s10", num:"376", brand:"Solaris", sub:"U12 III", model:"Urbino 12 III", type:"spalinowy"},
-  {id:"s11", num:"377", brand:"Solaris", sub:"U12 III", model:"Urbino 12 III", type:"spalinowy"},
-  {id:"s12", num:"378", brand:"Solaris", sub:"U12 III", model:"Urbino 12 III", type:"spalinowy"},
-  {id:"s13", num:"379", brand:"Solaris", sub:"U12 III", model:"Urbino 12 III", type:"spalinowy"},
-  {id:"s14", num:"380", brand:"Solaris", sub:"U12 III", model:"Urbino 12 III", type:"spalinowy"},
-  {id:"s15", num:"381", brand:"Solaris", sub:"U12 III", model:"Urbino 12 III", type:"spalinowy"},
-  {id:"s16", num:"382", brand:"Solaris", sub:"U12 III", model:"Urbino 12 III", type:"spalinowy"},
-  {id:"s17", num:"383", brand:"Solaris", sub:"U12 III", model:"Urbino 12 III", type:"spalinowy"},
-  {id:"s18", num:"384", brand:"Solaris", sub:"U12 III", model:"Urbino 12 III", type:"spalinowy"},
-  {id:"s19", num:"385", brand:"Solaris", sub:"U12 III", model:"Urbino 12 III", type:"spalinowy"},
-  {id:"s20", num:"386", brand:"Solaris", sub:"U12 III", model:"Urbino 12 III", type:"spalinowy"},
-  {id:"s21", num:"387", brand:"Solaris", sub:"U12 III", model:"Urbino 12 III", type:"spalinowy"},
-  {id:"s22", num:"388", brand:"Solaris", sub:"U12 III", model:"Urbino 12 III", type:"spalinowy"},
-  {id:"s23", num:"389", brand:"Solaris", sub:"U12 III", model:"Urbino 12 III", type:"spalinowy"},
-  {id:"s24", num:"390", brand:"Solaris", sub:"U12 III", model:"Urbino 12 III", type:"spalinowy"},
-  {id:"s25", num:"391", brand:"Solaris", sub:"U12 III", model:"Urbino 12 III", type:"spalinowy"},
-  {id:"s26", num:"392", brand:"Solaris", sub:"U12 III", model:"Urbino 12 III", type:"spalinowy"},
-  {id:"s27", num:"393", brand:"Solaris", sub:"U12 III", model:"Urbino 12 III", type:"spalinowy"},
-  {id:"s28", num:"394", brand:"Solaris", sub:"U12 III", model:"Urbino 12 III", type:"spalinowy"},
-  {id:"s29", num:"395", brand:"Solaris", sub:"U12 III", model:"Urbino 12 III", type:"spalinowy"},
-  {id:"s30", num:"396", brand:"Solaris", sub:"U12 III", model:"Urbino 12 III", type:"spalinowy"},
-  {id:"s31", num:"397", brand:"Solaris", sub:"U12 III", model:"Urbino 12 III", type:"spalinowy"},
-  {id:"s32", num:"398", brand:"Solaris", sub:"U12 III", model:"Urbino 12 III", type:"spalinowy"},
-  {id:"s33", num:"450", brand:"Solaris", sub:"U12 III", model:"Urbino 12 III", type:"spalinowy"},
-  {id:"s34", num:"451", brand:"Solaris", sub:"U12 III", model:"Urbino 12 III", type:"spalinowy"},
-  {id:"s35", num:"454", brand:"Solaris", sub:"U12 III", model:"Urbino 12 III", type:"spalinowy"},
-  // Solaris U12 IV hybrid
-  {id:"s36", num:"5001", brand:"Solaris", sub:"U12 IV", model:"Urbino 12 IV", type:"hybrydowy"},
-  {id:"s37", num:"5002", brand:"Solaris", sub:"U12 IV", model:"Urbino 12 IV", type:"hybrydowy"},
-  {id:"s38", num:"5003", brand:"Solaris", sub:"U12 IV", model:"Urbino 12 IV", type:"hybrydowy"},
-  {id:"s39", num:"5004", brand:"Solaris", sub:"U12 IV", model:"Urbino 12 IV", type:"hybrydowy"},
-  {id:"s40", num:"5005", brand:"Solaris", sub:"U12 IV", model:"Urbino 12 IV", type:"hybrydowy"},
-  {id:"s41", num:"5006", brand:"Solaris", sub:"U12 IV", model:"Urbino 12 IV", type:"hybrydowy"},
-  {id:"s42", num:"5007", brand:"Solaris", sub:"U12 IV", model:"Urbino 12 IV", type:"hybrydowy"},
-  {id:"s43", num:"5008", brand:"Solaris", sub:"U12 IV", model:"Urbino 12 IV", type:"hybrydowy"},
-  {id:"s44", num:"5009", brand:"Solaris", sub:"U12 IV", model:"Urbino 12 IV", type:"hybrydowy"},
-  {id:"s45", num:"5010", brand:"Solaris", sub:"U12 IV", model:"Urbino 12 IV", type:"hybrydowy"},
-  {id:"s46", num:"5011", brand:"Solaris", sub:"U12 IV", model:"Urbino 12 IV", type:"hybrydowy"},
-  {id:"s47", num:"5012", brand:"Solaris", sub:"U12 IV", model:"Urbino 12 IV", type:"hybrydowy"},
-  {id:"s48", num:"5013", brand:"Solaris", sub:"U12 IV", model:"Urbino 12 IV", type:"hybrydowy"},
-  {id:"s49", num:"5014", brand:"Solaris", sub:"U12 IV", model:"Urbino 12 IV", type:"hybrydowy"},
-  {id:"s50", num:"5015", brand:"Solaris", sub:"U12 IV", model:"Urbino 12 IV", type:"hybrydowy"},
-  // Solaris U15 III rare
-  {id:"s51", num:"244", brand:"Solaris", sub:"U15 III", model:"Urbino 15 III", type:"spalinowy", rare:true, unique:true},
-  // Solaris U18 III spalinowe
-  {id:"s52", num:"238", brand:"Solaris", sub:"U18 III", model:"Urbino 18 III", type:"spalinowy"},
-  {id:"s53", num:"239", brand:"Solaris", sub:"U18 III", model:"Urbino 18 III", type:"spalinowy"},
-  {id:"s54", num:"240", brand:"Solaris", sub:"U18 III", model:"Urbino 18 III", type:"spalinowy"},
-  {id:"s55", num:"241", brand:"Solaris", sub:"U18 III", model:"Urbino 18 III", type:"spalinowy"},
-  {id:"s56", num:"242", brand:"Solaris", sub:"U18 III", model:"Urbino 18 III", type:"spalinowy"},
-  {id:"s57", num:"243", brand:"Solaris", sub:"U18 III", model:"Urbino 18 III", type:"spalinowy"},
-  {id:"s58", num:"245", brand:"Solaris", sub:"U18 III", model:"Urbino 18 III", type:"spalinowy"},
-  {id:"s59", num:"246", brand:"Solaris", sub:"U18 III", model:"Urbino 18 III", type:"spalinowy"},
-  {id:"s60", num:"247", brand:"Solaris", sub:"U18 III", model:"Urbino 18 III", type:"spalinowy"},
-  {id:"s61", num:"248", brand:"Solaris", sub:"U18 III", model:"Urbino 18 III", type:"spalinowy"},
-  {id:"s62", num:"249", brand:"Solaris", sub:"U18 III", model:"Urbino 18 III", type:"spalinowy"},
-  {id:"s63", num:"250", brand:"Solaris", sub:"U18 III", model:"Urbino 18 III", type:"spalinowy"},
-  {id:"s64", num:"251", brand:"Solaris", sub:"U18 III", model:"Urbino 18 III", type:"spalinowy"},
-  {id:"s65", num:"252", brand:"Solaris", sub:"U18 III", model:"Urbino 18 III", type:"spalinowy"},
-  {id:"s66", num:"253", brand:"Solaris", sub:"U18 III", model:"Urbino 18 III", type:"spalinowy"},
-  {id:"s67", num:"256", brand:"Solaris", sub:"U18 III", model:"Urbino 18 III", type:"spalinowy"},
-  {id:"s68", num:"257", brand:"Solaris", sub:"U18 III", model:"Urbino 18 III", type:"spalinowy"},
-  {id:"s69", num:"258", brand:"Solaris", sub:"U18 III", model:"Urbino 18 III", type:"spalinowy"},
-  {id:"s70", num:"259", brand:"Solaris", sub:"U18 III", model:"Urbino 18 III", type:"spalinowy"},
-  {id:"s71", num:"261", brand:"Solaris", sub:"U18 III", model:"Urbino 18 III", type:"spalinowy"},
-  {id:"s72", num:"262", brand:"Solaris", sub:"U18 III", model:"Urbino 18 III", type:"spalinowy"},
-  {id:"s73", num:"267", brand:"Solaris", sub:"U18 III", model:"Urbino 18 III", type:"spalinowy"},
-  // Solaris U18 III Hybrid
-  {id:"s74", num:"6001", brand:"Solaris", sub:"U18 III Hybrid", model:"Urbino 18 III Hybrid", type:"hybrydowy"},
-  {id:"s75", num:"6002", brand:"Solaris", sub:"U18 III Hybrid", model:"Urbino 18 III Hybrid", type:"hybrydowy"},
-  {id:"s76", num:"6003", brand:"Solaris", sub:"U18 III Hybrid", model:"Urbino 18 III Hybrid", type:"hybrydowy"},
-  {id:"s77", num:"6004", brand:"Solaris", sub:"U18 III Hybrid", model:"Urbino 18 III Hybrid", type:"hybrydowy"},
-  {id:"s78", num:"6005", brand:"Solaris", sub:"U18 III Hybrid", model:"Urbino 18 III Hybrid", type:"hybrydowy"},
-  {id:"s79", num:"6006", brand:"Solaris", sub:"U18 III Hybrid", model:"Urbino 18 III Hybrid", type:"hybrydowy"},
-  {id:"s80", num:"6007", brand:"Solaris", sub:"U18 III Hybrid", model:"Urbino 18 III Hybrid", type:"hybrydowy"},
-  {id:"s81", num:"6008", brand:"Solaris", sub:"U18 III Hybrid", model:"Urbino 18 III Hybrid", type:"hybrydowy"},
-  {id:"s82", num:"6009", brand:"Solaris", sub:"U18 III Hybrid", model:"Urbino 18 III Hybrid", type:"hybrydowy"},
-  {id:"s83", num:"6010", brand:"Solaris", sub:"U18 III Hybrid", model:"Urbino 18 III Hybrid", type:"hybrydowy"},
-  // Solaris U18 IV
-  {id:"s84", num:"269", brand:"Solaris", sub:"U18 IV", model:"Urbino 18 IV", type:"spalinowy"},
-  {id:"s85", num:"270", brand:"Solaris", sub:"U18 IV", model:"Urbino 18 IV", type:"spalinowy"},
-  // MAN
-  {id:"n1",  num:"271", brand:"MAN", model:"NG330 City 18", type:"spalinowy"},
-  {id:"n2",  num:"272", brand:"MAN", model:"NG330 City 18", type:"spalinowy"},
-  {id:"n3",  num:"273", brand:"MAN", model:"NG330 City 18", type:"spalinowy"},
-  {id:"n4",  num:"274", brand:"MAN", model:"NG330 City 18", type:"spalinowy"},
-  {id:"n5",  num:"275", brand:"MAN", model:"NG330 City 18", type:"spalinowy"},
-  {id:"n6",  num:"276", brand:"MAN", model:"NG330 City 18", type:"spalinowy"},
-  {id:"n7",  num:"277", brand:"MAN", model:"NG330 City 18", type:"spalinowy"},
-  {id:"n8",  num:"278", brand:"MAN", model:"NG330 City 18", type:"spalinowy"},
-  {id:"n9",  num:"279", brand:"MAN", model:"NG330 City 18", type:"spalinowy"},
-  {id:"n10", num:"280", brand:"MAN", model:"NG330 City 18", type:"spalinowy"},
-  {id:"n11", num:"281", brand:"MAN", model:"NG330 City 18", type:"spalinowy"},
-  {id:"n12", num:"282", brand:"MAN", model:"NG330 City 18", type:"spalinowy"},
-  {id:"n13", num:"415", brand:"MAN", model:"NL280 City 12", type:"spalinowy"},
-  {id:"n14", num:"416", brand:"MAN", model:"NL280 City 12", type:"spalinowy"},
-  {id:"n15", num:"417", brand:"MAN", model:"NL280 City 12", type:"spalinowy"},
-  {id:"n16", num:"418", brand:"MAN", model:"NL280 City 12", type:"spalinowy"},
-  {id:"n17", num:"419", brand:"MAN", model:"NL280 City 12", type:"spalinowy"},
-  {id:"n18", num:"420", brand:"MAN", model:"NL280 City 12", type:"spalinowy"},
-  {id:"n19", num:"421", brand:"MAN", model:"NL280 City 12", type:"spalinowy"},
-  {id:"n20", num:"422", brand:"MAN", model:"NL280 City 12", type:"spalinowy"},
-  {id:"n21", num:"423", brand:"MAN", model:"NL280 City 12", type:"spalinowy"},
-  {id:"n22", num:"424", brand:"MAN", model:"NL280 City 12", type:"spalinowy"},
-  {id:"n23", num:"425", brand:"MAN", model:"NL280 City 12", type:"spalinowy"},
-  {id:"n24", num:"426", brand:"MAN", model:"NL280 City 12", type:"spalinowy"},
-  {id:"n25", num:"427", brand:"MAN", model:"NL280 City 12", type:"spalinowy"},
-  {id:"n26", num:"428", brand:"MAN", model:"NL280 City 12", type:"spalinowy"},
-  {id:"n27", num:"429", brand:"MAN", model:"NL280 City 12", type:"spalinowy"},
-  // Mercedes
-  {id:"e1", num:"400", brand:"Mercedes", model:"Conecto LF", type:"spalinowy"},
-  {id:"e2", num:"401", brand:"Mercedes", model:"Conecto LF", type:"spalinowy"},
-  {id:"e3", num:"402", brand:"Mercedes", model:"Conecto LF", type:"spalinowy"},
-  {id:"e4", num:"404", brand:"Mercedes", model:"O530K A26",  type:"spalinowy"},
-  {id:"e5", num:"405", brand:"Mercedes", model:"Conecto",    type:"spalinowy"},
-  {id:"e6", num:"406", brand:"Mercedes", model:"Conecto",    type:"spalinowy"},
-  // Autosan
-  {id:"a1", num:"610", brand:"Autosan", model:"M12LF", type:"spalinowy"},
-  {id:"a2", num:"611", brand:"Autosan", model:"M12LF", type:"spalinowy"},
-  {id:"a3", num:"612", brand:"Autosan", model:"M12LF", type:"spalinowy"},
-  {id:"a4", num:"613", brand:"Autosan", model:"M12LF", type:"spalinowy"},
-  {id:"a5", num:"614", brand:"Autosan", model:"M12LF", type:"spalinowy"},
-  // Ikarus
-  {id:"i1", num:"",    brand:"Ikarus",  model:"260.04", type:"spalinowy", unique:true}
+  {id:"m1",num:"006",brand:"MAZ",model:"MAZ-206085",type:"spalinowy"},{id:"m2",num:"950",brand:"MAZ",model:"MAZ-206085",type:"spalinowy"},{id:"m3",num:"951",brand:"MAZ",model:"MAZ-206085",type:"spalinowy"},
+  {id:"m4",num:"007",brand:"MAZ",model:"MAZ-203069",type:"spalinowy"},{id:"m5",num:"009",brand:"MAZ",model:"MAZ-203069",type:"spalinowy"},{id:"m6",num:"010",brand:"MAZ",model:"MAZ-203069",type:"spalinowy"},
+  {id:"m7",num:"011",brand:"MAZ",model:"MAZ-203069",type:"spalinowy"},{id:"m8",num:"013",brand:"MAZ",model:"MAZ-203069",type:"spalinowy"},{id:"m9",num:"014",brand:"MAZ",model:"MAZ-203069",type:"spalinowy"},
+  {id:"m10",num:"015",brand:"MAZ",model:"MAZ-203069",type:"spalinowy"},{id:"m11",num:"016",brand:"MAZ",model:"MAZ-203069",type:"spalinowy"},{id:"m12",num:"919",brand:"MAZ",model:"MAZ-203069",type:"spalinowy"},
+  {id:"t1",num:"030",brand:"Temsa",model:"LF 12",type:"spalinowy"},{id:"t2",num:"031",brand:"Temsa",model:"LF 12",type:"spalinowy"},{id:"t3",num:"032",brand:"Temsa",model:"LF 12",type:"spalinowy"},
+  {id:"t4",num:"600",brand:"Temsa",model:"LF 12",type:"spalinowy"},{id:"t5",num:"601",brand:"Temsa",model:"LF 12",type:"spalinowy"},{id:"t6",num:"602",brand:"Temsa",model:"LF 12",type:"spalinowy"},
+  {id:"t7",num:"603",brand:"Temsa",model:"LF 12",type:"spalinowy"},{id:"t8",num:"604",brand:"Temsa",model:"LF 12",type:"spalinowy"},{id:"t9",num:"605",brand:"Temsa",model:"LF 12",type:"spalinowy"},
+  {id:"t10",num:"606",brand:"Temsa",model:"LF 12",type:"spalinowy"},{id:"t11",num:"607",brand:"Temsa",model:"LF 12",type:"spalinowy"},
+  {id:"s1",num:"328",brand:"Solaris",sub:"U12 I",model:"Urbino 12 I",type:"spalinowy",rare:true,unique:true},
+  {id:"s2",num:"363",brand:"Solaris",sub:"U12 III",model:"Urbino 12 III",type:"spalinowy"},{id:"s3",num:"365",brand:"Solaris",sub:"U12 III",model:"Urbino 12 III",type:"spalinowy"},
+  {id:"s4",num:"366",brand:"Solaris",sub:"U12 III",model:"Urbino 12 III",type:"spalinowy"},{id:"s5",num:"368",brand:"Solaris",sub:"U12 III",model:"Urbino 12 III",type:"spalinowy"},
+  {id:"s6",num:"369",brand:"Solaris",sub:"U12 III",model:"Urbino 12 III",type:"spalinowy"},{id:"s7",num:"372",brand:"Solaris",sub:"U12 III",model:"Urbino 12 III",type:"spalinowy"},
+  {id:"s8",num:"374",brand:"Solaris",sub:"U12 III",model:"Urbino 12 III",type:"spalinowy"},{id:"s9",num:"375",brand:"Solaris",sub:"U12 III",model:"Urbino 12 III",type:"spalinowy"},
+  {id:"s10",num:"376",brand:"Solaris",sub:"U12 III",model:"Urbino 12 III",type:"spalinowy"},{id:"s11",num:"377",brand:"Solaris",sub:"U12 III",model:"Urbino 12 III",type:"spalinowy"},
+  {id:"s12",num:"378",brand:"Solaris",sub:"U12 III",model:"Urbino 12 III",type:"spalinowy"},{id:"s13",num:"379",brand:"Solaris",sub:"U12 III",model:"Urbino 12 III",type:"spalinowy"},
+  {id:"s14",num:"380",brand:"Solaris",sub:"U12 III",model:"Urbino 12 III",type:"spalinowy"},{id:"s15",num:"381",brand:"Solaris",sub:"U12 III",model:"Urbino 12 III",type:"spalinowy"},
+  {id:"s16",num:"382",brand:"Solaris",sub:"U12 III",model:"Urbino 12 III",type:"spalinowy"},{id:"s17",num:"383",brand:"Solaris",sub:"U12 III",model:"Urbino 12 III",type:"spalinowy"},
+  {id:"s18",num:"384",brand:"Solaris",sub:"U12 III",model:"Urbino 12 III",type:"spalinowy"},{id:"s19",num:"385",brand:"Solaris",sub:"U12 III",model:"Urbino 12 III",type:"spalinowy"},
+  {id:"s20",num:"386",brand:"Solaris",sub:"U12 III",model:"Urbino 12 III",type:"spalinowy"},{id:"s21",num:"387",brand:"Solaris",sub:"U12 III",model:"Urbino 12 III",type:"spalinowy"},
+  {id:"s22",num:"388",brand:"Solaris",sub:"U12 III",model:"Urbino 12 III",type:"spalinowy"},{id:"s23",num:"389",brand:"Solaris",sub:"U12 III",model:"Urbino 12 III",type:"spalinowy"},
+  {id:"s24",num:"390",brand:"Solaris",sub:"U12 III",model:"Urbino 12 III",type:"spalinowy"},{id:"s25",num:"391",brand:"Solaris",sub:"U12 III",model:"Urbino 12 III",type:"spalinowy"},
+  {id:"s26",num:"392",brand:"Solaris",sub:"U12 III",model:"Urbino 12 III",type:"spalinowy"},{id:"s27",num:"393",brand:"Solaris",sub:"U12 III",model:"Urbino 12 III",type:"spalinowy"},
+  {id:"s28",num:"394",brand:"Solaris",sub:"U12 III",model:"Urbino 12 III",type:"spalinowy"},{id:"s29",num:"395",brand:"Solaris",sub:"U12 III",model:"Urbino 12 III",type:"spalinowy"},
+  {id:"s30",num:"396",brand:"Solaris",sub:"U12 III",model:"Urbino 12 III",type:"spalinowy"},{id:"s31",num:"397",brand:"Solaris",sub:"U12 III",model:"Urbino 12 III",type:"spalinowy"},
+  {id:"s32",num:"398",brand:"Solaris",sub:"U12 III",model:"Urbino 12 III",type:"spalinowy"},{id:"s33",num:"450",brand:"Solaris",sub:"U12 III",model:"Urbino 12 III",type:"spalinowy"},
+  {id:"s34",num:"451",brand:"Solaris",sub:"U12 III",model:"Urbino 12 III",type:"spalinowy"},{id:"s35",num:"454",brand:"Solaris",sub:"U12 III",model:"Urbino 12 III",type:"spalinowy"},
+  {id:"s36",num:"5001",brand:"Solaris",sub:"U12 IV",model:"Urbino 12 IV",type:"hybrydowy"},{id:"s37",num:"5002",brand:"Solaris",sub:"U12 IV",model:"Urbino 12 IV",type:"hybrydowy"},
+  {id:"s38",num:"5003",brand:"Solaris",sub:"U12 IV",model:"Urbino 12 IV",type:"hybrydowy"},{id:"s39",num:"5004",brand:"Solaris",sub:"U12 IV",model:"Urbino 12 IV",type:"hybrydowy"},
+  {id:"s40",num:"5005",brand:"Solaris",sub:"U12 IV",model:"Urbino 12 IV",type:"hybrydowy"},{id:"s41",num:"5006",brand:"Solaris",sub:"U12 IV",model:"Urbino 12 IV",type:"hybrydowy"},
+  {id:"s42",num:"5007",brand:"Solaris",sub:"U12 IV",model:"Urbino 12 IV",type:"hybrydowy"},{id:"s43",num:"5008",brand:"Solaris",sub:"U12 IV",model:"Urbino 12 IV",type:"hybrydowy"},
+  {id:"s44",num:"5009",brand:"Solaris",sub:"U12 IV",model:"Urbino 12 IV",type:"hybrydowy"},{id:"s45",num:"5010",brand:"Solaris",sub:"U12 IV",model:"Urbino 12 IV",type:"hybrydowy"},
+  {id:"s46",num:"5011",brand:"Solaris",sub:"U12 IV",model:"Urbino 12 IV",type:"hybrydowy"},{id:"s47",num:"5012",brand:"Solaris",sub:"U12 IV",model:"Urbino 12 IV",type:"hybrydowy"},
+  {id:"s48",num:"5013",brand:"Solaris",sub:"U12 IV",model:"Urbino 12 IV",type:"hybrydowy"},{id:"s49",num:"5014",brand:"Solaris",sub:"U12 IV",model:"Urbino 12 IV",type:"hybrydowy"},
+  {id:"s50",num:"5015",brand:"Solaris",sub:"U12 IV",model:"Urbino 12 IV",type:"hybrydowy"},
+  {id:"s51",num:"244",brand:"Solaris",sub:"U15 III",model:"Urbino 15 III",type:"spalinowy",rare:true,unique:true},
+  {id:"s52",num:"238",brand:"Solaris",sub:"U18 III",model:"Urbino 18 III",type:"spalinowy"},{id:"s53",num:"239",brand:"Solaris",sub:"U18 III",model:"Urbino 18 III",type:"spalinowy"},
+  {id:"s54",num:"240",brand:"Solaris",sub:"U18 III",model:"Urbino 18 III",type:"spalinowy"},{id:"s55",num:"241",brand:"Solaris",sub:"U18 III",model:"Urbino 18 III",type:"spalinowy"},
+  {id:"s56",num:"242",brand:"Solaris",sub:"U18 III",model:"Urbino 18 III",type:"spalinowy"},{id:"s57",num:"243",brand:"Solaris",sub:"U18 III",model:"Urbino 18 III",type:"spalinowy"},
+  {id:"s58",num:"245",brand:"Solaris",sub:"U18 III",model:"Urbino 18 III",type:"spalinowy"},{id:"s59",num:"246",brand:"Solaris",sub:"U18 III",model:"Urbino 18 III",type:"spalinowy"},
+  {id:"s60",num:"247",brand:"Solaris",sub:"U18 III",model:"Urbino 18 III",type:"spalinowy"},{id:"s61",num:"248",brand:"Solaris",sub:"U18 III",model:"Urbino 18 III",type:"spalinowy"},
+  {id:"s62",num:"249",brand:"Solaris",sub:"U18 III",model:"Urbino 18 III",type:"spalinowy"},{id:"s63",num:"250",brand:"Solaris",sub:"U18 III",model:"Urbino 18 III",type:"spalinowy"},
+  {id:"s64",num:"251",brand:"Solaris",sub:"U18 III",model:"Urbino 18 III",type:"spalinowy"},{id:"s65",num:"252",brand:"Solaris",sub:"U18 III",model:"Urbino 18 III",type:"spalinowy"},
+  {id:"s66",num:"253",brand:"Solaris",sub:"U18 III",model:"Urbino 18 III",type:"spalinowy"},{id:"s67",num:"256",brand:"Solaris",sub:"U18 III",model:"Urbino 18 III",type:"spalinowy"},
+  {id:"s68",num:"257",brand:"Solaris",sub:"U18 III",model:"Urbino 18 III",type:"spalinowy"},{id:"s69",num:"258",brand:"Solaris",sub:"U18 III",model:"Urbino 18 III",type:"spalinowy"},
+  {id:"s70",num:"259",brand:"Solaris",sub:"U18 III",model:"Urbino 18 III",type:"spalinowy"},{id:"s71",num:"261",brand:"Solaris",sub:"U18 III",model:"Urbino 18 III",type:"spalinowy"},
+  {id:"s72",num:"262",brand:"Solaris",sub:"U18 III",model:"Urbino 18 III",type:"spalinowy"},{id:"s73",num:"267",brand:"Solaris",sub:"U18 III",model:"Urbino 18 III",type:"spalinowy"},
+  {id:"s74",num:"6001",brand:"Solaris",sub:"U18 III Hybrid",model:"Urbino 18 III Hybrid",type:"hybrydowy"},{id:"s75",num:"6002",brand:"Solaris",sub:"U18 III Hybrid",model:"Urbino 18 III Hybrid",type:"hybrydowy"},
+  {id:"s76",num:"6003",brand:"Solaris",sub:"U18 III Hybrid",model:"Urbino 18 III Hybrid",type:"hybrydowy"},{id:"s77",num:"6004",brand:"Solaris",sub:"U18 III Hybrid",model:"Urbino 18 III Hybrid",type:"hybrydowy"},
+  {id:"s78",num:"6005",brand:"Solaris",sub:"U18 III Hybrid",model:"Urbino 18 III Hybrid",type:"hybrydowy"},{id:"s79",num:"6006",brand:"Solaris",sub:"U18 III Hybrid",model:"Urbino 18 III Hybrid",type:"hybrydowy"},
+  {id:"s80",num:"6007",brand:"Solaris",sub:"U18 III Hybrid",model:"Urbino 18 III Hybrid",type:"hybrydowy"},{id:"s81",num:"6008",brand:"Solaris",sub:"U18 III Hybrid",model:"Urbino 18 III Hybrid",type:"hybrydowy"},
+  {id:"s82",num:"6009",brand:"Solaris",sub:"U18 III Hybrid",model:"Urbino 18 III Hybrid",type:"hybrydowy"},{id:"s83",num:"6010",brand:"Solaris",sub:"U18 III Hybrid",model:"Urbino 18 III Hybrid",type:"hybrydowy"},
+  {id:"s84",num:"269",brand:"Solaris",sub:"U18 IV",model:"Urbino 18 IV",type:"spalinowy"},{id:"s85",num:"270",brand:"Solaris",sub:"U18 IV",model:"Urbino 18 IV",type:"spalinowy"},
+  {id:"n1",num:"271",brand:"MAN",model:"NG330 City 18",type:"spalinowy"},{id:"n2",num:"272",brand:"MAN",model:"NG330 City 18",type:"spalinowy"},{id:"n3",num:"273",brand:"MAN",model:"NG330 City 18",type:"spalinowy"},
+  {id:"n4",num:"274",brand:"MAN",model:"NG330 City 18",type:"spalinowy"},{id:"n5",num:"275",brand:"MAN",model:"NG330 City 18",type:"spalinowy"},{id:"n6",num:"276",brand:"MAN",model:"NG330 City 18",type:"spalinowy"},
+  {id:"n7",num:"277",brand:"MAN",model:"NG330 City 18",type:"spalinowy"},{id:"n8",num:"278",brand:"MAN",model:"NG330 City 18",type:"spalinowy"},{id:"n9",num:"279",brand:"MAN",model:"NG330 City 18",type:"spalinowy"},
+  {id:"n10",num:"280",brand:"MAN",model:"NG330 City 18",type:"spalinowy"},{id:"n11",num:"281",brand:"MAN",model:"NG330 City 18",type:"spalinowy"},{id:"n12",num:"282",brand:"MAN",model:"NG330 City 18",type:"spalinowy"},
+  {id:"n13",num:"415",brand:"MAN",model:"NL280 City 12",type:"spalinowy"},{id:"n14",num:"416",brand:"MAN",model:"NL280 City 12",type:"spalinowy"},{id:"n15",num:"417",brand:"MAN",model:"NL280 City 12",type:"spalinowy"},
+  {id:"n16",num:"418",brand:"MAN",model:"NL280 City 12",type:"spalinowy"},{id:"n17",num:"419",brand:"MAN",model:"NL280 City 12",type:"spalinowy"},{id:"n18",num:"420",brand:"MAN",model:"NL280 City 12",type:"spalinowy"},
+  {id:"n19",num:"421",brand:"MAN",model:"NL280 City 12",type:"spalinowy"},{id:"n20",num:"422",brand:"MAN",model:"NL280 City 12",type:"spalinowy"},{id:"n21",num:"423",brand:"MAN",model:"NL280 City 12",type:"spalinowy"},
+  {id:"n22",num:"424",brand:"MAN",model:"NL280 City 12",type:"spalinowy"},{id:"n23",num:"425",brand:"MAN",model:"NL280 City 12",type:"spalinowy"},{id:"n24",num:"426",brand:"MAN",model:"NL280 City 12",type:"spalinowy"},
+  {id:"n25",num:"427",brand:"MAN",model:"NL280 City 12",type:"spalinowy"},{id:"n26",num:"428",brand:"MAN",model:"NL280 City 12",type:"spalinowy"},{id:"n27",num:"429",brand:"MAN",model:"NL280 City 12",type:"spalinowy"},
+  {id:"e1",num:"400",brand:"Mercedes",model:"Conecto LF",type:"spalinowy"},{id:"e2",num:"401",brand:"Mercedes",model:"Conecto LF",type:"spalinowy"},{id:"e3",num:"402",brand:"Mercedes",model:"Conecto LF",type:"spalinowy"},
+  {id:"e4",num:"404",brand:"Mercedes",model:"O530K A26",type:"spalinowy"},{id:"e5",num:"405",brand:"Mercedes",model:"Conecto",type:"spalinowy"},{id:"e6",num:"406",brand:"Mercedes",model:"Conecto",type:"spalinowy"},
+  {id:"a1",num:"610",brand:"Autosan",model:"M12LF",type:"spalinowy"},{id:"a2",num:"611",brand:"Autosan",model:"M12LF",type:"spalinowy"},{id:"a3",num:"612",brand:"Autosan",model:"M12LF",type:"spalinowy"},
+  {id:"a4",num:"613",brand:"Autosan",model:"M12LF",type:"spalinowy"},{id:"a5",num:"614",brand:"Autosan",model:"M12LF",type:"spalinowy"},
+  {id:"i1",num:"",brand:"Ikarus",model:"260.04",type:"spalinowy",unique:true}
 ];
+var TM={spalinowy:{label:"Spalinowy",icon:"&#x26FD;",color:"#e87a0a"},hybrydowy:{label:"Hybrydowy",icon:"&#x1F50B;",color:"#4caf50"},elektryczny:{label:"Elektryczny",icon:"&#x26A1;",color:"#2196f3"}};
+var BM={MAZ:{icon:"&#x1F1E7;&#x1F1FE;",color:"#039be5"},Temsa:{icon:"&#x1F1F9;&#x1F1F7;",color:"#8e24aa"},Solaris:{icon:"&#x1F1F5;&#x1F1F1;",color:"#fb8c00"},MAN:{icon:"&#x1F1E9;&#x1F1EA;",color:"#e53935"},Mercedes:{icon:"&#x2B50;",color:"#78909c"},Autosan:{icon:"&#x1F1F5;&#x1F1F1;",color:"#c0392b"},Ikarus:{icon:"&#x1F3DB;&#xFE0F;",color:"#c9a84c",retro:true}};
+var BRANDS=["Wszystkie","MAZ","Temsa","Solaris","MAN","Mercedes","Autosan","Ikarus"];
+var TYPES=["Wszystkie","spalinowy","hybrydowy","elektryczny"];
+var caught={},brandF="Wszystkie",typeF="Wszystkie",curBus=null,capPh=null;
 
-// ============================================================
-// META
-// ============================================================
-var TM = {
-  spalinowy:   {label:"Spalinowy",   icon:"\u26FD", color:"#e87a0a"},
-  hybrydowy:   {label:"Hybrydowy",   icon:"\uD83D\uDD0B", color:"#4caf50"},
-  elektryczny: {label:"Elektryczny", icon:"\u26A1", color:"#2196f3"}
-};
-var BM = {
-  MAZ:      {icon:"\uD83C\uDDE7\uD83C\uDDFE", color:"#039be5"},
-  Temsa:    {icon:"\uD83C\uDDF9\uD83C\uDDF7", color:"#8e24aa"},
-  Solaris:  {icon:"\uD83C\uDDF5\uD83C\uDDF1", color:"#fb8c00"},
-  MAN:      {icon:"\uD83C\uDDE9\uD83C\uDDEA", color:"#e53935"},
-  Mercedes: {icon:"\u2B50", color:"#78909c"},
-  Autosan:  {icon:"\uD83C\uDDF5\uD83C\uDDF1", color:"#c0392b"},
-  Ikarus:   {icon:"\uD83C\uDFDB\uFE0F", color:"#c9a84c", retro:true}
-};
-var BRANDS = ["Wszystkie","MAZ","Temsa","Solaris","MAN","Mercedes","Autosan","Ikarus"];
-var TYPES  = ["Wszystkie","spalinowy","hybrydowy","elektryczny"];
+function loadData(){try{var c=localStorage.getItem("bd3");if(c)caught=JSON.parse(c);}catch(e){}}
+function saveData(){var m={};for(var k in caught)m[k]={date:caught[k].date,note:caught[k].note,hp:caught[k].hp};try{localStorage.setItem("bd3",JSON.stringify(m));}catch(e){}}
+function savePh(id,b64){try{localStorage.setItem("bdp-"+id,b64);return true;}catch(e){return false;}}
+function loadPh(id){try{return localStorage.getItem("bdp-"+id);}catch(e){return null;}}
+function delPh(id){try{localStorage.removeItem("bdp-"+id);}catch(e){}}
 
-// ============================================================
-// STATE
-// ============================================================
-var caught = {};
-var brandF = "Wszystkie";
-var typeF  = "Wszystkie";
-var curBus = null;
-var capPh  = null;
+function compress(file,cb){var r=new FileReader();r.onerror=function(){cb("err");};r.onload=function(e){var img=new Image();img.onerror=function(){cb("err");};img.onload=function(){var maxW=1200,w=img.naturalWidth,h=img.naturalHeight;if(w>maxW){h=Math.round(h*maxW/w);w=maxW;}var cv=document.getElementById("cvs");cv.width=w;cv.height=h;cv.getContext("2d").drawImage(img,0,0,w,h);cb(null,cv.toDataURL("image/jpeg",0.75));};img.src=e.target.result;};r.readAsDataURL(file);}
 
-// ============================================================
-// STORAGE
-// ============================================================
-function loadData() {
-  try {
-    var c = localStorage.getItem("bd3");
-    if (c) caught = JSON.parse(c);
-  } catch(e) {}
-}
-function saveData() {
-  var meta = {};
-  var k;
-  for (k in caught) {
-    meta[k] = {date: caught[k].date, note: caught[k].note, hp: caught[k].hp};
-  }
-  try { localStorage.setItem("bd3", JSON.stringify(meta)); } catch(e) {}
-}
-function savePh(id, b64) {
-  try { localStorage.setItem("bdp-"+id, b64); return true; } catch(e) { return false; }
-}
-function loadPh(id) {
-  try { return localStorage.getItem("bdp-"+id); } catch(e) { return null; }
-}
-function delPh(id) {
-  try { localStorage.removeItem("bdp-"+id); } catch(e) {}
-}
+var toastT;
+function toast(msg){var el=document.getElementById("toast");el.textContent=msg;el.classList.add("show");clearTimeout(toastT);toastT=setTimeout(function(){el.classList.remove("show");},2500);}
 
-// ============================================================
-// COMPRESS
-// ============================================================
-function compress(file, cb) {
-  var reader = new FileReader();
-  reader.onerror = function() { cb("Blad odczytu"); };
-  reader.onload = function(e) {
-    var img = new Image();
-    img.onerror = function() { cb("Blad obrazu"); };
-    img.onload = function() {
-      var maxW = 1200;
-      var w = img.naturalWidth, h = img.naturalHeight;
-      if (w > maxW) { h = Math.round(h * maxW / w); w = maxW; }
-      var cvs = document.getElementById("cvs");
-      cvs.width = w; cvs.height = h;
-      cvs.getContext("2d").drawImage(img, 0, 0, w, h);
-      cb(null, cvs.toDataURL("image/jpeg", 0.75));
-    };
-    img.src = e.target.result;
-  };
-  reader.readAsDataURL(file);
-}
+function openMod(){document.getElementById("ov").classList.add("open");}
+function closeMod(){document.getElementById("ov").classList.remove("open");}
 
-// ============================================================
-// TOAST
-// ============================================================
-var toastTimer;
-function toast(msg) {
-  var el = document.getElementById("toast");
-  el.textContent = msg;
-  el.classList.add("show");
-  clearTimeout(toastTimer);
-  toastTimer = setTimeout(function() { el.classList.remove("show"); }, 2500);
-}
-
-// ============================================================
-// MODAL
-// ============================================================
-function openMod() { document.getElementById("ov").classList.add("open"); }
-function closeMod() { document.getElementById("ov").classList.remove("open"); }
-
-// ============================================================
-// SCREENS
-// ============================================================
-function showScreen(id) {
-  var all = document.querySelectorAll(".screen");
-  for (var i = 0; i < all.length; i++) all[i].classList.remove("active");
-  document.getElementById(id).classList.add("active");
-  window.scrollTo(0, 0);
-}
-function showList() { showScreen("screen-list"); renderList(); }
-function showDetail(bus) { curBus = bus; showScreen("screen-detail"); renderDetail(); }
-function showCapture(bus, edit) {
-  curBus = bus;
-  capPh = null;
-  var bm = BM[bus.brand];
-  var tm = TM[bus.type];
-  var label = bus.num ? "#" + bus.num : bus.model;
-  document.getElementById("cap-title").textContent = "Zlap " + label;
-  document.getElementById("cap-back").onclick = function() { showDetail(bus); };
-  var info = document.getElementById("cap-info");
-  info.style.borderColor = bm.color;
-  info.innerHTML =
-    '<span style="font-size:26px">' + bm.icon + '</span>' +
-    '<div style="flex:1">' +
-      '<div style="font-size:28px;font-weight:900;color:' + tm.color + ';line-height:1">' + label + '</div>' +
-      '<div style="color:#777;font-size:12px;margin-top:3px">' + bus.brand + ' &middot; ' + bus.model + '</div>' +
-    '</div>' +
-    '<span style="font-size:20px">' + tm.icon + '</span>';
-  document.getElementById("btn-save").style.background = bm.retro ? "#a07820" : (bus.rare ? "#7c3aed" : tm.color);
-  document.getElementById("note").value = (edit && caught[bus.id] && caught[bus.id].note) ? caught[bus.id].note : "";
-  if (edit && caught[bus.id] && caught[bus.id].hp) {
-    var existing = loadPh(bus.id);
-    if (existing) { capPh = existing; setPrev(existing); }
-    else setPrev(null);
-  } else {
-    setPrev(null);
-  }
+function showScreen(id){var all=document.querySelectorAll(".screen");for(var i=0;i<all.length;i++)all[i].classList.remove("active");document.getElementById(id).classList.add("active");window.scrollTo(0,0);}
+function showList(){showScreen("screen-list");renderList();}
+function showDetail(bus){curBus=bus;showScreen("screen-detail");renderDetail();}
+function showCapture(bus,edit){
+  curBus=bus;capPh=null;
+  var bm=BM[bus.brand],tm=TM[bus.type];
+  var lbl=bus.num?"#"+bus.num:bus.model;
+  document.getElementById("cap-title").textContent="Zlap "+lbl;
+  document.getElementById("cap-back").onclick=function(){showDetail(bus);};
+  var info=document.getElementById("cap-info");
+  info.style.borderColor=bm.color;
+  info.innerHTML='<span style="font-size:26px">'+bm.icon+'</span><div style="flex:1"><div style="font-size:28px;font-weight:900;color:'+tm.color+';line-height:1">'+lbl+'</div><div style="color:#777;font-size:12px;margin-top:3px">'+bus.brand+' - '+bus.model+'</div></div><span style="font-size:20px">'+tm.icon+'</span>';
+  var btnColor=bm.retro?"#a07820":(bus.rare?"#7c3aed":tm.color);
+  document.getElementById("btn-save").style.background=btnColor;
+  document.getElementById("note").value=(edit&&caught[bus.id]&&caught[bus.id].note)?caught[bus.id].note:"";
+  if(edit&&caught[bus.id]&&caught[bus.id].hp){var ex=loadPh(bus.id);if(ex){capPh=ex;setPrev(ex);}else setPrev(null);}else setPrev(null);
   showScreen("screen-capture");
 }
+function setPrev(src){var ph=document.getElementById("pph"),pr=document.getElementById("pprev"),db=document.getElementById("btn-del-ph");if(src){pr.src=src;pr.style.display="block";ph.style.display="none";db.style.display="inline-block";}else{pr.style.display="none";pr.src="";ph.style.display="block";db.style.display="none";}}
+function handleFile(inp){closeMod();var file=inp.files[0];if(!file)return;inp.value="";toast("Kompresowanie...");compress(file,function(err,b64){if(err){toast("Blad");return;}capPh=b64;setPrev(b64);toast("Zdjecie gotowe");});}
+function trigCam(){closeMod();setTimeout(function(){document.getElementById("in-cam").click();},80);}
+function trigGal(){closeMod();setTimeout(function(){document.getElementById("in-gal").click();},80);}
 
-function setPrev(src) {
-  var ph = document.getElementById("pph");
-  var pr = document.getElementById("pprev");
-  var db = document.getElementById("btn-del-ph");
-  if (src) {
-    pr.src = src; pr.style.display = "block";
-    ph.style.display = "none"; db.style.display = "inline-block";
-  } else {
-    pr.style.display = "none"; pr.src = "";
-    ph.style.display = "block"; db.style.display = "none";
+// ── CATCH ANIMATION ─────────────────────────────────────────
+var caGT;
+function caGrain(){var cv=document.getElementById("ca-grain"),w=cv.offsetWidth,h=cv.offsetHeight;if(!w||!h)return;cv.width=w;cv.height=h;var ctx=cv.getContext("2d"),img=ctx.createImageData(w,h);for(var i=0;i<img.data.length;i+=4){var v=(Math.random()*255)|0;img.data[i]=img.data[i+1]=img.data[i+2]=v;img.data[i+3]=255;}ctx.putImageData(img,0,0);}
+
+function showCatchAnim(bus,photoSrc,onClose){
+  var tm=TM[bus.type],bm=BM[bus.brand];
+  var isRetro=!!bm.retro,isRare=!!bus.rare;
+  var badgeColor=isRetro?"#c9a84c":(isRare?"#c084fc":tm.color);
+  document.getElementById("ca-badge").textContent=isRetro?"LEGENDA ZLATA!":(isRare?"RZADKI ZLATY!":"ZLATY!");
+  document.getElementById("ca-badge").style.color=badgeColor;
+  var lbl=bus.num?"#"+bus.num:bus.model;
+  document.getElementById("ca-sub").textContent=bus.brand+" "+lbl+" - "+bus.model;
+  document.getElementById("ca-sub").style.color=badgeColor+"99";
+
+  // Ikarus uses server file; others use captured photo
+  var imgSrc=isRetro?"ikarus.jpg":(photoSrc||null);
+
+  var ov=document.getElementById("ca"),photo=document.getElementById("ca-photo"),tint=document.getElementById("ca-tint"),il=document.getElementById("ca-il"),led=document.getElementById("ca-led"),status=document.getElementById("ca-status"),ghost=document.getElementById("ca-noghost");
+
+  photo.classList.remove("on");photo.src="";
+  tint.style.transition="none";tint.style.opacity="0";
+  il.classList.remove("show");led.classList.remove("on");
+  status.textContent="POWER ON";
+  clearInterval(caGT);
+  ghost.style.display="none";
+  photo.style.display="block";
+
+  ov.classList.add("show");
+  ov.onclick=function(){clearInterval(caGT);ov.classList.remove("show");photo.classList.remove("on");if(onClose)onClose();};
+
+  if(!imgSrc){
+    ghost.style.display="block";led.classList.add("on");status.textContent="CAPTURED";return;
   }
+
+  photo.src=imgSrc;
+  il.classList.add("show");
+  setTimeout(function(){
+    photo.classList.add("on");
+    tint.style.opacity="1";
+    led.classList.add("on");
+    status.textContent="LOADING";
+    setTimeout(function(){
+      il.classList.remove("show");
+      tint.style.transition="opacity 1.4s";
+      tint.style.opacity="0";
+      status.textContent="CAPTURED";
+      caGT=setInterval(caGrain,80);
+    },330);
+  },110);
 }
 
-// ============================================================
-// FILE HANDLING
-// ============================================================
-function handleFile(inp) {
-  closeMod();
-  var file = inp.files[0];
-  if (!file) return;
-  inp.value = "";
-  toast("Kompresowanie...");
-  compress(file, function(err, b64) {
-    if (err) { toast("Blad: " + err); return; }
-    capPh = b64;
-    setPrev(b64);
-    toast("Zdjecie gotowe");
-  });
-}
-function trigCam()  { closeMod(); setTimeout(function() { document.getElementById("in-cam").click(); }, 80); }
-function trigGal()  { closeMod(); setTimeout(function() { document.getElementById("in-gal").click(); }, 80); }
-
-// ============================================================
-// SAVE CATCH
-// ============================================================
-function saveCatch() {
-  var id = curBus.id;
-  var note = document.getElementById("note").value.trim();
-  var today = new Date().toLocaleDateString("pl-PL");
-  var ok = true;
-  if (capPh) ok = savePh(id, capPh);
-  else delPh(id);
-  caught[id] = {date: today, note: note, hp: !!(capPh && ok)};
+function saveCatch(){
+  var id=curBus.id,note=document.getElementById("note").value.trim(),today=new Date().toLocaleDateString("pl-PL"),ok=true;
+  if(capPh)ok=savePh(id,capPh);else delPh(id);
+  caught[id]={date:today,note:note,hp:!!(capPh&&ok)};
   saveData();
-  var label = curBus.num ? "#" + curBus.num : curBus.model;
-  toast("Zlatpano " + label + "!");
-  showDetail(curBus);
+  var savedBus=curBus,savedPh=capPh;
+  showCatchAnim(savedBus,savedPh,function(){showDetail(savedBus);});
 }
-function delCatch(id) {
-  if (!confirm("Usunac zlatpanie?")) return;
-  delete caught[id];
-  delPh(id);
-  saveData();
-  toast("Usuniety");
-  renderDetail();
-}
+function delCatch(id){if(!confirm("Usunac zlapanie?"))return;delete caught[id];delPh(id);saveData();toast("Usuniety");renderDetail();}
 
-// ============================================================
-// RENDER STATS
-// ============================================================
-function renderStats() {
-  var tot = CATALOG.length;
-  var got = Object.keys(caught).length;
-  var pct = tot ? Math.round(got / tot * 100) : 0;
-  document.getElementById("pct-big").textContent = pct + "%";
-  document.getElementById("pct-sub").textContent = got + " / " + tot + " zlatpanych";
-  document.getElementById("prog-bar").style.width = pct + "%";
-  document.getElementById("pct-big").style.color = pct === 100 ? "#4caf50" : "#f5a623";
-  var sr = document.getElementById("stats-row");
-  sr.innerHTML = "";
-  var types = ["spalinowy","hybrydowy","elektryczny"];
-  for (var ti = 0; ti < types.length; ti++) {
-    var k = types[ti];
-    var v = TM[k];
-    var cnt = 0, g = 0;
-    for (var ci = 0; ci < CATALOG.length; ci++) {
-      if (CATALOG[ci].type === k) {
-        cnt++;
-        if (caught[CATALOG[ci].id]) g++;
-      }
-    }
-    var p = cnt ? Math.round(g / cnt * 100) : 0;
-    var ch = document.createElement("div");
-    ch.className = "stat-chip";
-    ch.style.borderColor = v.color + "44";
-    ch.innerHTML =
-      '<span style="font-size:18px">' + v.icon + '</span>' +
-      '<span style="font-weight:800;font-size:14px;color:' + v.color + '">' + g + "/" + cnt + '</span>' +
-      '<div class="smbar"><div class="smfill" style="width:' + p + '%;background:' + v.color + '"></div></div>' +
-      '<span style="font-size:9px;color:#555;letter-spacing:.5px">' + v.label.toUpperCase() + '</span>';
-    sr.appendChild(ch);
-  }
+function openViewer(id,num,model,brand){var p="?id="+encodeURIComponent(id)+"&num="+encodeURIComponent(num)+"&model="+encodeURIComponent(model)+"&brand="+encodeURIComponent(brand);window.location.href="viewer.html"+p;}
+
+function renderStats(){
+  var tot=CATALOG.length,got=Object.keys(caught).length,pct=tot?Math.round(got/tot*100):0;
+  document.getElementById("pct-big").textContent=pct+"%";document.getElementById("pct-sub").textContent=got+" / "+tot+" zlatpanych";
+  document.getElementById("prog-bar").style.width=pct+"%";document.getElementById("pct-big").style.color=pct===100?"#4caf50":"#f5a623";
+  var sr=document.getElementById("stats-row");sr.innerHTML="";
+  var types=["spalinowy","hybrydowy","elektryczny"];
+  for(var ti=0;ti<types.length;ti++){var k=types[ti],v=TM[k],cnt=0,g=0;for(var ci=0;ci<CATALOG.length;ci++){if(CATALOG[ci].type===k){cnt++;if(caught[CATALOG[ci].id])g++;}}var p2=cnt?Math.round(g/cnt*100):0;var ch=document.createElement("div");ch.className="stat-chip";ch.style.borderColor=v.color+"44";ch.innerHTML='<span style="font-size:18px">'+v.icon+'</span><span style="font-weight:800;font-size:14px;color:'+v.color+'">'+g+"/"+cnt+'</span><div class="smbar"><div class="smfill" style="width:'+p2+'%;background:'+v.color+'"></div></div><span style="font-size:9px;color:#555;letter-spacing:.5px">'+v.label.toUpperCase()+'</span>';sr.appendChild(ch);}
 }
 
-// ============================================================
-// RENDER FILTERS
-// ============================================================
-function renderFilters() {
-  var bf = document.getElementById("bf");
-  bf.innerHTML = "";
-  for (var i = 0; i < BRANDS.length; i++) {
-    var b = BRANDS[i];
-    var bm = BM[b];
-    var on = brandF === b;
-    var btn = document.createElement("button");
-    btn.className = "chip" + (on ? " on" : "");
-    btn.textContent = (bm ? bm.icon + " " : "") + b;
-    if (on && bm) { btn.style.background = bm.color; btn.style.borderColor = bm.color; }
-    (function(brand) { btn.onclick = function() { brandF = brand; renderList(); }; })(b);
-    bf.appendChild(btn);
-  }
-  var tf = document.getElementById("tf");
-  tf.innerHTML = "";
-  for (var j = 0; j < TYPES.length; j++) {
-    var t = TYPES[j];
-    var tm = TM[t];
-    var on2 = typeF === t;
-    var btn2 = document.createElement("button");
-    btn2.className = "chip" + (on2 ? " on" : "");
-    btn2.textContent = (tm ? tm.icon + " " + tm.label : t);
-    if (on2 && tm) { btn2.style.background = tm.color; btn2.style.borderColor = tm.color; }
-    (function(type) { btn2.onclick = function() { typeF = type; renderList(); }; })(t);
-    tf.appendChild(btn2);
-  }
+function renderFilters(){
+  var bf=document.getElementById("bf");bf.innerHTML="";
+  for(var i=0;i<BRANDS.length;i++){var b=BRANDS[i],bm=BM[b],on=brandF===b;var btn=document.createElement("button");btn.className="chip"+(on?" on":"");btn.innerHTML=(bm?bm.icon+" ":"")+b;if(on&&bm){btn.style.background=bm.color;btn.style.borderColor=bm.color;}(function(br){btn.onclick=function(){brandF=br;renderList();};})(b);bf.appendChild(btn);}
+  var tf=document.getElementById("tf");tf.innerHTML="";
+  for(var j=0;j<TYPES.length;j++){var t=TYPES[j],tm=TM[t],on2=typeF===t;var btn2=document.createElement("button");btn2.className="chip"+(on2?" on":"");btn2.innerHTML=(tm?tm.icon+" "+tm.label:t);if(on2&&tm){btn2.style.background=tm.color;btn2.style.borderColor=tm.color;}(function(ty){btn2.onclick=function(){typeF=ty;renderList();};})(t);tf.appendChild(btn2);}
 }
 
-// ============================================================
-// BUILD CARD
-// ============================================================
-function buildCard(bus, retro) {
-  var c   = caught[bus.id];
-  var tm  = TM[bus.type];
-  var bm  = BM[bus.brand];
-  // Ikarus: zawsze pokazuje ikarus.jpg z serwera
-  var ph  = retro ? "ikarus.jpg" : (c && c.hp ? loadPh(bus.id) : null);
-  var lbl = bus.num ? "#" + bus.num : bus.model;
-  var el  = document.createElement("div");
-
-  if (retro) {
-    el.className = "icard" + (c ? " caught" : "");
-    el.innerHTML =
-      '<img class="cthumb" src="ikarus.jpg" alt="' + lbl + '" style="filter:sepia(.4)" onerror="this.style.display=\'none\'">' +
-      '<div class="cnum" style="font-size:' + (bus.num ? "12px" : "9px") + '">' + lbl + '</div>' +
-      (bus.num ? '<div class="iera">' + bus.model + '</div>' : '') +
-      '<div class="ctype">&#x26FD;</div>' +
-      (bus.unique ? '<div class="oneof">1 OF 1</div>' : '') +
-      (c ? '<div class="cchk">&#x2B50;</div>' : '');
-  } else if (bus.rare) {
-    el.className = "card rare" + (c ? " caught" : "");
-    el.innerHTML =
-      (ph ? '<img class="cthumb" src="' + ph + '" alt="' + lbl + '" style="filter:hue-rotate(260deg) saturate(.7)">'
-          : '<div class="cicon">&#x1F68C;</div>') +
-      '<div class="cnum">' + lbl + '</div>' +
-      '<div class="cmod" style="color:#4a2060">' + bus.model.split(" ").slice(-2).join(" ") + '</div>' +
-      '<div class="ctype">' + tm.icon + '</div>' +
-      (bus.unique ? '<div class="oneof">1 OF 1</div>' : '') +
-      (c ? '<div class="cchk" style="right:18px">&#x2705;</div>' : '');
-  } else {
-    el.className = "card" + (c ? " caught" : "");
-    el.style.borderColor = c ? tm.color : "#1e1e1e";
-    el.style.background  = c ? tm.color + "0d" : "#111";
-    el.innerHTML =
-      (ph ? '<img class="cthumb" src="' + ph + '" alt="' + lbl + '">'
-          : '<div class="cicon">&#x1F68C;</div>') +
-      '<div class="cnum" style="color:' + (c ? tm.color : "#444") + '">' + lbl + '</div>' +
-      '<div class="cmod">' + bus.model.split(" ").slice(-2).join(" ") + '</div>' +
-      '<div class="ctype">' + tm.icon + '</div>' +
-      (c ? '<div class="cchk">&#x2705;</div>' : '');
+function buildCard(bus,retro){
+  var c=caught[bus.id],tm=TM[bus.type],bm=BM[bus.brand];
+  var ph=c&&c.hp?loadPh(bus.id):null;
+  var lbl=bus.num?"#"+bus.num:bus.model;
+  var el=document.createElement("div");
+  if(retro){
+    el.className="icard"+(c?" caught":"");
+    el.innerHTML=(ph?'<img class="cthumb" src="'+ph+'" alt="'+lbl+'" style="filter:sepia(.3)">':(c?'<div class="cicon" style="font-size:24px;opacity:.85;filter:sepia(.5)">&#x1F68C;</div>':'<div class="cicon" style="font-size:24px">&#x1F68C;</div>'))+
+      '<div class="cnum" style="font-size:'+(bus.num?"12px":"9px")+'">'+lbl+'</div>'+
+      (bus.num?'<div class="iera">'+bus.model+'</div>':'')+
+      '<div class="ctype">&#x26FD;</div>'+
+      (bus.unique?'<div class="oneof">1 OF 1</div>':'')+
+      (c?'<div class="cchk">&#x2B50;</div>':"");
+  }else if(bus.rare){
+    el.className="card rare"+(c?" caught":"");
+    el.innerHTML=(ph?'<img class="cthumb" src="'+ph+'" alt="'+lbl+'" style="filter:hue-rotate(260deg) saturate(.7)">':'<div class="cicon">&#x1F68C;</div>')+
+      '<div class="cnum">'+lbl+'</div><div class="cmod" style="color:#4a2060">'+bus.model.split(" ").slice(-2).join(" ")+'</div><div class="ctype">'+tm.icon+'</div>'+
+      (bus.unique?'<div class="oneof">1 OF 1</div>':'')+
+      (c?'<div class="cchk" style="right:18px">&#x2705;</div>':"");
+  }else{
+    el.className="card"+(c?" caught":"");el.style.borderColor=c?tm.color:"#1e1e1e";el.style.background=c?tm.color+"0d":"#111";
+    el.innerHTML=(ph?'<img class="cthumb" src="'+ph+'" alt="'+lbl+'">':"<div class=\"cicon\">&#x1F68C;</div>")+
+      '<div class="cnum" style="color:'+(c?tm.color:"#444")+'">'+lbl+'</div><div class="cmod">'+bus.model.split(" ").slice(-2).join(" ")+'</div><div class="ctype">'+tm.icon+'</div>'+
+      (c?'<div class="cchk">&#x2705;</div>':"");
   }
-
-  el.onclick = function() { showDetail(bus); };
-  return el;
+  el.onclick=function(){showDetail(bus);};return el;
 }
 
-// ============================================================
-// RENDER LIST
-// ============================================================
-function renderList() {
-  renderStats();
-  renderFilters();
-  var q = document.getElementById("si").value.toLowerCase();
-  var filtered = [];
-  for (var i = 0; i < CATALOG.length; i++) {
-    var b = CATALOG[i];
-    if (brandF !== "Wszystkie" && b.brand !== brandF) continue;
-    if (typeF  !== "Wszystkie" && b.type  !== typeF)  continue;
-    if (q && b.num.indexOf(q) === -1 && b.model.toLowerCase().indexOf(q) === -1) continue;
-    filtered.push(b);
-  }
-  // group by brand preserving order
-  var brandOrder = [], groups = {};
-  for (var j = 0; j < filtered.length; j++) {
-    var br = filtered[j].brand;
-    if (!groups[br]) { groups[br] = []; brandOrder.push(br); }
-    groups[br].push(filtered[j]);
-  }
-  var container = document.getElementById("bus-list");
-  container.innerHTML = "";
-  if (!filtered.length) {
-    container.innerHTML = '<div style="text-align:center;color:#444;margin-top:50px;font-size:14px">Brak wynik&oacute;w</div>';
-    return;
-  }
-  for (var bi = 0; bi < brandOrder.length; bi++) {
-    var brand = brandOrder[bi];
-    var buses = groups[brand];
-    var bm    = BM[brand];
-    var got   = 0;
-    for (var gi = 0; gi < buses.length; gi++) if (caught[buses[gi].id]) got++;
-    var pct2 = Math.round(got / buses.length * 100);
-    var sec = document.createElement("div");
-
-    if (bm.retro) {
-      // Ikarus retro header
-      var ihdr = document.createElement("div");
-      ihdr.className = "ihdr";
-      ihdr.innerHTML =
-        '<div>' +
-          '<div style="display:flex;align-items:center;gap:8px">' +
-            '<span style="font-size:22px">' + bm.icon + '</span>' +
-            '<div><div class="itit">Ikarus</div>' +
-            '<div class="isub">W&#x119;gierska legenda &middot; 1895</div></div>' +
-          '</div>' +
-        '</div>' +
-        '<div style="flex:1"></div>' +
-        '<span style="font-size:12px;color:#7a6020">' + got + "/" + buses.length + '</span>' +
-        '<div class="sminibar" style="margin-left:8px;width:60px;height:4px;background:#2a2000;border-radius:2px">' +
-          '<div style="width:' + pct2 + '%;height:100%;background:linear-gradient(90deg,#a07820,#f0c040);border-radius:2px"></div>' +
-        '</div>';
+function renderList(){
+  renderStats();renderFilters();
+  var q=document.getElementById("si").value.toLowerCase();
+  var filtered=[];for(var i=0;i<CATALOG.length;i++){var b=CATALOG[i];if(brandF!=="Wszystkie"&&b.brand!==brandF)continue;if(typeF!=="Wszystkie"&&b.type!==typeF)continue;if(q&&b.num.indexOf(q)===-1&&b.model.toLowerCase().indexOf(q)===-1)continue;filtered.push(b);}
+  var brandOrder=[],groups={};for(var j=0;j<filtered.length;j++){var br=filtered[j].brand;if(!groups[br]){groups[br]=[];brandOrder.push(br);}groups[br].push(filtered[j]);}
+  var container=document.getElementById("bus-list");container.innerHTML="";
+  if(!filtered.length){container.innerHTML='<div style="text-align:center;color:#444;margin-top:50px;font-size:14px">Brak wynikow</div>';return;}
+  for(var bi=0;bi<brandOrder.length;bi++){
+    var brand=brandOrder[bi],buses=groups[brand],bm=BM[brand],got=0;
+    for(var gi=0;gi<buses.length;gi++)if(caught[buses[gi].id])got++;
+    var pct2=Math.round(got/buses.length*100);var sec=document.createElement("div");
+    if(bm.retro){
+      var ihdr=document.createElement("div");ihdr.className="ihdr";
+      ihdr.innerHTML='<div style="display:flex;align-items:center;gap:8px"><span style="font-size:22px">'+bm.icon+'</span><div><div class="itit">Ikarus</div><div class="isub">Wegierska legenda - 1895</div></div></div><div style="flex:1"></div><span style="font-size:12px;color:#7a6020">'+got+"/"+buses.length+'</span><div style="width:60px;height:4px;background:#2a2000;border-radius:2px;margin-left:8px"><div style="width:'+pct2+'%;height:100%;background:linear-gradient(90deg,#a07820,#f0c040);border-radius:2px"></div></div>';
       sec.appendChild(ihdr);
-      var igrid = document.createElement("div");
-      igrid.className = "igrid";
-      for (var ii = 0; ii < buses.length; ii++) igrid.appendChild(buildCard(buses[ii], true));
-      sec.appendChild(igrid);
-    } else {
-      var shdr = document.createElement("div");
-      shdr.className = "shdr";
-      shdr.style.borderLeftColor = bm.color;
-      shdr.innerHTML =
-        '<span style="font-size:20px">' + bm.icon + '</span>' +
-        '<span class="stit" style="color:' + bm.color + '">' + brand + '</span>' +
-        '<span class="scnt">' + got + "/" + buses.length + '</span>' +
-        '<div style="flex:1"></div>' +
-        '<div class="sminibar"><div class="sminifill" style="width:' + pct2 + '%;background:' + bm.color + '"></div></div>';
+      var ig=document.createElement("div");ig.className="igrid";for(var ii=0;ii<buses.length;ii++)ig.appendChild(buildCard(buses[ii],true));sec.appendChild(ig);
+    }else{
+      var shdr=document.createElement("div");shdr.className="shdr";shdr.style.borderLeftColor=bm.color;
+      shdr.innerHTML='<span style="font-size:20px">'+bm.icon+'</span><span class="stit" style="color:'+bm.color+'">'+brand+'</span><span class="scnt">'+got+"/"+buses.length+'</span><div style="flex:1"></div><div class="sminibar"><div class="sminifill" style="width:'+pct2+'%;background:'+bm.color+'"></div></div>';
       sec.appendChild(shdr);
-
-      // check for sub-groups
-      var hasSub = false;
-      for (var si2 = 0; si2 < buses.length; si2++) if (buses[si2].sub) { hasSub = true; break; }
-
-      if (hasSub) {
-        var subOrder = [], subGroups = {};
-        for (var si = 0; si < buses.length; si++) {
-          var sub = buses[si].sub || "Inne";
-          if (!subGroups[sub]) { subGroups[sub] = []; subOrder.push(sub); }
-          subGroups[sub].push(buses[si]);
+      var hasSub=false;for(var si2=0;si2<buses.length;si2++)if(buses[si2].sub){hasSub=true;break;}
+      if(hasSub){
+        var subOrder=[],subGroups={};for(var si=0;si<buses.length;si++){var sub=buses[si].sub||"Inne";if(!subGroups[sub]){subGroups[sub]=[];subOrder.push(sub);}subGroups[sub].push(buses[si]);}
+        for(var soi=0;soi<subOrder.length;soi++){
+          var subName=subOrder[soi],subBuses=subGroups[subName],isRareSub=false;
+          for(var ri=0;ri<subBuses.length;ri++)if(subBuses[ri].rare){isRareSub=true;break;}
+          var subGot=0;for(var sgi=0;sgi<subBuses.length;sgi++)if(caught[subBuses[sgi].id])subGot++;
+          var subP=Math.round(subGot/subBuses.length*100);
+          var subHdr=document.createElement("div");
+          if(isRareSub){subHdr.className="rshdr";subHdr.innerHTML='<span style="font-size:14px">&#x1F48E;</span><span class="rstit">'+subName+'</span><span style="font-size:11px;color:#6b21a8">'+subGot+"/"+subBuses.length+'</span><div style="width:40px;height:3px;background:#1a0a2a;border-radius:2px;margin-left:6px"><div style="width:'+subP+'%;height:100%;background:linear-gradient(90deg,#7c3aed,#c084fc);border-radius:2px"></div></div>';}
+          else{subHdr.className="subhdr";subHdr.style.borderLeftColor=bm.color+"55";subHdr.innerHTML='<span class="subtit" style="color:'+bm.color+'bb">'+subName+'</span><span style="font-size:11px;color:#444">'+subGot+"/"+subBuses.length+'</span><div style="width:40px;height:3px;background:#1a1a1a;border-radius:2px;margin-left:6px"><div style="width:'+subP+'%;height:100%;background:'+bm.color+'88;border-radius:2px"></div></div>';}
+          sec.appendChild(subHdr);var subGrid=document.createElement("div");subGrid.className="grid";for(var sbi=0;sbi<subBuses.length;sbi++)subGrid.appendChild(buildCard(subBuses[sbi],false));sec.appendChild(subGrid);
         }
-        for (var soi = 0; soi < subOrder.length; soi++) {
-          var subName = subOrder[soi];
-          var subBuses = subGroups[subName];
-          var isRareSub = false;
-          for (var ri = 0; ri < subBuses.length; ri++) if (subBuses[ri].rare) { isRareSub = true; break; }
-          var subGot = 0;
-          for (var sgi = 0; sgi < subBuses.length; sgi++) if (caught[subBuses[sgi].id]) subGot++;
-          var subP = Math.round(subGot / subBuses.length * 100);
-          var subHdr = document.createElement("div");
-          if (isRareSub) {
-            subHdr.className = "rshdr";
-            subHdr.innerHTML =
-              '<span style="font-size:14px">&#x1F48E;</span>' +
-              '<span class="rstit">' + subName + '</span>' +
-              '<span style="font-size:11px;color:#6b21a8">' + subGot + "/" + subBuses.length + '</span>' +
-              '<div style="width:40px;height:3px;background:#1a0a2a;border-radius:2px;margin-left:6px">' +
-                '<div style="width:' + subP + '%;height:100%;background:linear-gradient(90deg,#7c3aed,#c084fc);border-radius:2px"></div>' +
-              '</div>';
-          } else {
-            subHdr.className = "subhdr";
-            subHdr.style.borderLeftColor = bm.color + "55";
-            subHdr.innerHTML =
-              '<span class="subtit" style="color:' + bm.color + 'bb">' + subName + '</span>' +
-              '<span style="font-size:11px;color:#444">' + subGot + "/" + subBuses.length + '</span>' +
-              '<div style="width:40px;height:3px;background:#1a1a1a;border-radius:2px;margin-left:6px">' +
-                '<div style="width:' + subP + '%;height:100%;background:' + bm.color + '88;border-radius:2px"></div>' +
-              '</div>';
-          }
-          sec.appendChild(subHdr);
-          var subGrid = document.createElement("div");
-          subGrid.className = "grid";
-          for (var sbi = 0; sbi < subBuses.length; sbi++) subGrid.appendChild(buildCard(subBuses[sbi], false));
-          sec.appendChild(subGrid);
-        }
-      } else {
-        var grid = document.createElement("div");
-        grid.className = "grid";
-        for (var gbi = 0; gbi < buses.length; gbi++) grid.appendChild(buildCard(buses[gbi], false));
-        sec.appendChild(grid);
-      }
+      }else{var grid=document.createElement("div");grid.className="grid";for(var gbi=0;gbi<buses.length;gbi++)grid.appendChild(buildCard(buses[gbi],false));sec.appendChild(grid);}
     }
     container.appendChild(sec);
   }
 }
 
-// ============================================================
-// RENDER DETAIL
-// ============================================================
-function renderDetail() {
-  var bus = curBus;
-  if (!bus) return;
-  var c   = caught[bus.id];
-  var tm  = TM[bus.type];
-  var bm  = BM[bus.brand];
-  var isRetro = !!bm.retro;
-  // Ikarus: zawsze pokazuje ikarus.jpg z serwera zamiast zdjecia uzytkownika
-  var ph  = isRetro ? "ikarus.jpg" : (c && c.hp ? loadPh(bus.id) : null);
-  var lbl = bus.num ? "#" + bus.num : bus.model;
-  var isRare  = !!bus.rare;
-  var isUniq  = !!bus.unique;
-  var titleStr = bus.brand + (bus.num ? " #" + bus.num : " \u00B7 " + bus.model);
-  document.getElementById("det-title").textContent = titleStr;
-  document.getElementById("det-back").onclick = function() { showList(); };
-  var body = document.getElementById("det-body");
-
-  // info row
-  var irowStyle = "border-color:" + bm.color + ";" + (isRetro ? "background:linear-gradient(135deg,#131006,#0e0c05);" : "");
-  var bnumSize = bus.num ? "38px" : "22px";
-  var bmodStyle = isRetro ? "color:#7a6020" : "";
-  var html =
-    '<div class="irow" style="' + irowStyle + '">' +
-      '<span style="font-size:34px">' + bm.icon + '</span>' +
-      '<div>' +
-        '<div class="bnum" style="color:' + tm.color + ';font-size:' + bnumSize + '">' + lbl + '</div>' +
-        '<div class="bmod" style="' + bmodStyle + '">' + bus.model + '</div>' +
-        (bus.sub ? '<div style="font-size:11px;color:#555;margin-top:3px;letter-spacing:1px">' + bus.sub + '</div>' : '') +
-      '</div>' +
-    '</div>';
-
-  // type badge
-  var tbc = tm.color;
-  html += '<div class="tbadge" style="color:' + tbc + ';background:' + tbc + '18;border-color:' + tbc + '66">' + tm.icon + ' ' + tm.label + '</div>';
-
-  if (c) {
-    // caught
-    var badgeCls, badgeStyle, badgeTxt;
-    if (isRetro) {
-      badgeCls = "cbadge"; badgeStyle = "background:#1a1200;border:1px solid #c9a84c;color:#c9a84c;";
-      badgeTxt = "&#x2B50; Z&#x141;APANA LEGENDA";
-    } else if (isRare) {
-      badgeCls = "cbadge"; badgeStyle = "background:#1a0a2a;border:1px solid #a855f7;color:#c084fc;";
-      badgeTxt = "&#x1F48E; RZADKI &middot; Z&#x141;APANY";
-    } else {
-      badgeCls = "cbadge"; badgeStyle = "background:#051a05;border:1px solid #4caf50;color:#4caf50;";
-      badgeTxt = "&#x2705; Z&#x141;APANY";
-    }
-    html += '<div class="' + badgeCls + '" style="' + badgeStyle + '">' + badgeTxt + '</div>';
-    if (isUniq) {
-      var pillStyle = isRetro
-        ? "background:#120d00;border:1px solid #a07820;color:#c9a84c;"
-        : "background:#12052a;border:1px solid #7c3aed;color:#c084fc;";
-      html += '<div class="oneof-pill" style="' + pillStyle + '">&thinsp;&#x2736; 1 OF 1 &#x2736;&thinsp;</div>';
-    }
-    if (ph) html += '<img class="bphoto" src="' + ph + '" style="border-color:' + (isRetro ? "#c9a84c" : (isRare ? "#a855f7" : tm.color)) + ';cursor:pointer" onclick="openViewer(\'' + bus.id + '\',\'' + (bus.num||'') + '\',\'' + bus.model.replace(/\'/g,'') + '\',\'' + bus.brand + '\')" alt="zdjecie"' + (isRetro ? ' onerror="this.parentNode.removeChild(this)"' : '') + '>';
-    // Ikarus: zawsze pokazuj zdjecie z serwera nawet przed zlaPANiem
-    if (!c && isRetro) html += '<img class="bphoto" src="ikarus.jpg" style="border-color:#c9a84c44;cursor:pointer" onclick="openViewer(\'' + bus.id + '\',\'\',\'260.04\',\'Ikarus\')" alt="Ikarus" onerror="this.parentNode.removeChild(this)">';
-    var mboxStyle = isRetro ? "background:#0e0c05;border:1px solid #2a2000;" : "";
-    html += '<div class="mbox" style="' + mboxStyle + '">';
-    if (c.date) html += '<span>&#x1F4C5; Z&#x142;apany: ' + c.date + '</span>';
-    if (c.note) html += '<span style="margin-top:4px">&#x1F4DD; ' + c.note.replace(/</g,"&lt;") + '</span>';
-    if (!c.date && !c.note) html += '<span style="color:#444">Brak notatki</span>';
-    html += '</div>';
-    if (!isRetro) html += '<button class="btns" onclick="showCapture(curBus,true)">&#x270F;&#xFE0F; Edytuj wpis</button>';
-    if (isRetro)  html += '<button class="btns" onclick="showCapture(curBus,true)">&#x270F;&#xFE0F; Edytuj notatk&#x119;</button>';
-    html += '<button class="btns btnd" onclick="delCatch(\'' + bus.id + '\')">&#x1F5D1; Usu&#x144; z&#x142;apanie</button>';
-  } else {
-    // not caught
-    var uBadgeStyle, uBadgeTxt;
-    if (isRetro) {
-      uBadgeStyle = "background:#1a1200;border:1px solid #c9a84c44;color:#7a6020;";
-      uBadgeTxt = "&#x1F3DB;&#xFE0F; NIEZLAPANA";
-    } else if (isRare) {
-      uBadgeStyle = "background:#1a0a2a;border:1px solid #a855f744;color:#6b21a8;";
-      uBadgeTxt = "&#x1F48E; RZADKI EGZEMPLARZ";
-    } else {
-      uBadgeStyle = "";
-      uBadgeTxt = "&#x2753; NIE Z&#x141;APANY";
-    }
-    html += '<div class="ubadge" style="' + uBadgeStyle + '">' + uBadgeTxt + '</div>';
-    if (isUniq) {
-      var pillStyle2 = isRetro
-        ? "background:#120d00;border:1px solid #a07820;color:#c9a84c;"
-        : "background:#12052a;border:1px solid #7c3aed;color:#c084fc;";
-      html += '<div class="oneof-pill" style="' + pillStyle2 + '">&thinsp;&#x2736; 1 OF 1 &#x2736;&thinsp;</div>';
-    }
-    var ghostStyle = isRetro ? "filter:sepia(.8);opacity:.1" : (isRare ? "filter:hue-rotate(270deg);opacity:.12" : "");
-    html += '<div class="ghost" style="' + ghostStyle + '">&#x1F68C;</div>';
-    var btnColor = isRetro ? "#a07820" : (isRare ? "#7c3aed" : tm.color);
-    var btnTxt = isRetro ? "&#x1F4F8; Z&#x142;ap t&#x119; legend&#x119;!" : (isRare ? "&#x1F4F8; Z&#x142;ap ten rzadki egzemplarz!" : "&#x1F4F8; Z&#x142;ap ten autobus!");
-    html += '<button class="btnp" style="background:' + btnColor + '" onclick="showCapture(curBus,false)">' + btnTxt + '</button>';
+function renderDetail(){
+  var bus=curBus;if(!bus)return;
+  var c=caught[bus.id],tm=TM[bus.type],bm=BM[bus.brand];
+  var ph=c&&c.hp?loadPh(bus.id):null;
+  var lbl=bus.num?"#"+bus.num:bus.model;
+  var isRetro=!!bm.retro,isRare=!!bus.rare,isUniq=!!bus.unique;
+  document.getElementById("det-title").textContent=bus.brand+(bus.num?" #"+bus.num:" - "+bus.model);
+  document.getElementById("det-back").onclick=function(){showList();};
+  var body=document.getElementById("det-body");
+  var irowStyle="border-color:"+bm.color+";"+(isRetro?"background:linear-gradient(135deg,#131006,#0e0c05);":"");
+  var bnumSize=bus.num?"38px":"22px";
+  var html='<div class="irow" style="'+irowStyle+'"><span style="font-size:34px">'+bm.icon+'</span><div><div class="bnum" style="color:'+tm.color+';font-size:'+bnumSize+'">'+lbl+'</div><div class="bmod"'+(isRetro?' style="color:#7a6020"':'')+'>'+bus.model+'</div>'+(bus.sub?'<div style="font-size:11px;color:#555;margin-top:3px;letter-spacing:1px">'+bus.sub+'</div>':'')+'</div></div>';
+  html+='<div class="tbadge" style="color:'+tm.color+';background:'+tm.color+'18;border-color:'+tm.color+'66">'+tm.icon+' '+tm.label+'</div>';
+  if(c){
+    var bs,bsy,btxt;
+    if(isRetro){bs="cbadge";bsy="background:#1a1200;border:1px solid #c9a84c;color:#c9a84c;";btxt="&#x2B50; ZLATANA LEGENDA";}
+    else if(isRare){bs="cbadge";bsy="background:#1a0a2a;border:1px solid #a855f7;color:#c084fc;";btxt="&#x1F48E; RZADKI - ZLATANY";}
+    else{bs="cbadge";bsy="background:#051a05;border:1px solid #4caf50;color:#4caf50;";btxt="&#x2705; ZLATANY";}
+    html+='<div class="'+bs+'" style="'+bsy+'">'+btxt+'</div>';
+    if(isUniq){var ps=isRetro?"background:#120d00;border:1px solid #a07820;color:#c9a84c;":"background:#12052a;border:1px solid #7c3aed;color:#c084fc;";html+='<div class="oneof-pill" style="'+ps+'">&thinsp;&#x2736; 1 OF 1 &#x2736;&thinsp;</div>';}
+    if(ph)html+='<img class="bphoto" src="'+ph+'" style="border-color:'+(isRetro?"#c9a84c":(isRare?"#a855f7":tm.color))+'" onclick="openViewer(\''+bus.id+'\',\''+(bus.num||'')+'\',\''+bus.model.replace(/'/g,"")+'\',\''+bus.brand+'\')" alt="zdjecie">';
+    var mbs=isRetro?"background:#0e0c05;border:1px solid #2a2000;":"";
+    html+='<div class="mbox" style="'+mbs+'">';
+    if(c.date)html+='<span>&#x1F4C5; Zlatany: '+c.date+'</span>';
+    if(c.note)html+='<span style="margin-top:4px">&#x1F4DD; '+c.note.replace(/</g,"&lt;")+'</span>';
+    if(!c.date&&!c.note)html+='<span style="color:#444">Brak notatki</span>';
+    html+='</div>';
+    html+='<button class="btns" onclick="showCapture(curBus,true)">&#x270F;&#xFE0F; Edytuj wpis</button>';
+    html+='<button class="btns btnd" onclick="delCatch(\''+bus.id+'\')">&#x1F5D1; Usun zlapanie</button>';
+  }else{
+    var ubs,ubsty,ubt;
+    if(isRetro){ubsty="background:#1a1200;border:1px solid #c9a84c44;color:#7a6020;";ubt="&#x1F3DB; NIEZLATANA";}
+    else if(isRare){ubsty="background:#1a0a2a;border:1px solid #a855f744;color:#6b21a8;";ubt="&#x1F48E; RZADKI EGZEMPLARZ";}
+    else{ubsty="";ubt="&#x2753; NIE ZLATANY";}
+    html+='<div class="ubadge" style="'+ubsty+'">'+ubt+'</div>';
+    if(isUniq){var ps2=isRetro?"background:#120d00;border:1px solid #a07820;color:#c9a84c;":"background:#12052a;border:1px solid #7c3aed;color:#c084fc;";html+='<div class="oneof-pill" style="'+ps2+'">&thinsp;&#x2736; 1 OF 1 &#x2736;&thinsp;</div>';}
+    var gs=isRetro?"filter:sepia(.8);opacity:.1":(isRare?"filter:hue-rotate(270deg);opacity:.12":"");
+    html+='<div class="ghost" style="'+gs+'">&#x1F68C;</div>';
+    var bc2=isRetro?"#a07820":(isRare?"#7c3aed":tm.color);
+    var bt2=isRetro?"&#x1F4F8; Zlap te legende!":(isRare?"&#x1F4F8; Zlap ten rzadki egzemplarz!":"&#x1F4F8; Zlap ten autobus!");
+    html+='<button class="btnp" style="background:'+bc2+'" onclick="showCapture(curBus,false)">'+bt2+'</button>';
   }
-
-  body.innerHTML = html;
+  body.innerHTML=html;
 }
 
-// ============================================================
-// INSTALL BANNER
-// ============================================================
-function renderInstall() {
-  var w = document.getElementById("inst-wrap");
-  if (localStorage.getItem("bd-inst")) { w.innerHTML = ""; return; }
-  var isIos = /iphone|ipad|ipod/i.test(navigator.userAgent) && !window.navigator.standalone;
-  var isAnd = /android/i.test(navigator.userAgent);
-  if (!isIos && !isAnd) return;
-  var tip = isIos
-    ? "&#x1F4F1; Dodaj do ekranu g&#x142;&oacute;wnego: naci&#x15B;nij <b>Udost&#x119;pnij</b> &rarr; <b>Dodaj do ekranu</b>"
-    : "&#x1F4F1; Dodaj do ekranu g&#x142;&oacute;wnego: menu <b>&#x22EE;</b> &rarr; <b>Dodaj do ekranu g&#x142;&oacute;wnego</b>";
-  w.innerHTML = '<div class="ibanner"><span style="flex:1;line-height:1.5">' + tip + '</span><button class="iclose" onclick="localStorage.setItem(\'bd-inst\',\'1\');document.getElementById(\'inst-wrap\').innerHTML=\'\'">&#xD7;</button></div>';
+function renderInstall(){
+  var w=document.getElementById("inst-wrap");if(localStorage.getItem("bd-inst")){w.innerHTML="";return;}
+  var isIos=/iphone|ipad|ipod/i.test(navigator.userAgent)&&!window.navigator.standalone;
+  var isAnd=/android/i.test(navigator.userAgent);
+  if(!isIos&&!isAnd)return;
+  var tip=isIos?"&#x1F4F1; Dodaj do ekranu glownego: Udostepnij &rarr; Dodaj do ekranu":"&#x1F4F1; Dodaj do ekranu glownego: menu &rarr; Dodaj do ekranu";
+  w.innerHTML='<div class="ibanner"><span style="flex:1;line-height:1.5">'+tip+'</span><button class="iclose" onclick="localStorage.setItem(\'bd-inst\',\'1\');document.getElementById(\'inst-wrap\').innerHTML=\'\'">&#xD7;</button></div>';
 }
 
-// ============================================================
-// VIEWER OPENER
-// ============================================================
-function openViewer(id, num, model, brand) {
-  var params = "?id=" + encodeURIComponent(id)
-    + "&num=" + encodeURIComponent(num)
-    + "&model=" + encodeURIComponent(model)
-    + "&brand=" + encodeURIComponent(brand);
-  window.location.href = "viewer.html" + params;
-}
-
-// ============================================================
-// EVENT WIRING
-// ============================================================
-document.addEventListener("DOMContentLoaded", function() {
-  // file inputs
-  document.getElementById("in-cam").addEventListener("change", function() { handleFile(this); });
-  document.getElementById("in-gal").addEventListener("change", function() { handleFile(this); });
-  // photo box
-  document.getElementById("pbox").addEventListener("click", openMod);
-  // photo buttons
-  document.getElementById("btn-cam").addEventListener("click", trigCam);
-  document.getElementById("btn-gal").addEventListener("click", trigGal);
-  document.getElementById("btn-del-ph").addEventListener("click", function() { capPh = null; setPrev(null); toast("Zdjecie usuniete"); });
-  // save
-  document.getElementById("btn-save").addEventListener("click", saveCatch);
-  // modal
-  document.getElementById("ov").addEventListener("click", function(e) { if (e.target === this) closeMod(); });
-  document.getElementById("m-cam").addEventListener("click", trigCam);
-  document.getElementById("m-gal").addEventListener("click", trigGal);
-  document.getElementById("m-cancel").addEventListener("click", closeMod);
-  // search
-  document.getElementById("si").addEventListener("input", function() { renderList(); });
-  // init
-  loadData();
-  renderList();
-  renderInstall();
+window.addEventListener("DOMContentLoaded",function(){
+  document.getElementById("in-cam").addEventListener("change",function(){handleFile(this);});
+  document.getElementById("in-gal").addEventListener("change",function(){handleFile(this);});
+  document.getElementById("pbox").addEventListener("click",openMod);
+  document.getElementById("btn-cam").addEventListener("click",trigCam);
+  document.getElementById("btn-gal").addEventListener("click",trigGal);
+  document.getElementById("btn-del-ph").addEventListener("click",function(){capPh=null;setPrev(null);toast("Zdjecie usuniete");});
+  document.getElementById("btn-save").addEventListener("click",saveCatch);
+  document.getElementById("ov").addEventListener("click",function(e){if(e.target===this)closeMod();});
+  document.getElementById("m-cam").addEventListener("click",trigCam);
+  document.getElementById("m-gal").addEventListener("click",trigGal);
+  document.getElementById("m-cancel").addEventListener("click",closeMod);
+  document.getElementById("si").addEventListener("input",function(){renderList();});
+  loadData();renderList();renderInstall();
 });
 </script>
 </body>
