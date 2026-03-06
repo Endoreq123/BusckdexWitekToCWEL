@@ -110,7 +110,7 @@ function powerOn(src){var outer=document.getElementById("crt-outer"),photo=docum
 function goBack(){clearInterval(grainTimer);if(window.history.length>1)window.history.back();else window.location.href="index.html";}
 window.addEventListener("DOMContentLoaded",function(){
   var p=getP(),busId=p.id||"",busNum=p.num||"",busModel=p.model||"",busBrand=p.brand||"";
-  var src=null;if(busBrand==="Ikarus"){src="grafika/ikarus.jpg";}else{try{if(busId)src=localStorage.getItem("bdp-"+busId);}catch(e){}}
+  var src=null;if(busBrand==="Ikarus"){src="ikarus.jpg";}else{try{if(busId)src=localStorage.getItem("bdp-"+busId);}catch(e){}}
   if(!src){document.getElementById("terminal").style.display="none";document.getElementById("no-photo").style.display="block";return;}
   var meta=document.getElementById("bus-meta");meta.style.display="flex";
   var numEl=document.getElementById("meta-num");numEl.textContent=busNum?"#"+busNum:busModel;
