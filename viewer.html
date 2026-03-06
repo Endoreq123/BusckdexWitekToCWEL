@@ -60,7 +60,7 @@ html,body{width:100%;min-height:100%;background:#0a0a0a;font-family:'Courier New
 <div id="wrap">
   <div class="topbar">
     <button class="back-btn" onclick="goBack()">&#x2190; Wr&oacute;&cacute;</button>
-    <span class="top-title">PHOTO VIEWER</span>
+    <span class="top-title">PRZEGLĄDARKA</span>
     <span style="width:60px"></span>
   </div>
   <div class="bus-meta" id="bus-meta" style="display:none">
@@ -73,7 +73,7 @@ html,body{width:100%;min-height:100%;background:#0a0a0a;font-family:'Courier New
     <div class="bezel">
       <div class="screw s-tl"></div><div class="screw s-tr"></div>
       <div class="screw s-bl"></div><div class="screw s-br"></div>
-      <div class="bezel-brand">BUSEDEX &bull; MONITOR</div>
+      <div class="bezel-brand">BUSEDEX · MONITOR</div>
       <div class="screen">
         <canvas id="grain"></canvas>
         <div id="tint"></div>
@@ -85,7 +85,7 @@ html,body{width:100%;min-height:100%;background:#0a0a0a;font-family:'Courier New
       </div>
       <div class="bezel-strip">
         <div class="led" id="led"></div>
-        <div class="status-txt" id="status">STANDBY</div>
+        <div class="status-txt" id="status">GOTOWOŚĆ</div>
         <div class="model-plate" id="plate"></div>
       </div>
     </div>
@@ -106,7 +106,7 @@ function drawGrain(){var c=document.getElementById("grain"),w=c.offsetWidth,h=c.
 function getP(){var p={};(window.location.search||"").replace(/^\?/,"").split("&").forEach(function(s){var a=s.split("=");if(a[0])p[a[0]]=decodeURIComponent(a[1]||"");});return p;}
 var LINES=["> BUSEDEX PHOTO ENGINE 2.0","> INICJALIZACJA WYSWIETLACZA...","> LADOWANIE STEROWNIKA CRT.....OK","> KALIBRACJA FOSFORU............OK","> MONTOWANIE PAMIECI ZDJEC.....OK","> DEKOMPRESJA OBRAZU.............","> FILTR SKANOWANIA.............OK","> GOTOWE"];
 function runBoot(cb){var cont=document.getElementById("tlines"),pbf=document.getElementById("pbf"),delay=0;LINES.forEach(function(txt,i){var wait=i===0?80:i<3?75:i<6?100:150;delay+=wait;setTimeout(function(){var div=document.createElement("div");div.className="tline";div.textContent=txt;cont.appendChild(div);requestAnimationFrame(function(){div.classList.add("show");});pbf.style.width=Math.round((i+1)/LINES.length*100)+"%";},delay);});setTimeout(cb,delay+180);}
-function powerOn(src){var outer=document.getElementById("crt-outer"),photo=document.getElementById("photo"),tint=document.getElementById("tint"),il=document.getElementById("il"),led=document.getElementById("led"),status=document.getElementById("status");outer.style.display="block";photo.src=src;il.classList.add("show");status.textContent="POWER ON";setTimeout(function(){photo.classList.add("on");tint.style.opacity="1";led.classList.add("on");status.textContent="LOADING";status.classList.add("on");setTimeout(function(){il.classList.remove("show");tint.style.transition="opacity 1.4s";tint.style.opacity="0";status.textContent="DISPLAY OK";grainTimer=setInterval(drawGrain,80);},350);},100);}
+function powerOn(src){var outer=document.getElementById("crt-outer"),photo=document.getElementById("photo"),tint=document.getElementById("tint"),il=document.getElementById("il"),led=document.getElementById("led"),status=document.getElementById("status");outer.style.display="block";photo.src=src;il.classList.add("show");status.textContent="WŁĄCZANIE";setTimeout(function(){photo.classList.add("on");tint.style.opacity="1";led.classList.add("on");status.textContent="ŁADOWANIE";status.classList.add("on");setTimeout(function(){il.classList.remove("show");tint.style.transition="opacity 1.4s";tint.style.opacity="0";status.textContent="WYŚWIETLANIE OK";grainTimer=setInterval(drawGrain,80);},350);},100);}
 function goBack(){clearInterval(grainTimer);if(window.history.length>1)window.history.back();else window.location.href="index.html";}
 window.addEventListener("DOMContentLoaded",function(){
   var p=getP(),busId=p.id||"",busNum=p.num||"",busModel=p.model||"",busBrand=p.brand||"";
