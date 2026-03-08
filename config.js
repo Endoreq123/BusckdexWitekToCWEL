@@ -1,44 +1,28 @@
 /* ============================================================
    BuseDex Kielce — config.js
    ============================================================
-   EDYTUJ TEN PLIK aby skonfigurować aplikację.
-
-   SUPABASE (globalny katalog):
+   SUPABASE (opcjonalny — ranking globalny):
    1. Załóż darmowe konto na https://supabase.com
-   2. Utwórz projekt, potem w Table Editor stwórz tabelę "buses":
-        id         text PRIMARY KEY
-        num        text
-        brand      text
-        sub        text  (nullable)
-        model      text
-        type       text
-        rare       boolean default false
-        unique_bus boolean default false
-        active     boolean default true
-        added_at   timestamptz default now()
-   3. W SQL Editor uruchom:
-        ALTER TABLE buses ENABLE ROW LEVEL SECURITY;
-        CREATE POLICY "public read" ON buses FOR SELECT USING (true);
-        CREATE POLICY "anon insert" ON buses FOR INSERT WITH CHECK (true);
-   4. Skopiuj URL i klucz anon z Settings → API i wklej poniżej.
+   2. Utwórz tabelę "user_progress":
+        user_id    text PRIMARY KEY
+        username   text
+        color      text
+        caught     int
+        badges     int
+        updated_at timestamptz default now()
+   3. Ustaw Row Level Security:
+        CREATE POLICY "public read"  ON user_progress FOR SELECT USING (true);
+        CREATE POLICY "public write" ON user_progress FOR INSERT WITH CHECK (true);
+        CREATE POLICY "public upd"   ON user_progress FOR UPDATE USING (true);
+   4. Skopiuj URL i klucz anon z Settings → API.
 
-   TRYB DEWELOPERA:
-   - Ustaw devUsername i uruchom aplikację
-   - Przy pierwszym logowaniu hasło zostanie zaszyfrowane i zapisane
-   - Możesz zmienić TYLKO wpisując nowe hasło w polu i klikając "Zmień hasło"
+   Bez Supabase aplikacja działa w pełni lokalnie.
    ============================================================ */
 
 var CONFIG = {
 
-  /* ── Supabase ──────────────────────────────────────────── */
+  /* ── Supabase (zostaw puste jeśli nie używasz) ─────────── */
   supabaseUrl: "",   // np. "https://abcxyz.supabase.co"
-  supabaseKey: "",   // klucz anon (bezpieczny do użycia w przeglądarce)
-
-  /* ── Konto dewelopera ──────────────────────────────────── */
-  devUsername: "endoreq",
-
-  /* ── Zachowanie ────────────────────────────────────────── */
-  syncOnStart:    true,   // pobierz globalny katalog przy starcie
-  syncInterval:   0,      // co ile ms odświeżać katalog (0 = wyłączone)
+  supabaseKey: "",   // klucz anon
 
 };

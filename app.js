@@ -140,6 +140,15 @@ function showCapture(bus, edit) {
   var bm = BM[bus.brand], tm = TM[bus.type];
   var lbl = bus.num ? "#" + bus.num : bus.model;
 
+  /* selector linii */
+  var catchIdx = (catches[bus.id] && catches[bus.id].length) ? catches[bus.id].length - 1 : 0;
+  setTimeout(function() {
+    var wrap = document.getElementById("line-selector-wrap");
+    if (wrap && typeof renderLineSelector === "function") {
+      wrap.innerHTML = renderLineSelector(bus.id, catchIdx);
+    }
+  }, 80);
+
   document.getElementById("cap-title").textContent = "Złap " + lbl;
   document.getElementById("cap-back").onclick = function() { showDetail(bus); };
 
@@ -309,6 +318,7 @@ function saveCatch() {
     }
     if (typeof notifOnCatch === "function") notifOnCatch(savedBus);
     if (typeof syncProgress === "function") syncProgress();
+    if (typeof refreshChallengesAfterCatch === "function") refreshChallengesAfterCatch();
     showCatchAnim(savedBus, savedPh, function() { showDetail(savedBus); });
   });
 }
@@ -399,7 +409,6 @@ function renderSettingsScreen() {
 
     /* deweloper — dyskretny link */
     '<div style="text-align:center;margin-top:24px">' +
-      '<button class="btns" style="font-size:10px;color:var(--tx3);border-color:var(--bd)" onclick="showDevScreen()">&#x1F6E0;&#xFE0F; Tryb dewelopera</button>' +
     '</div>';
 
   /* załaduj szczegóły powiadomień */
@@ -433,6 +442,24 @@ function renderInstall() {
 }
 
 /* ── INICJALIZACJA ───────────────────────────────────────────── */
+/* ── OFFLINE-FIRST SYNC ─────────────────────────────────────── */
+var _syncPending = false;
+
+function _initOfflineSync() {
+  window.addEventListener("online", function() {
+    if (_syncPending) {
+      _syncPending = false;
+      toast("📶 Online — synchronizuję...");
+      if (typeof syncProgress === "function") syncProgress();
+    }
+  });
+  window.addEventListener("offline", function() {
+    toast("📵 Tryb offline");
+    _syncPending = true;
+  });
+  if (!navigator.onLine) _syncPending = true;
+}
+
 window.addEventListener("DOMContentLoaded", function() {
   document.getElementById("in-cam").addEventListener("change", function() { handleFile(this); });
   document.getElementById("in-gal").addEventListener("change", function() { handleFile(this); });
@@ -452,6 +479,7 @@ window.addEventListener("DOMContentLoaded", function() {
   document.getElementById("si").addEventListener("input", function() { renderList(); });
 
   loadTheme();            /* motyw przed renderem */
+  _initOfflineSync();     /* offline-first background sync */
   loadAccount();          /* załaduj sesję konta */
   loadData();
   initProgressCanvas();   /* canvas postępu */

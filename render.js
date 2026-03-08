@@ -6,12 +6,40 @@
 /* ── STATYSTYKI (pasek górny) ───────────────────────────────── */
 function renderStats() {
   var tot = CATALOG.length,
-      got = Object.keys(caught).length;
+      got = Object.keys(caught).length,
+      pct = tot ? Math.round(got / tot * 100) : 0;
 
-  /* canvas zamiast tekstu */
-  if (typeof animateProgressCanvas === "function") {
-    animateProgressCanvas(got, tot);
+  /* ── nowy pasek segmentowany ─────────────────────────────── */
+  var bar = document.getElementById("prog-bar-wrap");
+  if (bar) {
+    /* policz złapane per typ */
+    var seg = { spalinowy:0, hybrydowy:0, elektryczny:0 };
+    var segTot = { spalinowy:0, hybrydowy:0, elektryczny:0 };
+    for (var ci = 0; ci < CATALOG.length; ci++) {
+      var b = CATALOG[ci], t = b.type;
+      if (segTot[t] !== undefined) {
+        segTot[t]++;
+        if (caught[b.id]) seg[t]++;
+      }
+    }
+    var types = ["spalinowy","hybrydowy","elektryczny"];
+    var segs = "";
+    for (var ti = 0; ti < types.length; ti++) {
+      var tp = types[ti], tm = TM[tp];
+      var w = tot ? (seg[tp] / tot * 100).toFixed(2) : 0;
+      if (w > 0) {
+        segs += '<div class="prog-seg" style="width:' + w + '%;background:' + tm.color +
+          '" title="' + tm.label + ': ' + seg[tp] + '/' + segTot[tp] + '"></div>';
+      }
+    }
+    bar.innerHTML = '<div class="prog-segs">' + segs + '</div>';
   }
+
+  /* tekst */
+  var pb = document.getElementById("pct-big");
+  var ps = document.getElementById("pct-sub");
+  if (pb) { pb.textContent = pct + "%"; pb.style.color = pct===100 ? "#4caf50" : "var(--yel)"; }
+  if (ps) ps.textContent = got + " / " + tot;
 
   var sr = document.getElementById("stats-row");
   sr.innerHTML = "";
