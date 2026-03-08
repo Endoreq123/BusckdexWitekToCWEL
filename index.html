@@ -8,13 +8,17 @@
   <meta name="theme-color" content="#c0191a">
   <title>BuseDex Kielce</title>
   <link rel="manifest" href="manifest.json">
-  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="css/style.css">
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
 </head>
-<body>
+<body class="theme-dark">
+
+<!-- PRZYCISK MOTYWU — zawsze widoczny -->
+<button id="theme-toggle" onclick="toggleTheme()" title="Zmień motyw">&#x1F319;</button>
+
 <div id="app">
 
-  <!-- EKRAN: LISTA -->
+  <!-- ═══ EKRAN: LISTA ═══ -->
   <div id="screen-list" class="screen active">
     <div class="topbar">
       <div class="topbar-left">
@@ -24,15 +28,14 @@
           <div class="app-title">&#x1F68C; BuseDex</div>
           <div class="app-sub">Kielce &middot; KM</div>
         </div>
-        <img class="topbar-herb" src="grafika/herb-swietokrzyskiego.png" alt="Herb Woj."
+        <img class="topbar-herb" src="grafika/herb-swietokrzyskie.png" alt="Herb Woj."
              onerror="this.outerHTML='&lt;div class=topbar-herb-missing&gt;herb&lt;br&gt;woj.&lt;/div&gt;'">
       </div>
-      <div>
-        <div class="score-big" id="pct-big">0%</div>
-        <div class="score-sub" id="pct-sub">0 / 0</div>
+      <!-- canvas postępu zamiast liczby tekstowej -->
+      <div class="progress-canvas-wrap">
+        <canvas id="progress-canvas"></canvas>
       </div>
     </div>
-    <div class="prog-wrap"><div class="prog-bar" id="prog-bar" style="width:0%"></div></div>
     <div class="stats-row" id="stats-row"></div>
     <div id="inst-wrap"></div>
     <div class="sw">
@@ -50,7 +53,7 @@
     <div style="height:8px"></div>
   </div>
 
-  <!-- EKRAN: SZCZEGOLY -->
+  <!-- ═══ EKRAN: SZCZEG&Oacute;ŁY ═══ -->
   <div id="screen-detail" class="screen">
     <div class="hdr">
       <button class="bk" id="det-back">&#x2190; Wr&#xF3;&#x107;</button>
@@ -60,7 +63,7 @@
     <div class="dbody" id="det-body"></div>
   </div>
 
-  <!-- EKRAN: ZLAP -->
+  <!-- ═══ EKRAN: Z&Lstrok;AP ═══ -->
   <div id="screen-capture" class="screen">
     <div class="hdr">
       <button class="bk" id="cap-back">&#x2190; Wr&#xF3;&#x107;</button>
@@ -82,88 +85,95 @@
         <div class="pbtns" style="margin-top:8px">
           <button class="pbtn" id="btn-cam">&#x1F4F7; Aparat</button>
           <button class="pbtn" id="btn-gal">&#x1F5BC; Galeria</button>
-          <button class="pbtn" id="btn-del-ph"
-                  style="display:none;color:#e74c3c;border-color:#c0392b">&#x1F5D1; Usu&#x144;</button>
+          <button class="pbtn" id="btn-del-ph" style="display:none;color:#e74c3c;border-color:#c0392b">&#x1F5D1; Usu&#x144;</button>
         </div>
       </div>
       <div>
         <div class="plbl" style="margin-bottom:6px">&#x1F4DD; Notatka</div>
         <textarea id="note" placeholder="np. linia 1, ul. Sienkiewicza&#x2026;"></textarea>
       </div>
-      <div style="font-size:10px;color:#444;text-align:center;letter-spacing:1px">
+      <div style="font-size:10px;color:var(--tx3);text-align:center;letter-spacing:1px">
         &#x1F4CD; Lokalizacja GPS zostanie zapisana automatycznie
       </div>
       <button class="btnp" id="btn-save">&#x2705; Zapisz z&#x142;apanie!</button>
     </div>
   </div>
 
-  <!-- EKRAN: MAPA -->
+  <!-- ═══ EKRAN: MAPA ═══ -->
   <div id="screen-map" class="screen">
-    <div class="hdr">
-      <span></span>
-      <span class="htit">&#x1F4CD; Mapa z&#x142;apa&#x144;</span>
-      <span></span>
-    </div>
+    <div class="hdr"><span></span><span class="htit">&#x1F4CD; Mapa z&#x142;apa&#x144;</span><span></span></div>
     <div class="map-stats" id="map-stats">Wczytywanie mapy&hellip;</div>
     <div id="map-container"></div>
   </div>
 
-  <!-- EKRAN: ODZNAKI -->
+  <!-- ═══ EKRAN: ODZNAKI ═══ -->
   <div id="screen-badges" class="screen">
-    <div class="hdr">
-      <span></span>
-      <span class="htit">&#x1F3C6; Odznaki i poziom</span>
-      <span></span>
-    </div>
+    <div class="hdr"><span></span><span class="htit">&#x1F3C6; Odznaki i poziom</span><span></span></div>
     <div class="badges-body" id="badges-body"></div>
   </div>
 
-  <!-- EKRAN: HISTORIA -->
+  <!-- ═══ EKRAN: HISTORIA ═══ -->
   <div id="screen-history" class="screen">
-    <div class="hdr">
-      <span></span>
-      <span class="htit">&#x1F4C5; Historia</span>
-      <span></span>
-    </div>
+    <div class="hdr"><span></span><span class="htit">&#x1F4C5; Historia</span><span></span></div>
     <div class="history-body" id="history-body"></div>
   </div>
 
-  <!-- EKRAN: STATYSTYKI -->
+  <!-- ═══ EKRAN: STATYSTYKI ═══ -->
   <div id="screen-stats" class="screen">
-    <div class="hdr">
-      <span></span>
-      <span class="htit">&#x1F4CA; Statystyki</span>
-      <span></span>
-    </div>
+    <div class="hdr"><span></span><span class="htit">&#x1F4CA; Statystyki</span><span></span></div>
     <div class="stats-body" id="stats-body"></div>
   </div>
 
-</div>
+  <!-- ═══ EKRAN: KONTO ═══ -->
+  <div id="screen-account" class="screen">
+    <div class="hdr"><span></span><span class="htit">&#x1F464; Konto</span><span></span></div>
+    <div id="account-body"></div>
+  </div>
 
-<!-- DOLNA NAWIGACJA -->
+  <!-- ═══ EKRAN: USTAWIENIA ═══ -->
+  <div id="screen-settings" class="screen">
+    <div class="hdr"><span></span><span class="htit">&#x2699;&#xFE0F; Ustawienia</span><span></span></div>
+    <div class="settings-body" id="settings-body"></div>
+  </div>
+
+  <!-- ═══ EKRAN: DEWELOPER ═══ -->
+  <div id="screen-dev" class="screen">
+    <div class="hdr"><span></span><span class="htit">&#x1F6E0;&#xFE0F; Tryb dewelopera</span><span></span></div>
+    <div class="dev-body" id="dev-body"></div>
+  </div>
+
+</div><!-- /#app -->
+
+<!-- ═══ DOLNA NAWIGACJA ═══ -->
 <nav class="bottom-nav">
-  <button class="nav-btn active" id="nav-list"    onclick="showList()">
+  <button class="nav-btn active" id="nav-list"     onclick="showList()">
     <span class="ni">&#x1F68C;</span>Lista
   </button>
-  <button class="nav-btn" id="nav-map"     onclick="showMap()">
+  <button class="nav-btn" id="nav-map"      onclick="showMap()">
     <span class="ni">&#x1F4CD;</span>Mapa
   </button>
-  <button class="nav-btn" id="nav-badges"  onclick="showBadges()">
+  <button class="nav-btn" id="nav-badges"   onclick="showBadges()">
     <span class="ni">&#x1F3C6;</span>Odznaki
   </button>
-  <button class="nav-btn" id="nav-history" onclick="showHistory()">
+  <button class="nav-btn" id="nav-history"  onclick="showHistory()">
     <span class="ni">&#x1F4C5;</span>Historia
   </button>
-  <button class="nav-btn" id="nav-stats"   onclick="showStatsScreen()">
+  <button class="nav-btn" id="nav-stats"    onclick="showStatsScreen()">
     <span class="ni">&#x1F4CA;</span>Wyniki
+  </button>
+  <button class="nav-btn" id="nav-account"  onclick="showAccountScreen()">
+    <span class="ni">&#x1F464;</span>Konto
+  </button>
+  <button class="nav-btn" id="nav-settings" onclick="showSettingsScreen()">
+    <span class="ni">&#x2699;&#xFE0F;</span>Ustaw.
   </button>
 </nav>
 
-<input type="file" id="in-cam" accept="image/*" capture="environment"
-       style="position:fixed;left:-9999px;opacity:0">
-<input type="file" id="in-gal" accept="image/*"
-       style="position:fixed;left:-9999px;opacity:0">
+<!-- UKRYTE INPUTY -->
+<input type="file" id="in-cam" accept="image/*" capture="environment" style="position:fixed;left:-9999px;opacity:0">
+<input type="file" id="in-gal" accept="image/*" style="position:fixed;left:-9999px;opacity:0">
 
+<!-- MODAL ZDJĘCIE -->
 <div id="ov"><div id="sheet">
   <h3>DODAJ ZDJ&#x118;CIE</h3>
   <button class="mbtn" id="m-cam">&#x1F4F7; Zr&#xF3;b zdj&#x119;cie aparatem</button>
@@ -199,14 +209,21 @@
   </div>
 </div>
 
-<!-- kolejnosc skryptow jest wazna -->
+<!-- SKRYPTY — kolejność ważna -->
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-<script src="catalog.js"></script>
-<script src="render.js"></script>
-<script src="badges.js"></script>
-<script src="map.js"></script>
-<script src="history.js"></script>
-<script src="stats.js"></script>
-<script src="app.js"></script>
+<script src="js/config.js"></script>
+<script src="js/catalog.js"></script>
+<script src="js/theme.js"></script>
+<script src="js/progress-canvas.js"></script>
+<script src="js/render.js"></script>
+<script src="js/badges.js"></script>
+<script src="js/map.js"></script>
+<script src="js/history.js"></script>
+<script src="js/stats.js"></script>
+<script src="js/notifications.js"></script>
+<script src="js/accounts.js"></script>
+<script src="js/devmode.js"></script>
+<script src="js/app.js"></script>
+
 </body>
 </html>

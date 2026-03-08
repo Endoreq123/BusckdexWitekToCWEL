@@ -1,0 +1,46 @@
+{
+  "name": "BuseDex Kielce",
+  "short_name": "BuseDex",
+  "description": "Kolekcja autobusów KM Kielce",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#0a0a0a",
+  "theme_color": "#c0191a",
+  "orientation": "portrait",
+  "icons": [
+    { "src": "grafika/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any maskable" },
+    { "src": "grafika/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any maskable" }
+  ],
+  "shortcuts": [
+    {
+      "name": "Złap autobus",
+      "short_name": "Złap",
+      "description": "Otwórz listę i złap autobus",
+      "url": "/?action=catch",
+      "icons": [{ "src": "grafika/icon-catch.png", "sizes": "96x96" }]
+    },
+    {
+      "name": "Moja mapa",
+      "short_name": "Mapa",
+      "description": "Pokaż mapę złapań",
+      "url": "/?action=map",
+      "icons": [{ "src": "grafika/icon-map.png", "sizes": "96x96" }]
+    },
+    {
+      "name": "Moje odznaki",
+      "short_name": "Odznaki",
+      "description": "Sprawdź odznaki i poziom",
+      "url": "/?action=badges",
+      "icons": [{ "src": "grafika/icon-badges.png", "sizes": "96x96" }]
+    }
+  ],
+  "screenshots": [
+    {
+      "src": "grafika/screenshot-1.png",
+      "sizes": "390x844",
+      "type": "image/png",
+      "form_factor": "narrow",
+      "label": "Lista autobusów"
+    }
+  ]
+}

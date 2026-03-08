@@ -6,13 +6,12 @@
 /* ── STATYSTYKI (pasek górny) ───────────────────────────────── */
 function renderStats() {
   var tot = CATALOG.length,
-      got = Object.keys(caught).length,
-      pct = tot ? Math.round(got / tot * 100) : 0;
+      got = Object.keys(caught).length;
 
-  document.getElementById("pct-big").textContent  = pct + "%";
-  document.getElementById("pct-sub").textContent  = got + " / " + tot + " złapanych";
-  document.getElementById("prog-bar").style.width = pct + "%";
-  document.getElementById("pct-big").style.color  = pct === 100 ? "#4caf50" : "var(--yel)";
+  /* canvas zamiast tekstu */
+  if (typeof animateProgressCanvas === "function") {
+    animateProgressCanvas(got, tot);
+  }
 
   var sr = document.getElementById("stats-row");
   sr.innerHTML = "";
@@ -107,12 +106,14 @@ function buildCard(bus, retro) {
     el.className = "card" + (c ? " caught" : "");
     el.style.borderColor = c ? tm.color : "#1e1e1e";
     el.style.background  = c ? tm.color + "0d" : "#111";
+    var catchCount = catches[bus.id] ? catches[bus.id].length : 0;
     el.innerHTML =
       (ph ? '<img class="cthumb" src="' + ph + '" alt="' + lbl + '">'
           : '<div class="cicon">&#x1F68C;</div>') +
       '<div class="cnum" style="color:' + (c ? tm.color : "#444") + '">' + lbl + '</div>' +
       '<div class="cmod">' + bus.model.split(" ").slice(-2).join(" ") + '</div>' +
       '<div class="ctype">' + tm.icon + '</div>' +
+      (catchCount > 1 ? '<div class="catch-count">x' + catchCount + '</div>' : '') +
       (c ? '<div class="cchk">&#x2705;</div>' : '');
   }
 
@@ -308,25 +309,43 @@ function renderDetail() {
       html += '<div class="oneof-pill" style="' + ps + '">&thinsp;&#x2736; 1 OF 1 &#x2736;&thinsp;</div>';
     }
 
-    // zdjęcie (klikalne → viewer)
-    if (ph) {
-      html +=
-        '<img class="bphoto" src="' + ph + '"' +
-        ' style="border-color:' + (isRetro ? "#c9a84c" : (isRare ? "#a855f7" : tm.color)) + '"' +
-        ' onclick="openViewer(\'' + bus.id + '\',\'' + (bus.num||'') + '\',\'' + bus.model.replace(/'/g,"") + '\',\'' + bus.brand + '\')"' +
-        ' alt="zdjęcie">';
+    // historia wszystkich złapań
+    var allCatches  = catches[bus.id] || [];
+    var borderColor = isRetro ? "#c9a84c" : (isRare ? "#a855f7" : tm.color);
+
+    if (allCatches.length > 1) {
+      html += '<div class="catch-header" style="color:' + borderColor + '">&#x1F4CB; Złapano ' + allCatches.length + '&times;</div>';
     }
 
-    // notatka + data
-    var mbs = isRetro ? "background:#0e0c05;border:1px solid #2a2000;" : "";
-    html += '<div class="mbox" style="' + mbs + '">';
-    if (c.date) html += '<span>&#x1F4C5; Złapany: ' + c.date + '</span>';
-    if (c.note) html += '<span style="margin-top:4px">&#x1F4DD; ' + c.note.replace(/</g, "&lt;") + '</span>';
-    if (!c.date && !c.note) html += '<span style="color:#444">Brak notatki</span>';
-    html += '</div>';
+    for (var ci2 = allCatches.length - 1; ci2 >= 0; ci2--) {
+      var ce  = allCatches[ci2];
+      var cph = ce.photoKey ? loadPh(ce.photoKey) : null;
+      var mbs = isRetro ? "background:#0e0c05;border:1px solid #2a2000;" : "background:#111;border:1px solid #1e1e1e;";
+      html += '<div style="' + mbs + 'border-radius:10px;padding:12px;margin-bottom:6px">';
+      if (allCatches.length > 1) {
+        html += '<div style="font-size:10px;font-weight:700;color:' + borderColor + ';margin-bottom:6px;letter-spacing:1px">ZŁAPANIE #' + (ci2+1) + '</div>';
+      }
+      if (cph) {
+        html += '<img class="bphoto" src="' + cph + '"' +
+          ' style="border-color:' + borderColor + ';margin-bottom:8px"' +
+          ' onclick="openViewer(\'' + bus.id + '\',\'' + (bus.num||'') + '\',\'' + bus.model.replace(/'/g,"") + '\',\'' + bus.brand + '\',\'' + (ce.photoKey||bus.id) + '\')"' +
+          ' alt="zdjęcie">';
+      }
+      html += '<div style="display:flex;flex-direction:column;gap:4px;font-size:13px;color:#777">';
+      if (ce.date) html += '<span>&#x1F4C5; ' + ce.date + '</span>';
+      if (ce.lat)  html += '<span>&#x1F4CD; ' + ce.lat.toFixed(4) + ', ' + ce.lng.toFixed(4) + '</span>';
+      if (ce.note) html += '<span style="color:#aaa">&#x1F4DD; ' + ce.note.replace(/</g,"&lt;") + '</span>';
+      if (!ce.date && !ce.note) html += '<span style="color:#333">Brak notatki</span>';
+      html += '</div>';
+      if (allCatches.length > 1) {
+        html += '<button class="btns btnd" style="margin-top:8px;padding:7px;font-size:11px" onclick="delCatch(\'' + bus.id + '\',' + ci2 + ')">&#x1F5D1; Usuń to złapanie</button>';
+      }
+      html += '</div>';
+    }
 
-    html += '<button class="btns" onclick="showCapture(curBus,true)">&#x270F;&#xFE0F; Edytuj wpis</button>';
-    html += '<button class="btns btnd" onclick="delCatch(\'' + bus.id + '\')">&#x1F5D1; Usuń złapanie</button>';
+    html += '<button class="btnp" style="background:' + borderColor + ';margin-top:2px" onclick="showCapture(curBus,false)">&#x1F4F8; Złap ponownie!</button>';
+    html += '<button class="btns" onclick="showCapture(curBus,true)">&#x270F;&#xFE0F; Dodaj notatkę do ostatniego</button>';
+    html += '<button class="btns btnd" onclick="delCatch(\'' + bus.id + '\')">&#x1F5D1; Usuń wszystkie złapania</button>';
 
   } else {
     // ── niezłapany ──────────────────────────────────────────

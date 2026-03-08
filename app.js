@@ -4,29 +4,47 @@
    ============================================================ */
 
 /* ── STAN APLIKACJI ─────────────────────────────────────────── */
-var caught       = {};          // { id: { date, note, hp, lat, lng } }
+var catches      = {};   // { busId: [{id,date,note,hp,photoKey,lat,lng}, ...] }
+var caught       = {};   // computed skrót: { busId: ostatnie złapanie }
 var brandF       = "Wszystkie";
 var typeF        = "Wszystkie";
-var onlyUncaught = false;       // filtr: pokaż tylko niezłapane
+var onlyUncaught = false;
 var curBus       = null;
-var capPh    = null;
+var capPh        = null;
 
 /* ── STORAGE ────────────────────────────────────────────────── */
-var STORAGE_KEY = "bdk2";   // zmiana klucza = czyste dane (naprawia błąd fab. złapania)
+var STORAGE_KEY  = "bdk3";   // bdk3 = nowy model wielokrotnych złapań
+
+function _rebuildCaught() {
+  caught = {};
+  for (var k in catches) {
+    if (catches[k].length) caught[k] = catches[k][catches[k].length - 1];
+  }
+}
 
 function loadData() {
   try {
     var raw = localStorage.getItem(STORAGE_KEY);
-    if (raw) caught = JSON.parse(raw);
-  } catch(e) { caught = {}; }
+    if (raw) {
+      catches = JSON.parse(raw);
+      _rebuildCaught();
+    }
+    /* migracja ze starego formatu bdk2 */
+    var old2 = localStorage.getItem("bdk2");
+    if (old2 && !raw) {
+      var oldData = JSON.parse(old2);
+      for (var k in oldData) {
+        var e = oldData[k];
+        catches[k] = [{ id: Date.now(), date: e.date, note: e.note || "", hp: !!e.hp }];
+      }
+      _rebuildCaught();
+      saveData();
+    }
+  } catch(e) { catches = {}; caught = {}; }
 }
 
 function saveData() {
-  var m = {};
-  for (var k in caught) {
-    m[k] = { date: caught[k].date, note: caught[k].note, hp: caught[k].hp };
-  }
-  try { localStorage.setItem(STORAGE_KEY, JSON.stringify(m)); } catch(e) {}
+  try { localStorage.setItem(STORAGE_KEY, JSON.stringify(catches)); } catch(e) {}
 }
 
 function savePh(id, b64) {
@@ -268,40 +286,124 @@ function saveCatch() {
   var today = new Date().toLocaleDateString("pl-PL");
 
   var ok = true;
-  if (capPh) ok = savePh(id, capPh);
-  else delPh(id);
+  /* zdjęcie: każde złapanie dostaje własne — nadpisujemy "najświeższe" */
+  if (capPh) ok = savePh(id + "_" + Date.now(), capPh);
 
-  caught[id] = { date: today, note: note, hp: !!(capPh && ok) };
+  var entry = { id: Date.now(), date: today, note: note, hp: !!(capPh && ok) };
+  if (capPh && ok) entry.photoKey = id + "_" + entry.id;
+
+  if (!catches[id]) catches[id] = [];
+  catches[id].push(entry);
+  _rebuildCaught();
   saveData();
 
-  var savedBus = curBus, savedPh = capPh;
+  var savedBus = curBus, savedPh = capPh, savedEntry = entry;
 
-  /* spróbuj zapisać lokalizację GPS */
+  /* GPS */
   getGpsAndSave(id, function(pos) {
     if (pos) {
-      caught[id].lat = pos.lat;
-      caught[id].lng = pos.lng;
+      savedEntry.lat = pos.lat;
+      savedEntry.lng = pos.lng;
+      _rebuildCaught();
       saveData();
     }
+    if (typeof notifOnCatch === "function") notifOnCatch(savedBus);
+    if (typeof syncProgress === "function") syncProgress();
     showCatchAnim(savedBus, savedPh, function() { showDetail(savedBus); });
   });
 }
 
-function delCatch(id) {
-  if (!confirm("Usunąć złapanie tego autobusu?")) return;
-  delete caught[id];
-  delPh(id);
+function delCatch(id, catchIdx) {
+  if (catchIdx !== undefined) {
+    /* usuń konkretne złapanie z historii */
+    if (!confirm("Usunąć to złapanie?")) return;
+    if (catches[id]) {
+      catches[id].splice(catchIdx, 1);
+      if (catches[id].length === 0) delete catches[id];
+    }
+  } else {
+    /* usuń wszystkie złapania */
+    if (!confirm("Usunąć WSZYSTKIE złapania tego autobusu?")) return;
+    if (catches[id]) {
+      catches[id].forEach(function(e) { if (e.photoKey) delPh(e.photoKey); });
+      delete catches[id];
+    }
+  }
+  _rebuildCaught();
   saveData();
   toast("Złapanie usunięte");
   renderDetail();
 }
 
-function openViewer(id, num, model, brand) {
+function openViewer(id, num, model, brand, photoKey) {
+  var pk = photoKey || id;
   var p = "?id="    + encodeURIComponent(id)    +
           "&num="   + encodeURIComponent(num)   +
           "&model=" + encodeURIComponent(model) +
-          "&brand=" + encodeURIComponent(brand);
+          "&brand=" + encodeURIComponent(brand) +
+          "&pk="    + encodeURIComponent(pk);
   window.location.href = "viewer.html" + p;
+}
+
+/* ── USTAWIENIA ─────────────────────────────────────────────── */
+function showSettingsScreen() {
+  showScreen("screen-settings");
+  setNav("nav-settings");
+  renderSettingsScreen();
+}
+
+function renderSettingsScreen() {
+  var body = document.getElementById("settings-body");
+  if (!body) return;
+
+  var notifPerm = "Notification" in window ? Notification.permission : "unsupported";
+  var notifStatus = notifPerm === "granted" ? "Włączone ✅" : notifPerm === "denied" ? "Zablokowane ❌" : "Wyłączone";
+
+  body.innerHTML =
+    /* motyw */
+    '<div class="dev-section-title" style="margin-top:0">&#x1F3A8; Wygląd</div>' +
+    '<div class="settings-group">' +
+      '<div class="settings-row" onclick="toggleTheme()">' +
+        '<span class="settings-row-label">Motyw</span>' +
+        '<span class="settings-row-val" id="theme-val">' +
+          (currentTheme === "dark" ? "&#x1F319; Ciemny" : "&#x2600;&#xFE0F; Jasny") +
+        '</span>' +
+        '<span style="font-size:20px;margin-left:8px" id="theme-toggle-icon">' +
+          (currentTheme === "dark" ? "&#x2600;&#xFE0F;" : "&#x1F319;") +
+        '</span>' +
+      '</div>' +
+    '</div>' +
+
+    /* powiadomienia */
+    '<div class="dev-section-title">&#x1F514; Powiadomienia</div>' +
+    '<div id="notif-settings"><div class="notif-panel">' +
+      (notifPerm !== "granted" ?
+        '<div class="notif-warn" style="border-color:var(--yel)">' +
+        'Status: ' + notifStatus + '</div>' +
+        '<button class="btnp" style="background:var(--red)" onclick="enableNotifs()">&#x1F514; Włącz powiadomienia</button>'
+        : '') +
+    '</div></div>' +
+
+    /* koniec */
+    '<div class="dev-section-title">&#x2139;&#xFE0F; O aplikacji</div>' +
+    '<div class="settings-group">' +
+      '<div class="settings-row">' +
+        '<span class="settings-row-label">BuseDex Kielce</span>' +
+        '<span class="settings-row-val">v2.0</span>' +
+      '</div>' +
+      '<div class="settings-row">' +
+        '<span class="settings-row-label">Autobusy w katalogu</span>' +
+        '<span class="settings-row-val">' + CATALOG.length + '</span>' +
+      '</div>' +
+    '</div>' +
+
+    /* deweloper — dyskretny link */
+    '<div style="text-align:center;margin-top:24px">' +
+      '<button class="btns" style="font-size:10px;color:var(--tx3);border-color:var(--bd)" onclick="showDevScreen()">&#x1F6E0;&#xFE0F; Tryb dewelopera</button>' +
+    '</div>';
+
+  /* załaduj szczegóły powiadomień */
+  if (notifPerm === "granted") renderNotifSettings();
 }
 
 /* ── FILTR TYLKO NIEZŁAPANE ─────────────────────────────────── */
@@ -349,9 +451,19 @@ window.addEventListener("DOMContentLoaded", function() {
   document.getElementById("m-cancel").addEventListener("click", closeMod);
   document.getElementById("si").addEventListener("input", function() { renderList(); });
 
+  loadTheme();            /* motyw przed renderem */
+  loadAccount();          /* załaduj sesję konta */
   loadData();
+  initProgressCanvas();   /* canvas postępu */
   renderList();
   renderInstall();
+  initNotifications();    /* harmonogram powiadomień */
+
+  /* Obsługa PWA shortcuts (?action=...) */
+  var action = new URLSearchParams(location.search).get("action");
+  if      (action === "map")    { showMap(); }
+  else if (action === "badges") { showBadges(); }
+  else if (action === "catch")  { /* zostań na liście */ }
 
   /* Service Worker — PWA offline */
   if ("serviceWorker" in navigator) {

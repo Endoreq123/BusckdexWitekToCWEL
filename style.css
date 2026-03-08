@@ -1,28 +1,87 @@
 /* ============================================================
    BuseDex Kielce — style.css
    Barwy: czerwony #c0191a + żółty #f5c800
+   Motywy: ciemny (domyślny) i jasny
    ============================================================ */
 
 *,*::before,*::after { box-sizing: border-box; margin: 0; padding: 0; }
 
+/* ── ZMIENNE MOTYWU — nadpisywane przez theme.js ──────────── */
 :root {
-  --red:  #c0191a;   /* czerwień kielecka */
-  --yel:  #f5c800;   /* żółć kielecka     */
-  --gr:   #4caf50;
-  --bg:   #0a0a0a;
-  --bg2:  #111;
-  --bd:   #222;
-  --mu:   #666;
+  --red:   #c0191a;
+  --yel:   #f5c800;
+  --gr:    #4caf50;
+
+  /* ciemny (wartości domyślne) */
+  --bg:    #0a0a0a;
+  --bg2:   #111111;
+  --bd:    #222222;
+  --mu:    #666666;
+  --tx:    #ffffff;
+  --tx2:   #aaaaaa;
+  --tx3:   #555555;
+  --card:  #111111;
+  --hdr:   #0e0e0e;
+  --inp:   #111111;
+  --inp-b: #2a2a2a;
+  --shd:   rgba(0,0,0,.6);
+  --topbg: linear-gradient(135deg,#1a0202,#120101);
 }
 
 html, body {
   height: 100%;
   background: var(--bg);
-  color: #fff;
+  color: var(--tx);
   font-family: 'Courier New', monospace;
   overflow-x: hidden;
   -webkit-text-size-adjust: 100%;
+  transition: background .25s, color .25s;
 }
+
+/* ── MOTYW JASNY — klasy nadawane przez theme.js ──────────── */
+body.theme-light {
+  color-scheme: light;
+}
+body.theme-light .topbar        { background: var(--topbg); }
+body.theme-light .bottom-nav    { background: #f8f8f8; border-top-color: var(--red); }
+body.theme-light .nav-btn       { color: #999; }
+body.theme-light .hdr           { background: var(--hdr); border-color: #ddd; }
+body.theme-light .bus-card      { background: var(--card); border-color: #e0e0e0; color: var(--tx); }
+body.theme-light .cnum          { /* color controlled inline */ }
+body.theme-light .cmod          { color: #666; }
+body.theme-light .cicon         { color: #bbb; }
+body.theme-light .si            { background: var(--inp); border-color: var(--inp-b); color: var(--tx); }
+body.theme-light .fbtn          { background: var(--inp); border-color: var(--inp-b); color: var(--tx2); }
+body.theme-light .fbtn.active   { background: var(--red); color: #fff; }
+body.theme-light .filter-uncaught { background: var(--inp); border-color: var(--inp-b); }
+body.theme-light .filter-uncaught.on { background: #fff0f0; border-color: var(--red); }
+body.theme-light .level-card    { background: var(--bg2); }
+body.theme-light .badge-card    { background: var(--bg2); border-color: #e0e0e0; }
+body.theme-light .rank-row      { background: var(--bg2); }
+body.theme-light .hist-row      { background: var(--bg2); }
+body.theme-light .dev-inp       { background: var(--inp); border-color: var(--inp-b); color: var(--tx); }
+body.theme-light .dev-stat      { background: var(--bg2); border-color: #e0e0e0; }
+body.theme-light .dev-catalog-row { background: var(--bg2); border-color: #e0e0e0; }
+body.theme-light .dev-status-row  { background: var(--bg2); }
+body.theme-light .export-btn    { background: var(--bg2); border-color: #ccc; color: var(--tx); }
+body.theme-light .btns          { background: var(--bg2); border-color: #ccc; color: var(--tx); }
+body.theme-light .dbody, body.theme-light .abody { background: var(--bg); }
+body.theme-light textarea       { background: var(--inp); border-color: var(--inp-b); color: var(--tx); }
+body.theme-light .mbox          { background: var(--bg2); border-color: #e0e0e0; }
+body.theme-light .cal-cell      { background: var(--bg2); }
+body.theme-light .cal-cell.has-catch { background: #fff0f0; }
+body.theme-light .leaflet-popup-content-wrapper { background: #fff !important; color: #111 !important; }
+
+/* przycisk motywu */
+#theme-toggle {
+  position: fixed; top: 10px; right: 10px;
+  z-index: 200;
+  background: transparent; border: none;
+  font-size: 20px; cursor: pointer; padding: 6px;
+  -webkit-tap-highlight-color: transparent;
+  filter: drop-shadow(0 1px 3px rgba(0,0,0,.5));
+}
+
 
 #app { max-width: 480px; margin: 0 auto; min-height: 100vh; }
 
@@ -572,3 +631,131 @@ canvas { display: none; }
   -webkit-tap-highlight-color: transparent;
 }
 .export-btn:active { opacity: .7; }
+
+/* ── WIELOKROTNE ZŁAPANIA ─────────────────────────────────────  */
+.catch-count {
+  position: absolute; bottom: 3px; right: 4px;
+  font-size: 8px; font-weight: 900;
+  color: #fff; background: var(--red);
+  border-radius: 8px; padding: 1px 5px;
+  letter-spacing: .5px;
+}
+.catch-header {
+  font-size: 12px; font-weight: 700; letter-spacing: 1px;
+  text-transform: uppercase; padding: 4px 2px;
+}
+
+/* ── TRYB DEWELOPERA ──────────────────────────────────────────  */
+.dev-body { padding: 20px; display: flex; flex-direction: column; gap: 14px; flex: 1; }
+
+.dev-login { display: flex; flex-direction: column; align-items: center; gap: 12px; padding: 30px 0 0; max-width: 320px; margin: 0 auto; width: 100%; }
+.dev-logo  { font-size: 56px; }
+.dev-title { font-size: 18px; font-weight: 900; color: var(--yel); letter-spacing: 2px; }
+.dev-sub   { font-size: 12px; color: #555; letter-spacing: 2px; }
+.dev-inp {
+  width: 100%; padding: 10px 12px;
+  border-radius: 8px; border: 1px solid #2a2a2a;
+  background: #111; color: #fff;
+  font-family: monospace; font-size: 13px;
+  -webkit-appearance: none;
+}
+.dev-inp:focus { outline: none; border-color: var(--yel); }
+select.dev-inp { cursor: pointer; }
+.dev-btn-login {
+  width: 100%; padding: 14px; border-radius: 10px;
+  background: var(--red); border: none;
+  color: #fff; font-weight: 900; font-size: 15px;
+  cursor: pointer; font-family: monospace;
+  -webkit-tap-highlight-color: transparent;
+}
+.dev-btn-login:active { opacity: .8; }
+
+.dev-panel { display: flex; flex-direction: column; gap: 14px; }
+.dev-status-row { display: flex; align-items: center; gap: 8px; padding: 8px 12px; background: #111; border-radius: 8px; }
+.dev-status-dot { width: 8px; height: 8px; border-radius: 50%; background: #333; flex-shrink: 0; }
+.dev-status-dot.on { background: #4caf50; box-shadow: 0 0 6px #4caf50; }
+.dev-stat-row { display: flex; gap: 8px; }
+.dev-stat { flex: 1; text-align: center; padding: 10px; background: #111; border-radius: 8px; border: 1px solid #222; }
+.dev-stat-n { font-size: 22px; font-weight: 900; color: var(--yel); }
+.dev-stat-l { font-size: 10px; color: #555; letter-spacing: 1px; margin-top: 2px; }
+.dev-section-title { font-size: 12px; font-weight: 700; color: #555; letter-spacing: 2px; text-transform: uppercase; padding: 6px 2px 0; border-top: 1px solid #1a1a1a; margin-top: 4px; }
+.dev-form { display: flex; flex-direction: column; gap: 8px; }
+.dev-row2 { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.dev-check { display: flex; align-items: center; gap: 8px; font-size: 13px; color: #888; cursor: pointer; padding: 8px 4px; }
+.dev-check input { width: 16px; height: 16px; cursor: pointer; accent-color: var(--red); }
+.dev-btn-add {
+  padding: 13px; border-radius: 10px;
+  background: #1a0000; border: 1px solid var(--red);
+  color: var(--yel); font-weight: 900; font-size: 14px;
+  cursor: pointer; font-family: monospace;
+}
+.dev-btn-add:active { opacity: .8; }
+.dev-catalog-list { display: flex; flex-direction: column; gap: 4px; }
+.dev-catalog-row {
+  display: flex; align-items: center; gap: 6px;
+  padding: 8px 10px; background: #111; border-radius: 6px;
+  border: 1px solid #1a1a1a;
+}
+.dev-del-btn {
+  background: transparent; border: none;
+  color: #c0392b; font-size: 14px; cursor: pointer; padding: 2px 6px;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* ── CANVAS POSTĘPU ───────────────────────────────────────────  */
+.progress-canvas-wrap {
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  padding: 10px 0 4px;
+  gap: 4px;
+}
+#progress-canvas { display: block; }
+.progress-canvas-label {
+  font-size: 10px; color: var(--tx3); letter-spacing: 2px;
+  text-transform: uppercase;
+}
+
+/* ── KONTA UŻYTKOWNIKA ────────────────────────────────────────  */
+.auth-wrap {
+  display: flex; flex-direction: column; gap: 10px;
+  padding: 20px 20px 40px; max-width: 360px;
+  margin: 0 auto; width: 100%;
+}
+.auth-logo  { font-size: 56px; text-align: center; padding-top: 20px; }
+.auth-title { font-size: 20px; font-weight: 900; color: var(--yel); letter-spacing: 2px; text-align: center; }
+.auth-err   {
+  color: #e74c3c; font-size: 12px; padding: 6px 10px;
+  background: rgba(231,76,60,.1); border-radius: 6px;
+  display: none; text-align: center;
+}
+.auth-switch { text-align: center; font-size: 12px; color: var(--tx3); margin-top: 4px; }
+.auth-switch span { color: var(--yel); cursor: pointer; text-decoration: underline; }
+
+/* ── POWIADOMIENIA ────────────────────────────────────────────  */
+.notif-panel  { display: flex; flex-direction: column; gap: 8px; }
+.notif-warn   {
+  padding: 12px; border-radius: 8px;
+  border: 1px solid #c0392b; background: rgba(192,25,26,.1);
+  font-size: 12px; color: var(--tx2); line-height: 1.5;
+}
+.notif-row {
+  display: flex; align-items: center; gap: 10px;
+  padding: 10px 12px; background: var(--bg2); border-radius: 8px;
+  cursor: pointer; -webkit-tap-highlight-color: transparent;
+  border: 1px solid var(--bd);
+}
+.notif-row:active { opacity: .7; }
+.notif-row.on { border-color: var(--red); background: rgba(192,25,26,.06); }
+
+/* ── USTAWIENIA (ekran Settings) ──────────────────────────────  */
+.settings-body  { padding: 14px; display: flex; flex-direction: column; gap: 14px; }
+.settings-group { display: flex; flex-direction: column; gap: 6px; }
+.settings-row {
+  display: flex; align-items: center; gap: 10px;
+  padding: 12px 14px; background: var(--bg2);
+  border-radius: 8px; border: 1px solid var(--bd);
+  cursor: pointer; -webkit-tap-highlight-color: transparent;
+}
+.settings-row:active { opacity: .7; }
+.settings-row-label { flex: 1; font-size: 13px; color: var(--tx2); }
+.settings-row-val   { font-size: 12px; color: var(--tx3); }

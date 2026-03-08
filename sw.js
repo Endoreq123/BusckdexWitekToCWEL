@@ -17,6 +17,10 @@ var ASSETS = [
   "/js/map.js",
   "/js/history.js",
   "/js/stats.js",
+  "/js/theme.js",
+  "/js/progress-canvas.js",
+  "/js/notifications.js",
+  "/js/accounts.js",
   "https://unpkg.com/leaflet@1.9.4/dist/leaflet.js",
   "https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
 ];
