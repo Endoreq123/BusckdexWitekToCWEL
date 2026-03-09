@@ -1,350 +1,511 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="pl">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <meta name="theme-color" content="#c0191a">
-  <title>BuseDex Kielce</title>
-  <link rel="manifest" href="manifest.json">
-  <link rel="stylesheet" href="css/style.css">
-  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
-</head>
-<body class="theme-dark">
-
-<!-- ═══ DESKTOP TOPBAR (ukryty na mobile) ═══ -->
-<div id="dt-topbar" style="display:none">
-  <div class="dt-logo">
-    <img class="dt-herb" src="grafika/herb-kielce.png" alt="" onerror="this.style.display='none'">
-    <div>
-      <div class="dt-logo-title">&#x1F68C; BUSEDEX</div>
-      <div class="dt-logo-sub">KM KIELCE &bull; KOLEKCJA</div>
-    </div>
-    <img class="dt-herb" src="grafika/herb-swietokrzyskie.png" alt="" onerror="this.style.display='none'">
-  </div>
-  <div class="dt-progress">
-    <div class="dt-prog-bar"><div class="dt-prog-fill" id="dt-prog-fill" style="width:0%"></div></div>
-    <span class="dt-prog-txt" id="dt-prog-txt">0%</span>
-    <span class="dt-prog-sub" id="dt-prog-sub">0/0</span>
-  </div>
-  <button class="dt-topbar-btn" id="dt-btn-dash"       onclick="dtShowPanel('dash')">&#x1F3E0; Dashboard</button>
-  <button class="dt-topbar-btn" id="dt-btn-map"        onclick="dtShowPanel('map')">&#x1F4CD; Mapa</button>
-  <button class="dt-topbar-btn" id="dt-btn-challenges" onclick="dtShowPanel('challenges')">&#x1F3AF; Wyzwania</button>
-  <button class="dt-topbar-btn" id="dt-btn-history"    onclick="dtShowPanel('history')">&#x1F4C5; Historia</button>
-  <button class="dt-topbar-btn" id="dt-btn-results"    onclick="dtShowPanel('results')">&#x1F4CA; Wyniki</button>
-  <button class="dt-topbar-btn" id="dt-btn-profile"    onclick="dtShowPanel('profile')">&#x1F464; Profil</button>
-  <button class="dt-topbar-btn" onclick="toggleTheme()" style="font-size:16px">&#x1F319;</button>
-</div>
-
-<!-- ═══ DESKTOP WORKSPACE ═══ -->
-<div id="dt-workspace" style="display:none">
-
-  <!-- LEWY SIDEBAR: nawigacja + lista autobusów -->
-  <div id="dt-sidebar">
-    <div class="dt-search-wrap">
-      <input class="dt-search" id="dt-si" type="search"
-             placeholder="&#x1F50D; numer, model lub marka..."
-             autocorrect="off" autocomplete="off"
-             oninput="dtRenderBusList()">
-    </div>
-    <div class="dt-filters">
-      <div class="dt-filter-row" id="dt-brand-filters"></div>
-      <div class="dt-filter-row" id="dt-type-filters"></div>
-    </div>
-    <div class="dt-list-header">
-      <span>AUTOBUSY</span>
-      <span id="dt-list-count" style="color:#444">—</span>
-    </div>
-    <div id="dt-bus-list"></div>
-  </div>
-
-  <!-- GŁÓWNA TREŚĆ -->
-  <div id="dt-main">
-
-    <!-- Dashboard -->
-    <div id="dt-panel-dash" class="dt-panel-wrap" style="padding:24px">
-      <div class="dt-panels" id="dt-panels-top"></div>
-      <div id="dt-panel-recent"></div>
-    </div>
-
-    <!-- Mapa -->
-    <div id="dt-panel-map" class="dt-panel-wrap" style="display:none;height:100%">
-      <div id="dt-map-container" style="height:100%;width:100%"></div>
-    </div>
-
-    <!-- Wyzwania -->
-    <div id="dt-panel-challenges" class="dt-panel-wrap" style="display:none;padding:24px">
-      <div id="dt-challenges-body"></div>
-    </div>
-
-    <!-- Historia -->
-    <div id="dt-panel-history" class="dt-panel-wrap" style="display:none;padding:24px">
-      <div id="dt-history-body"></div>
-    </div>
-
-    <!-- Wyniki -->
-    <div id="dt-panel-results" class="dt-panel-wrap" style="display:none;padding:24px">
-      <div id="dt-results-body"></div>
-    </div>
-
-    <!-- Profil -->
-    <div id="dt-panel-profile" class="dt-panel-wrap" style="display:none;padding:24px">
-      <div id="dt-profile-body"></div>
-    </div>
-
-    <!-- Szczegóły autobusu -->
-    <div id="dt-panel-detail" class="dt-panel-wrap" style="display:none;padding:24px">
-      <div id="dt-detail-body"></div>
-    </div>
-
-  </div><!-- /#dt-main -->
-</div><!-- /#dt-workspace -->
-
-<!-- ═══ MOBILE APP ═══ -->
-<div id="app">
-
-  <!-- ═══ LISTA ═══ -->
-  <div id="screen-list" class="screen active">
-    <div class="topbar">
-      <div class="topbar-left">
-        <img class="topbar-herb" src="grafika/herb-kielce.png" alt=""
-             onerror="this.style.display='none'">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+    />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta
+      name="apple-mobile-web-app-status-bar-style"
+      content="black-translucent"
+    />
+    <meta name="theme-color" content="#c0191a" />
+    <title>BuseDex Kielce</title>
+    <link rel="manifest" href="manifest.json" />
+    <link rel="stylesheet" href="style.css" />
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+    />
+  </head>
+  <body class="theme-dark">
+    <!-- ═══ DESKTOP TOPBAR (ukryty na mobile) ═══ -->
+    <div id="dt-topbar" style="display: none">
+      <div class="dt-logo">
+        <img
+          class="dt-herb"
+          src="grafika/herb-kielce.png"
+          alt=""
+          onerror="this.style.display = 'none'"
+        />
         <div>
-          <div class="app-title">&#x1F68C; BuseDex</div>
-          <div class="app-sub">Kielce &middot; KM</div>
+          <div class="dt-logo-title">&#x1F68C; BUSEDEX</div>
+          <div class="dt-logo-sub">KM KIELCE &bull; KOLEKCJA</div>
         </div>
-        <img class="topbar-herb" src="grafika/herb-swietokrzyskie.png" alt=""
-             onerror="this.style.display='none'">
+        <img
+          class="dt-herb"
+          src="grafika/herb-swietokrzyskie.png"
+          alt=""
+          onerror="this.style.display = 'none'"
+        />
       </div>
-      <div style="text-align:right;padding-right:4px">
-        <div class="score-big" id="pct-big">0%</div>
-        <div class="score-sub" id="pct-sub">0/0</div>
+      <div class="dt-progress">
+        <div class="dt-prog-bar">
+          <div class="dt-prog-fill" id="dt-prog-fill" style="width: 0%"></div>
+        </div>
+        <span class="dt-prog-txt" id="dt-prog-txt">0%</span>
+        <span class="dt-prog-sub" id="dt-prog-sub">0/0</span>
       </div>
+      <button
+        class="dt-topbar-btn"
+        id="dt-btn-dash"
+        onclick="dtShowPanel('dash')"
+      >
+        &#x1F3E0; Dashboard
+      </button>
+      <button
+        class="dt-topbar-btn"
+        id="dt-btn-map"
+        onclick="dtShowPanel('map')"
+      >
+        &#x1F4CD; Mapa
+      </button>
+      <button
+        class="dt-topbar-btn"
+        id="dt-btn-challenges"
+        onclick="dtShowPanel('challenges')"
+      >
+        &#x1F3AF; Wyzwania
+      </button>
+      <button
+        class="dt-topbar-btn"
+        id="dt-btn-history"
+        onclick="dtShowPanel('history')"
+      >
+        &#x1F4C5; Historia
+      </button>
+      <button
+        class="dt-topbar-btn"
+        id="dt-btn-results"
+        onclick="dtShowPanel('results')"
+      >
+        &#x1F4CA; Wyniki
+      </button>
+      <button
+        class="dt-topbar-btn"
+        id="dt-btn-profile"
+        onclick="dtShowPanel('profile')"
+      >
+        &#x1F464; Profil
+      </button>
+      <button
+        class="dt-topbar-btn"
+        onclick="toggleTheme()"
+        style="font-size: 16px"
+      >
+        &#x1F319;
+      </button>
     </div>
-    <div class="prog-bar-wrap" id="prog-bar-wrap"></div>
-    <div class="stats-row" id="stats-row"></div>
-    <div id="inst-wrap"></div>
-    <div class="sw">
-      <input class="si" id="si" type="search"
-             placeholder="&#x1F50D; numer, model lub marka..."
-             autocorrect="off" autocomplete="off">
-    </div>
-    <div class="frow" id="bf"></div>
-    <div class="frow" id="tf"></div>
-    <div class="filter-row">
-      <div class="filter-uncaught" id="filter-uncaught" onclick="toggleUncaught()">
-        <span class="fu-icon">&#x2753;</span>
-        <span class="fu-label">Tylko niezłapane</span>
-        <div class="fu-toggle"><div class="fu-knob"></div></div>
-      </div>
-      <div class="filter-sort" id="filter-sort" onclick="toggleSort()">
-        <span class="fu-icon">&#x21F3;</span>
-        <span class="fu-label" id="sort-label">A–Z</span>
-      </div>
-    </div>
-    <div id="bus-list"></div>
-    <div style="height:80px"></div>
-  </div>
 
-  <!-- ═══ SZCZEGÓŁY ═══ -->
-  <div id="screen-detail" class="screen">
-    <div class="hdr">
-      <button class="bk" id="det-back">&#x2190;</button>
-      <span class="htit" id="det-title"></span>
-      <span style="width:40px"></span>
-    </div>
-    <div class="dbody" id="det-body"></div>
-  </div>
+    <!-- ═══ DESKTOP WORKSPACE ═══ -->
+    <div id="dt-workspace" style="display: none">
+      <!-- LEWY SIDEBAR: nawigacja + lista autobusów -->
+      <div id="dt-sidebar">
+        <div class="dt-search-wrap">
+          <input
+            class="dt-search"
+            id="dt-si"
+            type="search"
+            placeholder="&#x1F50D; numer, model lub marka..."
+            autocorrect="off"
+            autocomplete="off"
+            oninput="dtRenderBusList()"
+          />
+        </div>
+        <div class="dt-filters">
+          <div class="dt-filter-row" id="dt-brand-filters"></div>
+          <div class="dt-filter-row" id="dt-type-filters"></div>
+        </div>
+        <div class="dt-list-header">
+          <span>AUTOBUSY</span>
+          <span id="dt-list-count" style="color: #444">—</span>
+        </div>
+        <div id="dt-bus-list"></div>
+      </div>
 
-  <!-- ═══ ZŁAP ═══ -->
-  <div id="screen-capture" class="screen">
-    <div class="hdr">
-      <button class="bk" id="cap-back">&#x2190;</button>
-      <span class="htit" id="cap-title">Złap autobus</span>
-      <span style="width:40px"></span>
+      <!-- GŁÓWNA TREŚĆ -->
+      <div id="dt-main">
+        <!-- Dashboard -->
+        <div id="dt-panel-dash" class="dt-panel-wrap" style="padding: 24px">
+          <div class="dt-panels" id="dt-panels-top"></div>
+          <div id="dt-panel-recent"></div>
+        </div>
+
+        <!-- Mapa -->
+        <div
+          id="dt-panel-map"
+          class="dt-panel-wrap"
+          style="display: none; height: 100%"
+        >
+          <div id="dt-map-container" style="height: 100%; width: 100%"></div>
+        </div>
+
+        <!-- Wyzwania -->
+        <div
+          id="dt-panel-challenges"
+          class="dt-panel-wrap"
+          style="display: none; padding: 24px"
+        >
+          <div id="dt-challenges-body"></div>
+        </div>
+
+        <!-- Historia -->
+        <div
+          id="dt-panel-history"
+          class="dt-panel-wrap"
+          style="display: none; padding: 24px"
+        >
+          <div id="dt-history-body"></div>
+        </div>
+
+        <!-- Wyniki -->
+        <div
+          id="dt-panel-results"
+          class="dt-panel-wrap"
+          style="display: none; padding: 24px"
+        >
+          <div id="dt-results-body"></div>
+        </div>
+
+        <!-- Profil -->
+        <div
+          id="dt-panel-profile"
+          class="dt-panel-wrap"
+          style="display: none; padding: 24px"
+        >
+          <div id="dt-profile-body"></div>
+        </div>
+
+        <!-- Szczegóły autobusu -->
+        <div
+          id="dt-panel-detail"
+          class="dt-panel-wrap"
+          style="display: none; padding: 24px"
+        >
+          <div id="dt-detail-body"></div>
+        </div>
+      </div>
+      <!-- /#dt-main -->
     </div>
-    <div class="abody">
-      <div class="ainfo" id="cap-info" style="border-color:#333"></div>
-      <div>
-        <div class="plbl" style="margin-bottom:6px">&#x1F4F8; Zdjęcie</div>
-        <div class="pbox" id="pbox">
-          <div class="pph" id="pph">
-            <div style="font-size:44px">&#x1F68C;</div>
-            <div>Dotknij aby dodać zdjęcie</div>
+    <!-- /#dt-workspace -->
+
+    <!-- ═══ MOBILE APP ═══ -->
+    <div id="app">
+      <!-- ═══ LISTA ═══ -->
+      <div id="screen-list" class="screen active">
+        <div class="topbar">
+          <div class="topbar-left">
+            <img
+              class="topbar-herb"
+              src="grafika/herb-kielce.png"
+              alt=""
+              onerror="this.style.display = 'none'"
+            />
+            <div>
+              <div class="app-title">&#x1F68C; BuseDex</div>
+              <div class="app-sub">Kielce &middot; KM</div>
+            </div>
+            <img
+              class="topbar-herb"
+              src="grafika/herb-swietokrzyskie.png"
+              alt=""
+              onerror="this.style.display = 'none'"
+            />
           </div>
-          <img id="pprev" class="pprev" src="" alt="podgląd">
+          <div style="text-align: right; padding-right: 4px">
+            <div class="score-big" id="pct-big">0%</div>
+            <div class="score-sub" id="pct-sub">0/0</div>
+          </div>
         </div>
-        <div class="pbtns" style="margin-top:8px">
-          <button class="pbtn" id="btn-cam">&#x1F4F7; Aparat</button>
-          <button class="pbtn" id="btn-gal">&#x1F5BC; Galeria</button>
-          <button class="pbtn" id="btn-del-ph" style="display:none;color:#e74c3c;border-color:#c0392b">&#x1F5D1; Usuń</button>
+        <div class="prog-bar-wrap" id="prog-bar-wrap"></div>
+        <div class="stats-row" id="stats-row"></div>
+        <div id="inst-wrap"></div>
+        <div class="sw">
+          <input
+            class="si"
+            id="si"
+            type="search"
+            placeholder="&#x1F50D; numer, model lub marka..."
+            autocorrect="off"
+            autocomplete="off"
+          />
+        </div>
+        <div class="frow" id="bf"></div>
+        <div class="frow" id="tf"></div>
+        <div class="filter-row">
+          <div
+            class="filter-uncaught"
+            id="filter-uncaught"
+            onclick="toggleUncaught()"
+          >
+            <span class="fu-icon">&#x2753;</span>
+            <span class="fu-label">Tylko niezłapane</span>
+            <div class="fu-toggle"><div class="fu-knob"></div></div>
+          </div>
+          <div class="filter-sort" id="filter-sort" onclick="toggleSort()">
+            <span class="fu-icon">&#x21F3;</span>
+            <span class="fu-label" id="sort-label">A–Z</span>
+          </div>
+        </div>
+        <div id="bus-list"></div>
+        <div style="height: 80px"></div>
+      </div>
+
+      <!-- ═══ SZCZEGÓŁY ═══ -->
+      <div id="screen-detail" class="screen">
+        <div class="hdr">
+          <button class="bk" id="det-back">&#x2190;</button>
+          <span class="htit" id="det-title"></span>
+          <span style="width: 40px"></span>
+        </div>
+        <div class="dbody" id="det-body"></div>
+      </div>
+
+      <!-- ═══ ZŁAP ═══ -->
+      <div id="screen-capture" class="screen">
+        <div class="hdr">
+          <button class="bk" id="cap-back">&#x2190;</button>
+          <span class="htit" id="cap-title">Złap autobus</span>
+          <span style="width: 40px"></span>
+        </div>
+        <div class="abody">
+          <div class="ainfo" id="cap-info" style="border-color: #333"></div>
+          <div>
+            <div class="plbl" style="margin-bottom: 6px">&#x1F4F8; Zdjęcie</div>
+            <div class="pbox" id="pbox">
+              <div class="pph" id="pph">
+                <div style="font-size: 44px">&#x1F68C;</div>
+                <div>Dotknij aby dodać zdjęcie</div>
+              </div>
+              <img id="pprev" class="pprev" src="" alt="podgląd" />
+            </div>
+            <div class="pbtns" style="margin-top: 8px">
+              <button class="pbtn" id="btn-cam">&#x1F4F7; Aparat</button>
+              <button class="pbtn" id="btn-gal">&#x1F5BC; Galeria</button>
+              <button
+                class="pbtn"
+                id="btn-del-ph"
+                style="display: none; color: #e74c3c; border-color: #c0392b"
+              >
+                &#x1F5D1; Usuń
+              </button>
+            </div>
+          </div>
+          <div>
+            <div class="plbl" style="margin-bottom: 6px">&#x1F4DD; Notatka</div>
+            <textarea
+              id="note"
+              placeholder="np. linia 1, ul. Sienkiewicza…"
+            ></textarea>
+          </div>
+          <div id="line-selector-wrap"></div>
+          <div
+            style="
+              font-size: 10px;
+              color: var(--tx3);
+              text-align: center;
+              letter-spacing: 1px;
+              margin-top: 4px;
+            "
+          >
+            &#x1F4CD; GPS zapisuje się automatycznie
+          </div>
+          <button class="btnp" id="btn-save">&#x2705; Zapisz złapanie!</button>
         </div>
       </div>
-      <div>
-        <div class="plbl" style="margin-bottom:6px">&#x1F4DD; Notatka</div>
-        <textarea id="note" placeholder="np. linia 1, ul. Sienkiewicza…"></textarea>
+
+      <!-- ═══ MAPA ═══ -->
+      <div id="screen-map" class="screen">
+        <div class="hdr">
+          <span></span><span class="htit">&#x1F4CD; Mapa złapań</span
+          ><span></span>
+        </div>
+        <div class="map-stats" id="map-stats">Wczytywanie…</div>
+        <div id="map-container"></div>
       </div>
-      <div id="line-selector-wrap"></div>
-      <div style="font-size:10px;color:var(--tx3);text-align:center;letter-spacing:1px;margin-top:4px">
-        &#x1F4CD; GPS zapisuje się automatycznie
+
+      <!-- ═══ WYZWANIA ═══ -->
+      <div id="screen-challenges" class="screen">
+        <div class="hdr">
+          <span></span><span class="htit">&#x1F3AF; Wyzwania</span><span></span>
+        </div>
+        <div class="challenges-body" id="challenges-body"></div>
       </div>
-      <button class="btnp" id="btn-save">&#x2705; Zapisz złapanie!</button>
+
+      <!-- ═══ HISTORIA ═══ -->
+      <div id="screen-history" class="screen">
+        <div class="hdr">
+          <span></span><span class="htit">&#x1F4C5; Historia</span><span></span>
+        </div>
+        <div class="history-body" id="history-body"></div>
+      </div>
+
+      <!-- ═══ WIĘCEJ ═══ -->
+      <div id="screen-more" class="screen">
+        <div class="hdr">
+          <span></span><span class="htit">&#x22EF; Więcej</span><span></span>
+        </div>
+        <div id="more-body"></div>
+      </div>
+
+      <!-- ═══ ODZNAKI ═══ -->
+      <div id="screen-badges" class="screen">
+        <div class="hdr">
+          <button class="bk" onclick="showMore()">&#x2190;</button>
+          <span class="htit">&#x1F3C6; Odznaki</span
+          ><span style="width: 40px"></span>
+        </div>
+        <div class="badges-body" id="badges-body"></div>
+      </div>
+
+      <!-- ═══ LINIE ═══ -->
+      <div id="screen-routes" class="screen">
+        <div class="hdr">
+          <button class="bk" onclick="showMore()">&#x2190;</button>
+          <span class="htit">&#x1F68D; Linie</span
+          ><span style="width: 40px"></span>
+        </div>
+        <div class="routes-body" id="routes-body"></div>
+      </div>
+
+      <!-- ═══ WYNIKI + UDOSTĘPNIJ ═══ -->
+      <div id="screen-results" class="screen">
+        <div class="hdr">
+          <button class="bk" onclick="showMore()">&#x2190;</button>
+          <span class="htit">&#x1F4CA; Wyniki</span
+          ><span style="width: 40px"></span>
+        </div>
+        <div id="results-body"></div>
+      </div>
+
+      <!-- ═══ KONTO + USTAWIENIA ═══ -->
+      <div id="screen-profile" class="screen">
+        <div class="hdr">
+          <button class="bk" onclick="showMore()">&#x2190;</button>
+          <span class="htit">&#x1F464; Profil</span
+          ><span style="width: 40px"></span>
+        </div>
+        <div id="profile-body"></div>
+      </div>
     </div>
-  </div>
+    <!-- /#app -->
 
-  <!-- ═══ MAPA ═══ -->
-  <div id="screen-map" class="screen">
-    <div class="hdr"><span></span><span class="htit">&#x1F4CD; Mapa złapań</span><span></span></div>
-    <div class="map-stats" id="map-stats">Wczytywanie…</div>
-    <div id="map-container"></div>
-  </div>
+    <!-- ═══ DOLNA NAWIGACJA — 5 zakładek wycentrowanych ═══ -->
+    <nav class="bottom-nav">
+      <div class="bottom-nav-inner">
+        <button class="nav-btn active" id="nav-list" onclick="showList()">
+          <span class="ni">&#x1F68C;</span>
+          <span>Lista</span>
+        </button>
+        <button class="nav-btn" id="nav-map" onclick="showMap()">
+          <span class="ni">&#x1F4CD;</span>
+          <span>Mapa</span>
+          <span class="nav-badge" id="badge-map"></span>
+        </button>
+        <button
+          class="nav-btn"
+          id="nav-challenges"
+          onclick="showChallengesScreen()"
+        >
+          <span class="ni">&#x1F3AF;</span>
+          <span>Wyzwania</span>
+          <span class="nav-badge" id="badge-challenges"></span>
+        </button>
+        <button class="nav-btn" id="nav-history" onclick="showHistory()">
+          <span class="ni">&#x1F4C5;</span>
+          <span>Historia</span>
+          <span class="nav-badge" id="badge-history"></span>
+        </button>
+        <button class="nav-btn" id="nav-more" onclick="showMore()">
+          <span class="ni">&#x22EF;</span>
+          <span>Więcej</span>
+          <span class="nav-badge" id="badge-more"></span>
+        </button>
+      </div>
+    </nav>
 
-  <!-- ═══ WYZWANIA ═══ -->
-  <div id="screen-challenges" class="screen">
-    <div class="hdr"><span></span><span class="htit">&#x1F3AF; Wyzwania</span><span></span></div>
-    <div class="challenges-body" id="challenges-body"></div>
-  </div>
+    <!-- ═══ FLOATING BUTTON ═══ -->
+    <button id="fab" onclick="fabAction()" title="Złap!">
+      <span id="fab-icon">&#x1F4F8;</span>
+    </button>
 
-  <!-- ═══ HISTORIA ═══ -->
-  <div id="screen-history" class="screen">
-    <div class="hdr"><span></span><span class="htit">&#x1F4C5; Historia</span><span></span></div>
-    <div class="history-body" id="history-body"></div>
-  </div>
+    <!-- UKRYTE INPUTY -->
+    <input
+      type="file"
+      id="in-cam"
+      accept="image/*"
+      capture="environment"
+      style="position: fixed; left: -9999px; opacity: 0"
+    />
+    <input
+      type="file"
+      id="in-gal"
+      accept="image/*"
+      style="position: fixed; left: -9999px; opacity: 0"
+    />
 
-  <!-- ═══ WIĘCEJ ═══ -->
-  <div id="screen-more" class="screen">
-    <div class="hdr"><span></span><span class="htit">&#x22EF; Więcej</span><span></span></div>
-    <div id="more-body"></div>
-  </div>
-
-  <!-- ═══ ODZNAKI ═══ -->
-  <div id="screen-badges" class="screen">
-    <div class="hdr">
-      <button class="bk" onclick="showMore()">&#x2190;</button>
-      <span class="htit">&#x1F3C6; Odznaki</span><span style="width:40px"></span>
+    <div id="ov">
+      <div id="sheet">
+        <h3>DODAJ ZDJĘCIE</h3>
+        <button class="mbtn" id="m-cam">&#x1F4F7; Zrób zdjęcie</button>
+        <button class="mbtn" id="m-gal">&#x1F5BC; Wybierz z galerii</button>
+        <button class="mbtn mcancel" id="m-cancel">Anuluj</button>
+      </div>
     </div>
-    <div class="badges-body" id="badges-body"></div>
-  </div>
 
-  <!-- ═══ LINIE ═══ -->
-  <div id="screen-routes" class="screen">
-    <div class="hdr">
-      <button class="bk" onclick="showMore()">&#x2190;</button>
-      <span class="htit">&#x1F68D; Linie</span><span style="width:40px"></span>
+    <div id="toast"></div>
+    <canvas id="cvs"></canvas>
+
+    <!-- CRT ANIMACJA -->
+    <div id="ca">
+      <div class="ca-bezel">
+        <div class="ca-sc ca-s1"></div>
+        <div class="ca-sc ca-s2"></div>
+        <div class="ca-sc ca-s3"></div>
+        <div class="ca-sc ca-s4"></div>
+        <div class="ca-brand">BUSEDEX &bull; KM KIELCE</div>
+        <div class="ca-screen">
+          <canvas id="ca-grain"></canvas>
+          <div id="ca-tint"></div>
+          <div id="ca-il"></div>
+          <div class="ca-scanlines"></div>
+          <div class="ca-vignette"></div>
+          <img id="ca-photo" src="" alt="" />
+          <div id="ca-noghost" class="ca-noghost" style="display: none">
+            &#x1F68C;
+          </div>
+        </div>
+        <div class="ca-strip">
+          <div class="ca-led" id="ca-led"></div>
+          <div class="ca-status" id="ca-status">ZŁAPANO</div>
+        </div>
+      </div>
+      <div class="ca-bottom">
+        <div class="ca-badge" id="ca-badge"></div>
+        <div class="ca-sub" id="ca-sub"></div>
+        <div class="ca-tap">&#x25BA; dotknij aby kontynuować</div>
+      </div>
     </div>
-    <div class="routes-body" id="routes-body"></div>
-  </div>
 
-  <!-- ═══ WYNIKI + UDOSTĘPNIJ ═══ -->
-  <div id="screen-results" class="screen">
-    <div class="hdr">
-      <button class="bk" onclick="showMore()">&#x2190;</button>
-      <span class="htit">&#x1F4CA; Wyniki</span><span style="width:40px"></span>
-    </div>
-    <div id="results-body"></div>
-  </div>
-
-  <!-- ═══ KONTO + USTAWIENIA ═══ -->
-  <div id="screen-profile" class="screen">
-    <div class="hdr">
-      <button class="bk" onclick="showMore()">&#x2190;</button>
-      <span class="htit">&#x1F464; Profil</span><span style="width:40px"></span>
-    </div>
-    <div id="profile-body"></div>
-  </div>
-
-</div><!-- /#app -->
-
-<!-- ═══ DOLNA NAWIGACJA — 5 zakładek wycentrowanych ═══ -->
-<nav class="bottom-nav"><div class="bottom-nav-inner">
-  <button class="nav-btn active" id="nav-list"       onclick="showList()">
-    <span class="ni">&#x1F68C;</span>
-    <span>Lista</span>
-  </button>
-  <button class="nav-btn" id="nav-map"               onclick="showMap()">
-    <span class="ni">&#x1F4CD;</span>
-    <span>Mapa</span>
-    <span class="nav-badge" id="badge-map"></span>
-  </button>
-  <button class="nav-btn" id="nav-challenges"        onclick="showChallengesScreen()">
-    <span class="ni">&#x1F3AF;</span>
-    <span>Wyzwania</span>
-    <span class="nav-badge" id="badge-challenges"></span>
-  </button>
-  <button class="nav-btn" id="nav-history"           onclick="showHistory()">
-    <span class="ni">&#x1F4C5;</span>
-    <span>Historia</span>
-    <span class="nav-badge" id="badge-history"></span>
-  </button>
-  <button class="nav-btn" id="nav-more"              onclick="showMore()">
-    <span class="ni">&#x22EF;</span>
-    <span>Więcej</span>
-    <span class="nav-badge" id="badge-more"></span>
-  </button>
-</div></nav>
-
-<!-- ═══ FLOATING BUTTON ═══ -->
-<button id="fab" onclick="fabAction()" title="Złap!">
-  <span id="fab-icon">&#x1F4F8;</span>
-</button>
-
-<!-- UKRYTE INPUTY -->
-<input type="file" id="in-cam" accept="image/*" capture="environment" style="position:fixed;left:-9999px;opacity:0">
-<input type="file" id="in-gal" accept="image/*" style="position:fixed;left:-9999px;opacity:0">
-
-<div id="ov"><div id="sheet">
-  <h3>DODAJ ZDJĘCIE</h3>
-  <button class="mbtn" id="m-cam">&#x1F4F7; Zrób zdjęcie</button>
-  <button class="mbtn" id="m-gal">&#x1F5BC; Wybierz z galerii</button>
-  <button class="mbtn mcancel" id="m-cancel">Anuluj</button>
-</div></div>
-
-<div id="toast"></div>
-<canvas id="cvs"></canvas>
-
-<!-- CRT ANIMACJA -->
-<div id="ca">
-  <div class="ca-bezel">
-    <div class="ca-sc ca-s1"></div><div class="ca-sc ca-s2"></div>
-    <div class="ca-sc ca-s3"></div><div class="ca-sc ca-s4"></div>
-    <div class="ca-brand">BUSEDEX &bull; KM KIELCE</div>
-    <div class="ca-screen">
-      <canvas id="ca-grain"></canvas>
-      <div id="ca-tint"></div><div id="ca-il"></div>
-      <div class="ca-scanlines"></div><div class="ca-vignette"></div>
-      <img id="ca-photo" src="" alt="">
-      <div id="ca-noghost" class="ca-noghost" style="display:none">&#x1F68C;</div>
-    </div>
-    <div class="ca-strip">
-      <div class="ca-led" id="ca-led"></div>
-      <div class="ca-status" id="ca-status">ZŁAPANO</div>
-    </div>
-  </div>
-  <div class="ca-bottom">
-    <div class="ca-badge" id="ca-badge"></div>
-    <div class="ca-sub"   id="ca-sub"></div>
-    <div class="ca-tap">&#x25BA; dotknij aby kontynuować</div>
-  </div>
-</div>
-
-<!-- SKRYPTY -->
-<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-<script src="js/config.js"></script>
-<script src="js/catalog.js"></script>
-<script src="js/theme.js"></script>
-<script src="js/render.js"></script>
-<script src="js/badges.js"></script>
-<script src="js/map.js"></script>
-<script src="js/history.js"></script>
-<script src="js/stats.js"></script>
-<script src="js/notifications.js"></script>
-<script src="js/accounts.js"></script>
-<script src="js/challenges.js"></script>
-<script src="js/routes.js"></script>
-<script src="js/comments.js"></script>
-<script src="js/sharing.js"></script>
-<script src="js/desktop.js"></script>
-<script src="js/app.js"></script>
-</body>
+    <!-- SKRYPTY -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="config.js"></script>
+    <script src="catalog.js"></script>
+    <script src="theme.js"></script>
+    <script src="render.js"></script>
+    <script src="badges.js"></script>
+    <script src="map.js"></script>
+    <script src="history.js"></script>
+    <script src="stats.js"></script>
+    <script src="notifications.js"></script>
+    <script src="accounts.js"></script>
+    <script src="challenges.js"></script>
+    <script src="routes.js"></script>
+    <script src="comments.js"></script>
+    <script src="sharing.js"></script>
+    <script src="desktop.js"></script>
+    <script src="app.js"></script>
+  </body>
 </html>
