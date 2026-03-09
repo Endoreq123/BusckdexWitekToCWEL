@@ -25,205 +25,258 @@
       &#x1F319;
     </button>
 
-    <div id="app">
-      <!-- ═══ LISTA ═══ -->
-      <div id="screen-list" class="screen active">
-        <div class="topbar">
-          <div class="topbar-left">
-            <img
-              class="topbar-herb"
-              src="grafika/herb-kielce.png"
-              alt=""
-              onerror="this.style.display = 'none'"
-            />
-            <div>
-              <div class="app-title">&#x1F68C; BuseDex</div>
-              <div class="app-sub">Kielce &middot; KM</div>
-            </div>
-            <img
-              class="topbar-herb"
-              src="grafika/herb-swietokrzyskie.png"
-              alt=""
-              onerror="this.style.display = 'none'"
-            />
+    <div class="desktop-layout">
+      <!-- ═══ LEWY PANEL BOCZNY (tylko desktop) ═══ -->
+      <aside class="desktop-sidebar" id="desktop-sidebar" style="display: none">
+        <div class="sidebar-brand">
+          <div class="sidebar-brand-title">&#x1F68C; BUSEDEX</div>
+          <div class="sidebar-brand-sub">KM KIELCE &bull; KOLEKCJA</div>
+        </div>
+        <div class="sidebar-card">
+          <div class="sidebar-title">&#x1F4CA; Twoje statystyki</div>
+          <div class="sidebar-stat">
+            <span>Złapane</span
+            ><span class="sidebar-stat-val" id="sb-caught">—</span>
           </div>
-          <div style="text-align: right; padding-right: 4px">
-            <div class="score-big" id="pct-big">0%</div>
-            <div class="score-sub" id="pct-sub">0/0</div>
+          <div class="sidebar-stat">
+            <span>Wszystkich</span
+            ><span class="sidebar-stat-val" id="sb-total">—</span>
+          </div>
+          <div class="sidebar-stat">
+            <span>Odznaki</span
+            ><span class="sidebar-stat-val" id="sb-badges">—</span>
+          </div>
+          <div class="sidebar-stat">
+            <span>Ukończono</span
+            ><span class="sidebar-stat-val" id="sb-pct">—</span>
           </div>
         </div>
-        <div class="prog-bar-wrap" id="prog-bar-wrap"></div>
-        <div class="stats-row" id="stats-row"></div>
-        <div id="inst-wrap"></div>
-        <div class="sw">
-          <input
-            class="si"
-            id="si"
-            type="search"
-            placeholder="&#x1F50D; numer, model lub marka..."
-            autocorrect="off"
-            autocomplete="off"
-          />
-        </div>
-        <div class="frow" id="bf"></div>
-        <div class="frow" id="tf"></div>
-        <div class="filter-row">
-          <div
-            class="filter-uncaught"
-            id="filter-uncaught"
-            onclick="toggleUncaught()"
-          >
-            <span class="fu-icon">&#x2753;</span>
-            <span class="fu-label">Tylko niezłapane</span>
-            <div class="fu-toggle"><div class="fu-knob"></div></div>
+        <div class="sidebar-card">
+          <div class="sidebar-title">&#x26A1; Skróty</div>
+          <div class="sidebar-shortcut" onclick="showMap()">
+            <span class="sidebar-shortcut-icon">&#x1F4CD;</span> Mapa złapań
           </div>
-          <div class="filter-sort" id="filter-sort" onclick="toggleSort()">
-            <span class="fu-icon">&#x21F3;</span>
-            <span class="fu-label" id="sort-label">A–Z</span>
+          <div class="sidebar-shortcut" onclick="showChallengesScreen()">
+            <span class="sidebar-shortcut-icon">&#x1F3AF;</span> Wyzwania
+          </div>
+          <div class="sidebar-shortcut" onclick="showBadges()">
+            <span class="sidebar-shortcut-icon">&#x1F3C6;</span> Odznaki
+          </div>
+          <div class="sidebar-shortcut" onclick="showResultsScreen()">
+            <span class="sidebar-shortcut-icon">&#x1F4CA;</span> Wyniki
           </div>
         </div>
-        <div id="bus-list"></div>
-        <div style="height: 80px"></div>
-      </div>
+      </aside>
 
-      <!-- ═══ SZCZEGÓŁY ═══ -->
-      <div id="screen-detail" class="screen">
-        <div class="hdr">
-          <button class="bk" id="det-back">&#x2190;</button>
-          <span class="htit" id="det-title"></span>
-          <span style="width: 40px"></span>
-        </div>
-        <div class="dbody" id="det-body"></div>
-      </div>
-
-      <!-- ═══ ZŁAP ═══ -->
-      <div id="screen-capture" class="screen">
-        <div class="hdr">
-          <button class="bk" id="cap-back">&#x2190;</button>
-          <span class="htit" id="cap-title">Złap autobus</span>
-          <span style="width: 40px"></span>
-        </div>
-        <div class="abody">
-          <div class="ainfo" id="cap-info" style="border-color: #333"></div>
-          <div>
-            <div class="plbl" style="margin-bottom: 6px">&#x1F4F8; Zdjęcie</div>
-            <div class="pbox" id="pbox">
-              <div class="pph" id="pph">
-                <div style="font-size: 44px">&#x1F68C;</div>
-                <div>Dotknij aby dodać zdjęcie</div>
+      <div id="app">
+        <!-- ═══ LISTA ═══ -->
+        <div id="screen-list" class="screen active">
+          <div class="topbar">
+            <div class="topbar-left">
+              <img
+                class="topbar-herb"
+                src="grafika/herb-kielce.png"
+                alt=""
+                onerror="this.style.display = 'none'"
+              />
+              <div>
+                <div class="app-title">&#x1F68C; BuseDex</div>
+                <div class="app-sub">Kielce &middot; KM</div>
               </div>
-              <img id="pprev" class="pprev" src="" alt="podgląd" />
+              <img
+                class="topbar-herb"
+                src="grafika/herb-swietokrzyskiego.png"
+                alt=""
+                onerror="this.style.display = 'none'"
+              />
             </div>
-            <div class="pbtns" style="margin-top: 8px">
-              <button class="pbtn" id="btn-cam">&#x1F4F7; Aparat</button>
-              <button class="pbtn" id="btn-gal">&#x1F5BC; Galeria</button>
-              <button
-                class="pbtn"
-                id="btn-del-ph"
-                style="display: none; color: #e74c3c; border-color: #c0392b"
-              >
-                &#x1F5D1; Usuń
-              </button>
+            <div style="text-align: right; padding-right: 4px">
+              <div class="score-big" id="pct-big">0%</div>
+              <div class="score-sub" id="pct-sub">0/0</div>
             </div>
           </div>
-          <div>
-            <div class="plbl" style="margin-bottom: 6px">&#x1F4DD; Notatka</div>
-            <textarea
-              id="note"
-              placeholder="np. linia 1, ul. Sienkiewicza…"
-            ></textarea>
+          <div class="prog-bar-wrap" id="prog-bar-wrap"></div>
+          <div class="stats-row" id="stats-row"></div>
+          <div id="inst-wrap"></div>
+          <div class="sw">
+            <input
+              class="si"
+              id="si"
+              type="search"
+              placeholder="&#x1F50D; numer, model lub marka..."
+              autocorrect="off"
+              autocomplete="off"
+            />
           </div>
-          <div id="line-selector-wrap"></div>
-          <div
-            style="
-              font-size: 10px;
-              color: var(--tx3);
-              text-align: center;
-              letter-spacing: 1px;
-              margin-top: 4px;
-            "
-          >
-            &#x1F4CD; GPS zapisuje się automatycznie
+          <div class="frow" id="bf"></div>
+          <div class="frow" id="tf"></div>
+          <div class="filter-row">
+            <div
+              class="filter-uncaught"
+              id="filter-uncaught"
+              onclick="toggleUncaught()"
+            >
+              <span class="fu-icon">&#x2753;</span>
+              <span class="fu-label">Tylko niezłapane</span>
+              <div class="fu-toggle"><div class="fu-knob"></div></div>
+            </div>
+            <div class="filter-sort" id="filter-sort" onclick="toggleSort()">
+              <span class="fu-icon">&#x21F3;</span>
+              <span class="fu-label" id="sort-label">A–Z</span>
+            </div>
           </div>
-          <button class="btnp" id="btn-save">&#x2705; Zapisz złapanie!</button>
+          <div id="bus-list"></div>
+          <div style="height: 80px"></div>
         </div>
-      </div>
 
-      <!-- ═══ MAPA ═══ -->
-      <div id="screen-map" class="screen">
-        <div class="hdr">
-          <span></span><span class="htit">&#x1F4CD; Mapa złapań</span
-          ><span></span>
+        <!-- ═══ SZCZEGÓŁY ═══ -->
+        <div id="screen-detail" class="screen">
+          <div class="hdr">
+            <button class="bk" id="det-back">&#x2190;</button>
+            <span class="htit" id="det-title"></span>
+            <span style="width: 40px"></span>
+          </div>
+          <div class="dbody" id="det-body"></div>
         </div>
-        <div class="map-stats" id="map-stats">Wczytywanie…</div>
-        <div id="map-container"></div>
-      </div>
 
-      <!-- ═══ WYZWANIA ═══ -->
-      <div id="screen-challenges" class="screen">
-        <div class="hdr">
-          <span></span><span class="htit">&#x1F3AF; Wyzwania</span><span></span>
+        <!-- ═══ ZŁAP ═══ -->
+        <div id="screen-capture" class="screen">
+          <div class="hdr">
+            <button class="bk" id="cap-back">&#x2190;</button>
+            <span class="htit" id="cap-title">Złap autobus</span>
+            <span style="width: 40px"></span>
+          </div>
+          <div class="abody">
+            <div class="ainfo" id="cap-info" style="border-color: #333"></div>
+            <div>
+              <div class="plbl" style="margin-bottom: 6px">
+                &#x1F4F8; Zdjęcie
+              </div>
+              <div class="pbox" id="pbox">
+                <div class="pph" id="pph">
+                  <div style="font-size: 44px">&#x1F68C;</div>
+                  <div>Dotknij aby dodać zdjęcie</div>
+                </div>
+                <img id="pprev" class="pprev" src="" alt="podgląd" />
+              </div>
+              <div class="pbtns" style="margin-top: 8px">
+                <button class="pbtn" id="btn-cam">&#x1F4F7; Aparat</button>
+                <button class="pbtn" id="btn-gal">&#x1F5BC; Galeria</button>
+                <button
+                  class="pbtn"
+                  id="btn-del-ph"
+                  style="display: none; color: #e74c3c; border-color: #c0392b"
+                >
+                  &#x1F5D1; Usuń
+                </button>
+              </div>
+            </div>
+            <div>
+              <div class="plbl" style="margin-bottom: 6px">
+                &#x1F4DD; Notatka
+              </div>
+              <textarea
+                id="note"
+                placeholder="np. linia 1, ul. Sienkiewicza…"
+              ></textarea>
+            </div>
+            <div id="line-selector-wrap"></div>
+            <div
+              style="
+                font-size: 10px;
+                color: var(--tx3);
+                text-align: center;
+                letter-spacing: 1px;
+                margin-top: 4px;
+              "
+            >
+              &#x1F4CD; GPS zapisuje się automatycznie
+            </div>
+            <button class="btnp" id="btn-save">
+              &#x2705; Zapisz złapanie!
+            </button>
+          </div>
         </div>
-        <div class="challenges-body" id="challenges-body"></div>
-      </div>
 
-      <!-- ═══ HISTORIA ═══ -->
-      <div id="screen-history" class="screen">
-        <div class="hdr">
-          <span></span><span class="htit">&#x1F4C5; Historia</span><span></span>
+        <!-- ═══ MAPA ═══ -->
+        <div id="screen-map" class="screen">
+          <div class="hdr">
+            <span></span><span class="htit">&#x1F4CD; Mapa złapań</span
+            ><span></span>
+          </div>
+          <div class="map-stats" id="map-stats">Wczytywanie…</div>
+          <div id="map-container"></div>
         </div>
-        <div class="history-body" id="history-body"></div>
-      </div>
 
-      <!-- ═══ WIĘCEJ ═══ -->
-      <div id="screen-more" class="screen">
-        <div class="hdr">
-          <span></span><span class="htit">&#x22EF; Więcej</span><span></span>
+        <!-- ═══ WYZWANIA ═══ -->
+        <div id="screen-challenges" class="screen">
+          <div class="hdr">
+            <span></span><span class="htit">&#x1F3AF; Wyzwania</span
+            ><span></span>
+          </div>
+          <div class="challenges-body" id="challenges-body"></div>
         </div>
-        <div id="more-body"></div>
-      </div>
 
-      <!-- ═══ ODZNAKI ═══ -->
-      <div id="screen-badges" class="screen">
-        <div class="hdr">
-          <button class="bk" onclick="showMore()">&#x2190;</button>
-          <span class="htit">&#x1F3C6; Odznaki</span
-          ><span style="width: 40px"></span>
+        <!-- ═══ HISTORIA ═══ -->
+        <div id="screen-history" class="screen">
+          <div class="hdr">
+            <span></span><span class="htit">&#x1F4C5; Historia</span
+            ><span></span>
+          </div>
+          <div class="history-body" id="history-body"></div>
         </div>
-        <div class="badges-body" id="badges-body"></div>
-      </div>
 
-      <!-- ═══ LINIE ═══ -->
-      <div id="screen-routes" class="screen">
-        <div class="hdr">
-          <button class="bk" onclick="showMore()">&#x2190;</button>
-          <span class="htit">&#x1F68D; Linie</span
-          ><span style="width: 40px"></span>
+        <!-- ═══ WIĘCEJ ═══ -->
+        <div id="screen-more" class="screen">
+          <div class="hdr">
+            <span></span><span class="htit">&#x22EF; Więcej</span><span></span>
+          </div>
+          <div id="more-body"></div>
         </div>
-        <div class="routes-body" id="routes-body"></div>
-      </div>
 
-      <!-- ═══ WYNIKI + UDOSTĘPNIJ ═══ -->
-      <div id="screen-results" class="screen">
-        <div class="hdr">
-          <button class="bk" onclick="showMore()">&#x2190;</button>
-          <span class="htit">&#x1F4CA; Wyniki</span
-          ><span style="width: 40px"></span>
+        <!-- ═══ ODZNAKI ═══ -->
+        <div id="screen-badges" class="screen">
+          <div class="hdr">
+            <button class="bk" onclick="showMore()">&#x2190;</button>
+            <span class="htit">&#x1F3C6; Odznaki</span
+            ><span style="width: 40px"></span>
+          </div>
+          <div class="badges-body" id="badges-body"></div>
         </div>
-        <div id="results-body"></div>
-      </div>
 
-      <!-- ═══ KONTO + USTAWIENIA ═══ -->
-      <div id="screen-profile" class="screen">
-        <div class="hdr">
-          <button class="bk" onclick="showMore()">&#x2190;</button>
-          <span class="htit">&#x1F464; Profil</span
-          ><span style="width: 40px"></span>
+        <!-- ═══ LINIE ═══ -->
+        <div id="screen-routes" class="screen">
+          <div class="hdr">
+            <button class="bk" onclick="showMore()">&#x2190;</button>
+            <span class="htit">&#x1F68D; Linie</span
+            ><span style="width: 40px"></span>
+          </div>
+          <div class="routes-body" id="routes-body"></div>
         </div>
-        <div id="profile-body"></div>
+
+        <!-- ═══ WYNIKI + UDOSTĘPNIJ ═══ -->
+        <div id="screen-results" class="screen">
+          <div class="hdr">
+            <button class="bk" onclick="showMore()">&#x2190;</button>
+            <span class="htit">&#x1F4CA; Wyniki</span
+            ><span style="width: 40px"></span>
+          </div>
+          <div id="results-body"></div>
+        </div>
+
+        <!-- ═══ KONTO + USTAWIENIA ═══ -->
+        <div id="screen-profile" class="screen">
+          <div class="hdr">
+            <button class="bk" onclick="showMore()">&#x2190;</button>
+            <span class="htit">&#x1F464; Profil</span
+            ><span style="width: 40px"></span>
+          </div>
+          <div id="profile-body"></div>
+        </div>
       </div>
+      <!-- /#app -->
     </div>
-    <!-- /#app -->
+    <!-- /.desktop-layout -->
 
     <!-- ═══ DOLNA NAWIGACJA — 5 zakładek wycentrowanych ═══ -->
     <nav class="bottom-nav">
