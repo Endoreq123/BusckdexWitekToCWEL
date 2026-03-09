@@ -481,7 +481,7 @@ function saveCatch() {
     if (typeof syncProgress === "function") syncProgress();
     if (typeof refreshChallengesAfterCatch === "function") refreshChallengesAfterCatch();
     updateNavBadges();
-    updateSidebar();
+    dtUpdate();
     showCatchAnim(savedBus, savedPh, function() { showDetail(savedBus); });
   });
 }
@@ -632,31 +632,6 @@ function _initOfflineSync() {
   if (!navigator.onLine) _syncPending = true;
 }
 
-/* ── DESKTOP SIDEBAR ─────────────────────────────────────────── */
-function initDesktop() {
-  var mq = window.matchMedia("(min-width: 900px)");
-  function applyDesktop(e) {
-    var sb = document.getElementById("desktop-sidebar");
-    if (!sb) return;
-    sb.style.display = e.matches ? "" : "none";
-    if (e.matches) updateSidebar();
-  }
-  mq.addEventListener("change", applyDesktop);
-  applyDesktop(mq);
-}
-
-function updateSidebar() {
-  var got    = Object.keys(caught).length;
-  var total  = CATALOG.length;
-  var earned = typeof getEarnedBadges === "function" ? getEarnedBadges(caught).length : 0;
-  var pct    = total ? Math.round(got / total * 100) : 0;
-  var el;
-  el = document.getElementById("sb-caught"); if (el) el.textContent = got;
-  el = document.getElementById("sb-total");  if (el) el.textContent = total;
-  el = document.getElementById("sb-badges"); if (el) el.textContent = earned;
-  el = document.getElementById("sb-pct");    if (el) el.textContent = pct + "%";
-}
-
 window.addEventListener("DOMContentLoaded", function() {
   document.getElementById("in-cam").addEventListener("change", function() { handleFile(this); });
   document.getElementById("in-gal").addEventListener("change", function() { handleFile(this); });
@@ -682,7 +657,7 @@ window.addEventListener("DOMContentLoaded", function() {
   renderList();
   renderInstall();
   setTimeout(updateNavBadges, 300);
-  initDesktop();
+  dtInit();
   initNotifications();    /* harmonogram powiadomień */
 
   /* Obsługa PWA shortcuts (?action=...) */
