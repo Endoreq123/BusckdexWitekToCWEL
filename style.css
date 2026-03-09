@@ -492,32 +492,6 @@ canvas { display: none; }
    NOWE EKRANY — dodane style
    ══════════════════════════════════════════════════════════════ */
 
-/* ── DOLNA NAWIGACJA ──────────────────────────────────────────  */
-.bottom-nav {
-  position: fixed; bottom: 0; left: 50%; transform: translateX(-50%);
-  width: 100%; max-width: 480px;
-  background: #0e0e0e;
-  border-top: 2px solid #c0191a;
-  display: flex; z-index: 50;
-  padding-bottom: env(safe-area-inset-bottom, 0);
-}
-.nav-btn {
-  flex: 1; display: flex; flex-direction: column;
-  align-items: center; justify-content: center;
-  padding: 8px 4px 6px;
-  background: transparent; border: none; color: #444;
-  font-family: monospace; font-size: 9px; letter-spacing: .5px;
-  cursor: pointer; gap: 2px;
-  -webkit-tap-highlight-color: transparent;
-  transition: color .15s;
-}
-.nav-btn .ni { font-size: 20px; line-height: 1; }
-.nav-btn.active { color: var(--yel); }
-.nav-btn:active { opacity: .7; }
-
-/* dodaj padding na dole ekranów aby nav nie zasłaniał */
-.screen { padding-bottom: 58px; }
-
 /* ── FILTR TYLKO NIEZŁAPANE ───────────────────────────────────  */
 .filter-uncaught {
   margin: 0 14px 6px;
@@ -981,20 +955,6 @@ body.theme-light .auth-title   { color: var(--red); }
 body.theme-light .auth-switch  { color: #888; }
 body.theme-light .auth-switch span { color: var(--red); }
 
-
-/* ── DOLNA NAWIGACJA — 2 rzędy ────────────────────────────────  */
-.bottom-nav {
-  flex-wrap: wrap;
-  height: auto;
-}
-.nav-btn {
-  width: 20%; /* 5 na rząd */
-  padding: 6px 2px 4px;
-}
-.nav-btn .ni { font-size: 17px; }
-.nav-btn { font-size: 8px; }
-.screen { padding-bottom: 72px; }
-
 /* ── AVATAR COLOR PICKER ──────────────────────────────────────  */
 .avatar-color-grid {
   display: flex; flex-wrap: wrap; gap: 8px; margin-top: 4px;
@@ -1018,19 +978,18 @@ body.theme-light .avatar-color-dot.ac-sel { border-color: #333; box-shadow: 0 0 
   background: #0e0e0e;
   border-top: 2px solid var(--red);
   height: 58px; z-index: 100;
-  max-width: 480px; margin: 0 auto;
-  justify-content: center;
+  justify-content: space-around;
 }
 .nav-btn {
   flex: 1; display: flex; flex-direction: column;
   align-items: center; justify-content: center;
   background: transparent; border: none;
   color: #555; font-size: 9px; font-family: 'Courier New', monospace;
-  cursor: pointer; padding: 6px 2px 4px;
+  cursor: pointer; padding: 6px 4px 4px;
   position: relative; gap: 2px;
   -webkit-tap-highlight-color: transparent;
   transition: color .15s;
-  max-width: 96px;
+  min-width: 0;
 }
 .nav-btn.active { color: var(--red); }
 .nav-btn:active  { opacity: .7; }
