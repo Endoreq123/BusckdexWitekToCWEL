@@ -9,6 +9,7 @@ var caught       = {};   // computed skrót: { busId: ostatnie złapanie }
 var brandF       = "Wszystkie";
 var typeF        = "Wszystkie";
 var onlyUncaught = false;
+var sortMode     = "caught-last";  /* "az" | "caught-last" */
 var curBus       = null;
 var capPh        = null;
 
@@ -93,8 +94,15 @@ function closeMod() { document.getElementById("ov").classList.remove("open"); }
 function showScreen(id) {
   var all = document.querySelectorAll(".screen");
   for (var i = 0; i < all.length; i++) all[i].classList.remove("active");
-  document.getElementById(id).classList.add("active");
+  var sc = document.getElementById(id);
+  if (sc) sc.classList.add("active");
   window.scrollTo(0, 0);
+  /* FAB visibility */
+  var fab = document.getElementById("fab");
+  if (fab) {
+    var hideFab = ["screen-capture","screen-detail"].indexOf(id) >= 0;
+    fab.style.display = hideFab ? "none" : "";
+  }
 }
 
 function showList() {
@@ -109,7 +117,7 @@ function showMap() {
 }
 function showBadges() {
   showScreen("screen-badges");
-  setNav("nav-badges");
+  setNav("nav-more");
   renderBadges();
 }
 function showHistory() {
@@ -117,16 +125,169 @@ function showHistory() {
   setNav("nav-history");
   renderHistory();
 }
-function showStatsScreen() {
-  showScreen("screen-stats");
-  setNav("nav-stats");
-  renderStats2();
+function showChallengesScreen() {
+  showScreen("screen-challenges");
+  setNav("nav-challenges");
+  renderChallenges();
 }
+function showRoutesScreen() {
+  showScreen("screen-routes");
+  setNav("nav-more");
+  renderRoutes();
+}
+function showResultsScreen() {
+  showScreen("screen-results");
+  setNav("nav-more");
+  renderResultsScreen();
+}
+function showProfileScreen() {
+  showScreen("screen-profile");
+  setNav("nav-more");
+  renderProfileScreen();
+}
+function showMore() {
+  showScreen("screen-more");
+  setNav("nav-more");
+  renderMoreScreen();
+}
+/* legacy aliases */
+function showStatsScreen()   { showResultsScreen(); }
+function showSharingScreen() { showResultsScreen(); }
+function showAccountScreen() { showProfileScreen(); }
+function showSettingsScreen(){ showProfileScreen(); }
+
 function setNav(activeId) {
   var btns = document.querySelectorAll(".nav-btn");
   for (var i = 0; i < btns.length; i++) btns[i].classList.remove("active");
   var el = document.getElementById(activeId);
   if (el) el.classList.add("active");
+}
+
+/* ── EKRAN WIĘCEJ ─────────────────────────────────────────────── */
+function renderMoreScreen() {
+  var body = document.getElementById("more-body");
+  if (!body) return;
+  var got    = Object.keys(caught).length;
+  var earned = typeof getEarnedBadges === "function" ? getEarnedBadges(caught).length : 0;
+  var items = [
+    { icon:"🏆", label:"Odznaki",    sub: earned + " zdobytych",       fn:"showBadges()" },
+    { icon:"🚌", label:"Linie",      sub:"Statystyki tras",             fn:"showRoutesScreen()" },
+    { icon:"📊", label:"Wyniki",     sub:"Statystyki i udostępnij",     fn:"showResultsScreen()" },
+    { icon:"👤", label:"Profil",     sub:"Konto i ustawienia",          fn:"showProfileScreen()" },
+  ];
+  var html = '<div class="more-list">';
+  items.forEach(function(it) {
+    html +=
+      '<div class="more-row" onclick="' + it.fn + '">' +
+        '<div class="more-icon">' + it.icon + '</div>' +
+        '<div class="more-info">' +
+          '<div class="more-label">' + it.label + '</div>' +
+          '<div class="more-sub">' + it.sub + '</div>' +
+        '</div>' +
+        '<div class="more-arrow">›</div>' +
+      '</div>';
+  });
+  html += '</div>';
+  body.innerHTML = html;
+}
+
+/* ── EKRAN WYNIKI + UDOSTĘPNIJ ────────────────────────────────── */
+function renderResultsScreen() {
+  var body = document.getElementById("results-body");
+  if (!body) return;
+  var html = '<div class="res-tabs">' +
+    '<button class="res-tab active" id="rt-stats" onclick="switchResultTab(\'stats\')">📊 Statystyki</button>' +
+    '<button class="res-tab" id="rt-share" onclick="switchResultTab(\'share\')">📤 Udostępnij</button>' +
+  '</div>' +
+  '<div id="rt-stats-body" class="rt-body"></div>' +
+  '<div id="rt-share-body" class="rt-body" style="display:none"></div>';
+  body.innerHTML = html;
+  /* render stats into first tab */
+  if (typeof renderStats2 === "function") {
+    var fakeBody = document.getElementById("rt-stats-body");
+    fakeBody.innerHTML = "";
+    renderStatsInto(fakeBody);
+  }
+  renderSharingInto(document.getElementById("rt-share-body"));
+}
+
+function switchResultTab(tab) {
+  document.getElementById("rt-stats").classList.toggle("active", tab==="stats");
+  document.getElementById("rt-share").classList.toggle("active", tab==="share");
+  document.getElementById("rt-stats-body").style.display = tab==="stats" ? "" : "none";
+  document.getElementById("rt-share-body").style.display = tab==="share" ? "" : "none";
+}
+
+/* ── EKRAN PROFIL + USTAWIENIA ────────────────────────────────── */
+function renderProfileScreen() {
+  var body = document.getElementById("profile-body");
+  if (!body) return;
+  var html = '<div class="res-tabs">' +
+    '<button class="res-tab active" id="pt-profile" onclick="switchProfileTab(\'profile\')">👤 Profil</button>' +
+    '<button class="res-tab" id="pt-settings" onclick="switchProfileTab(\'settings\')">⚙️ Ustawienia</button>' +
+  '</div>' +
+  '<div id="pt-profile-body" class="rt-body"></div>' +
+  '<div id="pt-settings-body" class="rt-body" style="display:none"></div>';
+  body.innerHTML = html;
+  /* render account into profile tab */
+  var accBody = document.getElementById("pt-profile-body");
+  accBody.id = "account-body";
+  if (typeof renderAccountScreen === "function") renderAccountScreen();
+  /* settings */
+  var settBody = document.getElementById("pt-settings-body");
+  settBody.id = "settings-body";
+  if (typeof renderSettingsScreen === "function") renderSettingsScreen();
+  /* restore ids */
+  accBody.id = "pt-profile-body";
+  settBody.id = "pt-settings-body";
+}
+
+function switchProfileTab(tab) {
+  document.getElementById("pt-profile").classList.toggle("active", tab==="profile");
+  document.getElementById("pt-settings").classList.toggle("active", tab==="settings");
+  document.getElementById("pt-profile-body").style.display = tab==="profile" ? "" : "none";
+  document.getElementById("pt-settings-body").style.display = tab==="settings" ? "" : "none";
+}
+
+/* ── FAB ACTION ───────────────────────────────────────────────── */
+function fabAction() {
+  /* jeśli jesteśmy na liście — wróć do góry i podświetl wyszukiwarkę */
+  var listActive = document.getElementById("screen-list").classList.contains("active");
+  if (listActive) {
+    window.scrollTo(0, 0);
+    var si = document.getElementById("si");
+    if (si) si.focus();
+    return;
+  }
+  /* w pozostałych ekranach — wróć do listy */
+  showList();
+}
+
+/* ── NAV BADGES (liczniki) ────────────────────────────────────── */
+function updateNavBadges() {
+  /* badge na Wyzwania — niezrobione wyzwanie dnia */
+  try {
+    var daily = typeof getDailyChallenge === "function" ? getDailyChallenge() : null;
+    var chBadge = document.getElementById("badge-challenges");
+    if (chBadge) chBadge.textContent = (daily && !daily.done) ? "!" : "";
+  } catch(e) {}
+
+  /* badge na Historię — złapania dzisiaj */
+  try {
+    var today = new Date().toLocaleDateString("pl-PL");
+    var todayCnt = 0;
+    for (var k in catches) {
+      catches[k].forEach(function(e) { if (e.date === today) todayCnt++; });
+    }
+    var hBadge = document.getElementById("badge-history");
+    if (hBadge) hBadge.textContent = todayCnt > 0 ? todayCnt : "";
+  } catch(e) {}
+
+  /* badge na Więcej — nowe odznaki (sprawdź czy jest nowa) */
+  try {
+    var moreBadge = document.getElementById("badge-more");
+    if (moreBadge) moreBadge.textContent = "";
+  } catch(e) {}
 }
 
 function showDetail(bus) {
@@ -319,6 +480,7 @@ function saveCatch() {
     if (typeof notifOnCatch === "function") notifOnCatch(savedBus);
     if (typeof syncProgress === "function") syncProgress();
     if (typeof refreshChallengesAfterCatch === "function") refreshChallengesAfterCatch();
+    updateNavBadges();
     showCatchAnim(savedBus, savedPh, function() { showDetail(savedBus); });
   });
 }
@@ -363,7 +525,7 @@ function showSettingsScreen() {
 }
 
 function renderSettingsScreen() {
-  var body = document.getElementById("settings-body");
+  var body = document.getElementById("settings-body") || document.getElementById("pt-settings-body");
   if (!body) return;
 
   var notifPerm = "Notification" in window ? Notification.permission : "unsupported";
@@ -420,6 +582,15 @@ function toggleUncaught() {
   onlyUncaught = !onlyUncaught;
   var el = document.getElementById("filter-uncaught");
   if (el) el.className = "filter-uncaught" + (onlyUncaught ? " on" : "");
+  renderList();
+}
+
+function toggleSort() {
+  sortMode = (sortMode === "caught-last") ? "az" : "caught-last";
+  var lbl = document.getElementById("sort-label");
+  if (lbl) lbl.textContent = sortMode === "caught-last" ? "Nowe ↑" : "A–Z";
+  var el = document.getElementById("filter-sort");
+  if (el) el.classList.toggle("on", sortMode === "caught-last");
   renderList();
 }
 
@@ -485,6 +656,7 @@ window.addEventListener("DOMContentLoaded", function() {
   initProgressCanvas();   /* canvas postępu */
   renderList();
   renderInstall();
+  setTimeout(updateNavBadges, 300);
   initNotifications();    /* harmonogram powiadomień */
 
   /* Obsługa PWA shortcuts (?action=...) */

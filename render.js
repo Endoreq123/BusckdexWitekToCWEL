@@ -163,17 +163,27 @@ function renderList() {
     if (brandF !== "Wszystkie" && b.brand !== brandF) continue;
     if (typeF  !== "Wszystkie" && b.type  !== typeF)  continue;
     if (onlyUncaught && caught[b.id]) continue;
-    if (q && b.num.indexOf(q) === -1 && b.model.toLowerCase().indexOf(q) === -1) continue;
+    if (q && b.num.indexOf(q) === -1 && b.model.toLowerCase().indexOf(q) === -1 && b.brand.toLowerCase().indexOf(q) === -1) continue;
     filtered.push(b);
   }
 
-  // grupowanie po marce
+  // sortowanie: złapane na dole jeśli włączone
+  if (typeof sortMode !== "undefined" && sortMode === "caught-last") {
+    filtered.sort(function(a, b2) {
+      var ac = caught[a.id] ? 1 : 0, bc = caught[b2.id] ? 1 : 0;
+      if (ac !== bc) return ac - bc;
+      return a.brand.localeCompare(b2.brand) || a.num.localeCompare(b2.num);
+    });
+  }
+
+  // grupowanie po marce — alfabetycznie
   var brandOrder = [], groups = {};
   for (var j = 0; j < filtered.length; j++) {
     var br = filtered[j].brand;
     if (!groups[br]) { groups[br] = []; brandOrder.push(br); }
     groups[br].push(filtered[j]);
   }
+  brandOrder.sort();
 
   var container = document.getElementById("bus-list");
   container.innerHTML = "";
@@ -398,5 +408,48 @@ function renderDetail() {
     html += '<button class="btnp" style="background:' + bc + '" onclick="showCapture(curBus,false)">' + bt + '</button>';
   }
 
+  /* ── mini-mapa GPS (ostatnie złapanie z lokalizacją) ── */
+  var allCatchesMini = catches[bus.id] || [];
+  var lastGps = null;
+  for (var mi = allCatchesMini.length - 1; mi >= 0; mi--) {
+    if (allCatchesMini[mi].lat) { lastGps = allCatchesMini[mi]; break; }
+  }
+  if (lastGps) {
+    var mapId = "mini-map-" + bus.id;
+    html +=
+      '<div style="margin-top:10px">' +
+        '<div class="plbl" style="margin-bottom:4px">&#x1F4CD; Ostatnia lokalizacja</div>' +
+        '<div id="' + mapId + '" class="mini-map"></div>' +
+        '<div style="font-size:10px;color:var(--tx3);margin-top:4px;text-align:center">' +
+          '<a href="https://www.google.com/maps?q=' + lastGps.lat + ',' + lastGps.lng + '" ' +
+          'target="_blank" style="color:var(--tx3)">&#x1F517; Otwórz w Mapach Google</a>' +
+        '</div>' +
+      '</div>';
+  }
+
+  /* ── komentarze ── */
+  html += '<div id="comments-wrap" style="margin-top:10px"></div>';
+
   body.innerHTML = html;
+
+  /* inicjuj mini-mapę po wstawieniu do DOM */
+  if (lastGps) {
+    setTimeout(function() {
+      var el = document.getElementById("mini-map-" + bus.id);
+      if (!el || !window.L) return;
+      var miniMap = L.map(el, { zoomControl:false, attributionControl:false, dragging:false, scrollWheelZoom:false });
+      L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png").addTo(miniMap);
+      miniMap.setView([lastGps.lat, lastGps.lng], 15);
+      var tm2 = TM[bus.type] || { color:"#888" };
+      var icon = L.divIcon({
+        className:"",
+        html: '<div style="width:14px;height:14px;border-radius:50%;background:' + tm2.color + ';border:2px solid #fff;box-shadow:0 2px 6px rgba(0,0,0,.5)"></div>',
+        iconAnchor:[7,7]
+      });
+      L.marker([lastGps.lat, lastGps.lng], { icon:icon }).addTo(miniMap);
+    }, 100);
+  }
+
+  /* ładuj komentarze */
+  if (typeof renderComments === "function") renderComments(bus.id);
 }

@@ -135,3 +135,16 @@ function exportStats() {
     document.getElementById("export-ok").style.display = "block";
   }
 }
+
+/* wrapper — renderuje statystyki do dowolnego elementu */
+function renderStatsInto(container) {
+  if (!container) return;
+  var oldId = null;
+  var statsBody = document.getElementById("stats-body");
+  /* tymczasowo podmień id */
+  if (statsBody) { oldId = "stats-body"; statsBody.id = "_sb_backup"; }
+  container.id = "stats-body";
+  renderStats2();
+  container.id = "_rt_stats";
+  if (statsBody) statsBody.id = "stats-body";
+}

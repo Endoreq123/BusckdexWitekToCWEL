@@ -329,3 +329,29 @@ async function doShareCard() {
     }
   }, "image/png");
 }
+
+/* wrapper — renderuje udostępnianie do dowolnego elementu */
+function renderSharingInto(container) {
+  if (!container) return;
+  container.innerHTML =
+    '<div style="padding:14px;display:flex;flex-direction:column;gap:14px">' +
+      '<div id="friend-compare-wrap-inline"></div>' +
+      '<div class="ch-section">&#x1F4CA; Karta wyników</div>' +
+      '<div style="font-size:12px;color:var(--tx3)">Wzór jest unikalny dla Twojej kolekcji.</div>' +
+      '<canvas id="export-canvas" style="width:100%;border-radius:10px;border:1px solid var(--bd)"></canvas>' +
+      '<div style="display:flex;gap:8px">' +
+        '<button class="btns" style="flex:1" onclick="doDownloadCard()">&#x1F4BE; Pobierz PNG</button>' +
+        '<button class="btns" style="flex:1" onclick="doShareCard()">&#x1F4E4; Udostępnij</button>' +
+      '</div>' +
+      '<button class="btns" onclick="copyShareLink()">&#x1F517; Kopiuj link do kolekcji</button>' +
+    '</div>';
+
+  /* porównanie z przyjacielem */
+  var fcw = document.getElementById("friend-compare-wrap-inline");
+  if (fcw) {
+    fcw.id = "friend-compare-wrap";
+    renderFriendComparison();
+    fcw.id = "friend-compare-wrap-inline";
+  }
+  setTimeout(generateExportCard, 150);
+}

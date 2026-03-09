@@ -111,7 +111,7 @@ function showAccountScreen() {
 }
 
 function renderAccountScreen() {
-  var body = document.getElementById("account-body");
+  var body = document.getElementById("account-body") || document.getElementById("pt-profile-body");
   if (!body) return;
   if (!currentUser)   _renderCreateProfile(body);
   else if (_editMode) _renderEditProfile(body);

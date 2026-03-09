@@ -104,23 +104,19 @@ function renderRoutes() {
     html += '</div>';
   }
 
-  /* tabela wszystkich linii */
+  /* tabela wszystkich linii — płaska siatka */
   html += '<div class="ch-section">&#x1F68D; Wszystkie linie</div>';
-
-  Object.keys(LINE_GROUPS).forEach(function(grp) {
-    html += '<div class="route-group-title">' + grp + '</div>';
-    html += '<div class="route-grid">';
-    LINE_GROUPS[grp].forEach(function(ln) {
-      var s   = stats[ln];
-      var cnt = s ? s.catches : 0;
-      html +=
-        '<div class="route-cell' + (cnt>0?" route-active":"") + '" onclick="showLineDetail(\'' + ln + '\')">' +
-          '<div class="route-num">' + ln + '</div>' +
-          (cnt > 0 ? '<div class="route-cnt">' + cnt + '</div>' : '') +
-        '</div>';
-    });
-    html += '</div>';
+  html += '<div class="route-grid">';
+  KM_LINES.forEach(function(ln) {
+    var s   = stats[ln];
+    var cnt = s ? s.catches : 0;
+    html +=
+      '<div class="route-cell' + (cnt>0?" route-active":"") + '" onclick="showLineDetail(\'' + ln + '\')">' +
+        '<div class="route-num">' + ln + '</div>' +
+        (cnt > 0 ? '<div class="route-cnt">' + cnt + '</div>' : '') +
+      '</div>';
   });
+  html += '</div>';
 
   body.innerHTML = html;
 }
